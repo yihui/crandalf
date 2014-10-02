@@ -83,7 +83,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     broken = intersect(broken, deps)
     if (length(broken)) {
       apt_get(broken, 'build-dep')
-      install.packages(broken, quiet = TRUE)
+      install.packages(broken)
     }
     # install extra dependencies not covered by apt-get
     lapply(
