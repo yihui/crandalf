@@ -79,7 +79,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db, recursive = TRUE))))
     apt_get(deps)
     # known broken packages in the PPA
-    broken = c('rJava', 'xtable')
+    broken = c('abind', 'MCMCpack', 'rJava', 'timeDate', 'xtable')
     broken = intersect(broken, deps)
     if (length(broken)) {
       apt_get(broken, 'build-dep')
