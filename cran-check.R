@@ -59,6 +59,8 @@ if (Sys.getenv('TRAVIS') == 'true') {
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db))))
     apt_get(sprintf('r-cran-%s', setdiff(deps, pkgs_deb)))
+    broken = setdiff(c('xtable'), deps)  # known broken packages in the PPA
+    if (length(broken)) install.packages(broken, quiet = TRUE)
     # install extra dependencies not covered by apt-get
     lapply(
       deps,
