@@ -84,26 +84,28 @@ if (Sys.getenv('TRAVIS') == 'true') {
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db, recursive = TRUE))))
     apt_get(deps)
-    # install extra dependencies not covered by apt-get
-    lapply(
-      deps,
-      function(p) {
-        if (pkg_loadable(p)) return()
-        if (need_compile(p)) {
-          apt_get(p, 'build-dep')
-          switch(
-            p,
-            rJava = system2('sudo', 'R CMD javareconf')
-          )
-        }
-        # p is not loadable, and it might be due to its dependencies are not loadable
-        for (k in tools::package_dependencies(p, db)[[1]]) Recall(k)
-        install.packages(p, quiet = TRUE)
-        if (pkg_loadable(p)) return()
-        # reinstall: why did it fail?
-        install.packages(p, quiet = FALSE)
+
+    install_deps = function(p) {
+      if (pkg_loadable(p)) return()
+      if (need_compile(p)) {
+        apt_get(p, 'build-dep')
+        switch(
+          p,
+          rJava = system2('sudo', 'R CMD javareconf')
+        )
       }
-    )
+      # p is not loadable, and it might be due to its dependencies are not loadable
+      for (k in tools::package_dependencies(p, db)[[1]]) Recall(k)
+      install.packages(p, quiet = TRUE)
+      if (pkg_loadable(p)) return()
+      # reinstall: why did it fail?
+      install.packages(p, quiet = FALSE)
+    }
+    # install extra dependencies not covered by apt-get
+    lapply(deps, install_deps)
+    # double check if all installed packages are loadable
+    lapply(.packages(TRUE), install_deps)
+
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
     for (j in 1:5) if (download_source(acv) == 0) break
     if (j == 5) {
