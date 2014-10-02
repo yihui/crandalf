@@ -1,0 +1,9 @@
+#!/bin/sh
+
+[ `git rev-parse --abbrev-ref HEAD` != master ] && exit 0
+
+# create branches from the current master if they do not exist
+for i in `grep -G '^package:' PACKAGES | sed 's/^package:\s*//' | sed 's/\s*//'`;
+do
+  git show-ref --verify --quiet refs/heads/$i || git branch $i
+done
