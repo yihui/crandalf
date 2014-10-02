@@ -109,7 +109,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     # otherwise create an empty done
     unlink('done')
     cmd = system2(
-      'R', c('CMD check --no-codoc --no-manual', acv, '&& echo 0 > done || touch done'),
+      'R', c('CMD check --no-codoc --no-manual', acv, '> /dev/null && echo 0 > done || touch done'),
       stdout = NULL, wait = FALSE
     )
     while(!file.exists('done')) {
