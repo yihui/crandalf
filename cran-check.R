@@ -47,8 +47,10 @@ if (Sys.getenv('TRAVIS') == 'true') {
   pkgs_deb = gsub('^r-cran-', '', pkgs_deb)
   apt_get(pkg)
   # knitr's reverse dependencies may need rmarkdown for R Markdown v2 vignettes
-  if (pkg == 'knitr' && !('rmarkdown' %in% .packages(TRUE)))
+  if (pkg == 'knitr' && !('rmarkdown' %in% .packages(TRUE))) {
+    apt_get(tools::package_dependencies('rmarkdown', db)[[1]])
     install.packages('rmarkdown', quiet = TRUE)
+  }
   devtools::install_github(config[pkg, 'install'])
 
   pkgs = strsplit(Sys.getenv('R_CHECK_PACKAGES'), '\\s+')[[1]]
