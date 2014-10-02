@@ -89,7 +89,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     system2('cat', logs)
   }
   if (length(failed))
-    stop('These packages failed:\n\n', paste(formatUL(unique(failed)), collapse = '\n'))
+    stop('\nThese packages failed:\n', paste(formatUL(unique(failed)), collapse = '\n'))
   setwd(owd)
 } else {
   pkgs = tools::package_dependencies(pkg, db, 'all', reverse = TRUE)[[1]]
