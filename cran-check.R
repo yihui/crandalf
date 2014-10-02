@@ -47,7 +47,7 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   cmd('')  # write to stdout to diagnose the problem
 }
 pkg_loadable = function(p) {
-  (p %in% .packages(TRUE)) && require(p, character.only = TRUE, quietly = TRUE)
+  (p %in% .packages(TRUE)) && requireNamespace(p, quietly = TRUE)
 }
 
 if (Sys.getenv('TRAVIS') == 'true') {
