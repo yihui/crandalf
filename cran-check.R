@@ -105,16 +105,22 @@ if (Sys.getenv('TRAVIS') == 'true') {
       writeLines('Download failed', sprintf('%s-00download', p))
       next
     }
-    # some packages may take more than 10 minutes to finish, and the best I can
-    # do is to use travis_wait to avoid Travis timeouts
-    cmd = system(
-      paste('travis_wait R CMD check --no-codoc --no-manual', acv),
-      ignore.stdout = TRUE
+    # run R CMD check as a background process; write 0 to done on success,
+    # otherwise create an empty done
+    unlink('done')
+    cmd = system2(
+      'R', c('CMD check --no-codoc --no-manual', acv, '&& echo 0 > done || touch done'),
+      stdout = NULL, wait = FALSE
     )
-    if (cmd != 0) {
+    while(!file.exists('done')) {
+      Sys.sleep(30)
+      cat('.')  # write a dot to stdout every 30 seconds to avoid Travis timeouts
+    }
+    if (file.info('done')[, 'size'] == 0) {
       out = list.files(sprintf('%s.Rcheck', p), '^00.+[.](log|out)$', full.names = TRUE)
       file.copy(out, sprintf('%s-%s', p, basename(out)), overwrite = TRUE)
     }
+    unlink('done')
   }
   # output in the order of maintainers
   authors = split(pkgs, db[pkgs, 'Maintainer'])
