@@ -24,21 +24,22 @@ download_source = function(pkg) {
   download.file(sprintf('http://cran.rstudio.com/src/contrib/%s', pkg), pkg,
                 method = 'wget', mode = 'wb')
 }
+apt_get = function(pkgs, command = 'install') {
+  if (length(pkgs) == 0) return()
+  if (length(pkgs) == 1 && (is.na(pkgs) || pkgs == '')) return()
+  system2('sudo', c(sprintf('apt-get -qq %s', command), pkgs), stdout = NULL)
+}
 
 if (Sys.getenv('TRAVIS') == 'true') {
   message('Checking reverse dependencies for ', pkg)
-  sysdeps = config[pkg, 'sysdeps']
-  if (!is.na(sysdeps) && sysdeps != '')
-    system2('sudo', c('apt-get -qq install', sysdeps))
+  apt_get(config[pkg, 'sysdeps'])
 
   owd = setwd(tempdir())
   unlink(c('*00check.log', '*00install.out', '*.tar.gz'))
   pkgs_deb = system2('apt-cache', 'pkgnames', stdout = TRUE)
   pkgs_deb = grep('^r-cran-.+', pkgs_deb, value = TRUE)
   pkgs_deb = gsub('^r-cran-', '', pkgs_deb)
-  if (pkg %in% pkgs_deb) {
-    system2('sudo', c('apt-get -qq install', sprintf('r-cran-%s', pkg)))
-  }
+  if (pkg %in% pkgs_deb) apt_get(sprintf('r-cran-%s', pkg))
   devtools::install_github(config[pkg, 'install'])
 
   pkgs = strsplit(Sys.getenv('R_CHECK_PACKAGES'), '\\s+')[[1]]
@@ -51,20 +52,17 @@ if (Sys.getenv('TRAVIS') == 'true') {
     # use apt-get install/build-dep (thanks to Michael Rutter)
     p_cran = sprintf('r-cran-%s', p)
     if (p %in% pkgs_deb) {
-      system2('sudo', c('apt-get -qq install', p_cran))
+      apt_get(p_cran)
       # in case it has system dependencies
-      if (db[p, 'NeedsCompilation'] == 'yes')
-        system2('sudo', c('apt-get -qq build-dep', p_cran))
+      if (db[p, 'NeedsCompilation'] == 'yes') apg_get(p_cran, 'build-dep')
     }
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
-    deps_deb = setdiff(deps, pkgs_deb)
-    if (length(deps_deb))
-      system2('sudo', c('apt-get -qq install', sprintf('r-cran-%s', deps_deb)))
+    apt_get(sprintf('r-cran-%s', setdiff(deps, pkgs_deb)))
     # install extra dependencies not covered by apt-get
     lapply(
       deps,
       function(p) {
-        if (!(p %in% .packages(TRUE))) install.packages(p)
+        if (!(p %in% .packages(TRUE))) install.packages(p, quiet = TRUE)
       }
     )
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
