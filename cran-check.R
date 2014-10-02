@@ -90,8 +90,8 @@ if (Sys.getenv('TRAVIS') == 'true') {
     logs = Sys.glob(sprintf('%s-00*', authors[[i]]))
     if (length(logs) == 0) next
     failed = c(failed, gsub('^(.+)-00.*$', '\\1', logs))
-    cat(i, '\n\n')
-    system2('cat', logs)
+    cat('\n\n', i, '\n\n')
+    system2('cat', c(logs, ' | grep -v "... OK"'))
   }
   if (length(failed))
     stop('\nThese packages failed:\n', paste(formatUL(unique(failed)), collapse = '\n'))
