@@ -18,6 +18,7 @@ install:
   - sudo apt-add-repository -y ppa:marutter/c2d4u
   - sudo apt-get -qq update
   - sudo apt-get -qq install r-base-dev r-cran-devtools > /dev/null
+  - sudo apt-get autoremove
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
 
 script:
