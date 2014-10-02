@@ -97,8 +97,9 @@ if (Sys.getenv('TRAVIS') == 'true') {
   for (i in names(authors)) {
     logs = Sys.glob(sprintf('%s-00*', authors[[i]]))
     if (length(logs) == 0) next
-    failed = c(failed, gsub('^(.+)-00.*$', '\\1', logs))
-    cat('\n\n', i, '\n\n')
+    fail  = gsub('^(.+)-00.*$', '\\1', logs)
+    failed = c(failed, fail)
+    cat('\n\n', paste(c(i, fail), collapse = '\n'), '\n\n')
     system2('cat', c(logs, ' | grep -v "... OK"'))
   }
   if (length(failed))
