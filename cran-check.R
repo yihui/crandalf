@@ -107,8 +107,9 @@ if (Sys.getenv('TRAVIS') == 'true') {
     }
     # some packages may take more than 10 minutes to finish, and the best I can
     # do is to use travis_wait to avoid Travis timeouts
-    cmd = system2(
-      'travis_wait', c('R CMD check --no-codoc --no-manual', acv), stdout = NULL
+    cmd = system(
+      paste('travis_wait R CMD check --no-codoc --no-manual', acv),
+      ignore.stdout = TRUE
     )
     if (cmd != 0) {
       out = list.files(sprintf('%s.Rcheck', p), '^00.+[.](log|out)$', full.names = TRUE)
