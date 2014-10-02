@@ -46,6 +46,9 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   system2('sudo', 'apt-get -f install')
   cmd('')  # write to stdout to diagnose the problem
 }
+pkg_loadable = function(p) {
+  (p %in% .packages(TRUE)) && require(p, character.only = TRUE, quietly = TRUE)
+}
 
 if (Sys.getenv('TRAVIS') == 'true') {
   message('Checking reverse dependencies for ', pkg)
@@ -82,11 +85,10 @@ if (Sys.getenv('TRAVIS') == 'true') {
     lapply(
       deps,
       function(p) {
-        if (p %in% .packages(TRUE))
-          if (require(p, character.only = TRUE, quietly = TRUE)) return()
+        if (pkg_loadable(p)) return()
         if (db[p, 'NeedsCompilation'] == 'yes') apt_get(p, 'build-dep')
         install.packages(p, quiet = TRUE)
-        if (require(p, character.only = TRUE, quietly = TRUE)) return()
+        if (pkg_loadable(p)) return()
         # reinstall: why did it fail?
         install.packages(p, quiet = FALSE)
       }
