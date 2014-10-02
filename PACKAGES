@@ -1,0 +1,10 @@
+package: formatR
+install: yihui/formatR
+
+package: knitr
+install: yihui/knitr
+matrix: 10
+sysdeps: pandoc pandoc-citeproc
+
+package: mime
+install: yihui/mime
