@@ -115,8 +115,12 @@ if (Sys.getenv('TRAVIS') == 'true') {
       'R', c('CMD check --no-codoc --no-manual', acv, '> /dev/null && echo 0 > done || touch done'),
       stdout = NULL, wait = FALSE
     )
+    s = 0
     while(!file.exists('done')) {
-      Sys.sleep(30)
+      Sys.sleep(1)
+      s = s + 1
+      if (s < 30) next
+      s = 0
       cat('.')  # write a dot to stdout every 30 seconds to avoid Travis timeouts
     }
     if (file.info('done')[, 'size'] == 0) {
