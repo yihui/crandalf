@@ -73,12 +73,16 @@ if (Sys.getenv('TRAVIS') == 'true') {
   }
   # output in the order of maintainers
   authors = split(pkgs, db[pkgs, 'Maintainer'])
+  failed = NULL
   for (i in names(authors)) {
     logs = Sys.glob(sprintf('%s-00*', authors[[i]]))
     if (length(logs) == 0) next
+    failed = c(failed, gsub('^(.+)-00.*$', '\\1', logs))
     cat(i, '\n\n')
     system2('cat', logs)
   }
+  if (length(failed))
+    stop('These packages failed:\n\n', paste(formatUL(unique(failed)), collapse = '\n'))
   setwd(owd)
 } else {
   pkgs = tools::package_dependencies(pkg, db, 'all', reverse = TRUE)[[1]]
