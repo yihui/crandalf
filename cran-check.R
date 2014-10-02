@@ -36,6 +36,9 @@ if (Sys.getenv('TRAVIS') == 'true') {
   pkgs_deb = system2('apt-cache', 'pkgnames', stdout = TRUE)
   pkgs_deb = grep('^r-cran-.+', pkgs_deb, value = TRUE)
   pkgs_deb = gsub('^r-cran-', '', pkgs_deb)
+  if (pkg %in% pkgs_deb) {
+    system2('sudo', c('apt-get -qq install', sprintf('r-cran-%s', pkg)))
+  }
   devtools::install_github(config[pkg, 'install'])
 
   pkgs = strsplit(Sys.getenv('R_CHECK_PACKAGES'), '\\s+')[[1]]
