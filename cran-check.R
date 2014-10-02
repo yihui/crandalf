@@ -133,7 +133,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
   if (is.na(m) || m == 0) m = 5  # 5 parallel builds by default
   items = sprintf(
     '    - R_CHECK_PACKAGES="%s"',
-    sapply(split(pkgs, rep(1:m, length.out = length(pkgs))), paste, collapse = ' ')
+    sapply(split(pkgs, sort(rep(1:m, length.out = length(pkgs)))), paste, collapse = ' ')
   )
   x = readLines('.travis.yml')
   i1 = which(x == '# matrix-start')
