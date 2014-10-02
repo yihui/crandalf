@@ -5,5 +5,13 @@
 # create branches from the current master if they do not exist
 for i in `grep -G '^package:' PACKAGES | sed 's/^package:\s*//' | sed 's/\s*//'`;
 do
-  git show-ref --verify --quiet refs/heads/$i || git branch $i
+  if git show-ref --verify --quiet refs/heads/$i; then
+    git checkout $i
+    git rebase master
+    Rscript cran-check.R
+    echo `git add -A && git commit -m"update branch $(date)"`
+    git checkout master
+  else
+    git branch $i
+  fi
 done
