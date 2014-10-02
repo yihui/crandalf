@@ -56,9 +56,13 @@ if (Sys.getenv('TRAVIS') == 'true') {
       if (db[p, 'NeedsCompilation'] == 'yes')
         system2('sudo', c('apt-get -qq build-dep', p_cran))
     }
+    deps = tools::package_dependencies(p, db, which = TRUE)[[1]]
+    deps_deb = setdiff(deps, pkgs_deb)
+    if (length(deps_deb))
+      system2('sudo', c('apt-get -qq install', sprintf('r-cran-%s', deps_deb)))
     # install extra dependencies not covered by apt-get
     lapply(
-      tools::package_dependencies(p, db, which = TRUE)[[1]],
+      deps,
       function(p) {
         if (!require(p, character.only = TRUE)) install.packages(p)
       }
