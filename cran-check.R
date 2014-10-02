@@ -33,7 +33,18 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
     if (length(pkgs) == 0) return()
     pkgs = sprintf('r-cran-%s', pkgs)
   }
-  system2('sudo', c(sprintf('apt-get -qq %s', command), pkgs), stdout = NULL)
+  cmd = function(stdout = NULL) {
+    system2(
+      'sudo',
+      c(sprintf('apt-get %s %s', if (is.null(stdout)) '-qq' else '', command), pkgs),
+      stdout = stdout
+    )
+  }
+  if (cmd() == 0) return()
+  # current I see it is possible to get the error "Unable to correct problems,
+  # you have held broken packages", so see if `apt-get -f install` can fix it
+  system2('sudo', 'apt-get -f install')
+  cmd('')  # write to stdout to diagnose the problem
 }
 
 if (Sys.getenv('TRAVIS') == 'true') {
