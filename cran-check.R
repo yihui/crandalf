@@ -54,7 +54,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     if (p %in% pkgs_deb) {
       apt_get(p_cran)
       # in case it has system dependencies
-      if (db[p, 'NeedsCompilation'] == 'yes') apg_get(p_cran, 'build-dep')
+      if (db[p, 'NeedsCompilation'] == 'yes') apt_get(p_cran, 'build-dep')
     }
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db))))
