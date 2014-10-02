@@ -99,11 +99,10 @@ if (Sys.getenv('TRAVIS') == 'true') {
       writeLines('Download failed', sprintf('%s-00download', p))
       next
     }
-    # some packages may take more than 10 minutes to finish, and we need stdout
-    # output to avoid Travis timeouts
-    timeout = c('DLMtool', 'SCGLR')
+    # some packages may take more than 10 minutes to finish, and the best I can
+    # do is to use travis_wait to avoid Travis timeouts
     cmd = system2(
-      'R', c('CMD check --no-codoc --no-manual', acv), stdout = p %in% timeout
+      'travis_wait', c('R CMD check --no-codoc --no-manual', acv), stdout = NULL
     )
     if (cmd != 0) {
       out = list.files(sprintf('%s.Rcheck', p), '^00.+[.](log|out)$', full.names = TRUE)
