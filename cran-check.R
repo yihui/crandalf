@@ -24,22 +24,28 @@ download_source = function(pkg) {
   download.file(sprintf('http://cran.rstudio.com/src/contrib/%s', pkg), pkg,
                 method = 'wget', mode = 'wb', quiet = TRUE)
 }
-apt_get = function(pkgs, command = 'install') {
+apt_get = function(pkgs, command = 'install', R = TRUE) {
   if (length(pkgs) == 0) return()
   if (length(pkgs) == 1 && (is.na(pkgs) || pkgs == '')) return()
+  if (R) {
+    pkgs = tolower(pkgs)
+    pkgs = intersect(pkgs, pkgs_deb)
+    if (length(pkgs) == 0) return()
+    pkgs = sprintf('r-cran-%s', pkgs)
+  }
   system2('sudo', c(sprintf('apt-get -qq %s', command), pkgs), stdout = NULL)
 }
 
 if (Sys.getenv('TRAVIS') == 'true') {
   message('Checking reverse dependencies for ', pkg)
-  apt_get(config[pkg, 'sysdeps'])
+  apt_get(config[pkg, 'sysdeps'], R = FALSE)
 
   owd = setwd(tempdir())
   unlink(c('*00check.log', '*00install.out', '*.tar.gz'))
   pkgs_deb = system2('apt-cache', 'pkgnames', stdout = TRUE)
   pkgs_deb = grep('^r-cran-.+', pkgs_deb, value = TRUE)
   pkgs_deb = gsub('^r-cran-', '', pkgs_deb)
-  if (pkg %in% pkgs_deb) apt_get(sprintf('r-cran-%s', pkg))
+  apt_get(pkg)
   # knitr's reverse dependencies may need rmarkdown for R Markdown v2 vignettes
   if (pkg == 'knitr' && !('rmarkdown' %in% .packages(TRUE)))
     install.packages('rmarkdown', quiet = TRUE)
@@ -53,20 +59,17 @@ if (Sys.getenv('TRAVIS') == 'true') {
     p = pkgs[i]
     message(sprintf('Checking %s (%d/%d)', p, i, n))
     # use apt-get install/build-dep (thanks to Michael Rutter)
-    p_cran = sprintf('r-cran-%s', p)
-    if (p %in% pkgs_deb) {
-      apt_get(p_cran)
-      # in case it has system dependencies
-      if (db[p, 'NeedsCompilation'] == 'yes') apt_get(p_cran, 'build-dep')
-    }
+    apt_get(p)
+    # in case it has system dependencies
+    if (db[p, 'NeedsCompilation'] == 'yes') apt_get(p, 'build-dep')
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db, recursive = TRUE))))
-    apt_get(sprintf('r-cran-%s', intersect(tolower(deps), pkgs_deb)))
+    apt_get(deps)
     # known broken packages in the PPA
     broken = c('rJava', 'xtable')
     broken = intersect(broken, deps)
     if (length(broken)) {
-      apt_get(intersect(tolower(broken), pkgs_deb), 'build-dep')
+      apt_get(broken, 'build-dep')
       install.packages(broken, quiet = TRUE)
     }
     # install extra dependencies not covered by apt-get
