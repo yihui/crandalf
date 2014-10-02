@@ -1,0 +1,9 @@
+#!/bin/sh
+
+[ `git rev-parse --abbrev-ref HEAD` = master ] && exit 0
+git rebase master
+Rscript cran-check.R
+git add -A
+git commit -m"update branch `date`"
+# git push -f
+
