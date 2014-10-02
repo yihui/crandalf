@@ -60,7 +60,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
       if (db[p, 'NeedsCompilation'] == 'yes') apt_get(p_cran, 'build-dep')
     }
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
-    deps = unique(c(deps, unlist(tools::package_dependencies(deps, db))))
+    deps = unique(c(deps, unlist(tools::package_dependencies(deps, db, recursive = TRUE))))
     apt_get(sprintf('r-cran-%s', intersect(tolower(deps), pkgs_deb)))
     broken = intersect(c('xtable'), deps)  # known broken packages in the PPA
     if (length(broken)) install.packages(broken, quiet = TRUE)
