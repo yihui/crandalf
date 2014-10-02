@@ -86,7 +86,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
       install.packages(broken)
     }
     # some packages that cannot be installed
-    broken = c('depth', 'mmod', 'pkgmaker', 'RcmdrMisc', 'spatstat', 'XLConnectJars')
+    broken = c('depth', 'mmod', 'pkgmaker', 'rgbif', 'rgdal', 'spatstat', 'RcmdrMisc', 'RAppArmor', 'XLConnectJars')
     # install extra dependencies not covered by apt-get
     lapply(
       deps,
