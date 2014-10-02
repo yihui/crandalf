@@ -11,6 +11,7 @@ env:
 install:
   - sudo apt-add-repository -y "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+  - sudo apt-add-repository -y ppa:marutter/c2d4u
   - sudo apt-get -qq update
   - sudo apt-get -qq install r-base-dev r-cran-devtools
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
