@@ -64,7 +64,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     lapply(
       deps,
       function(p) {
-        if (!require(p, character.only = TRUE)) install.packages(p)
+        if (!(p %in% .packages(TRUE))) install.packages(p)
       }
     )
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
