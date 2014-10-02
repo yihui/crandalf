@@ -57,6 +57,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
       if (db[p, 'NeedsCompilation'] == 'yes') apg_get(p_cran, 'build-dep')
     }
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
+    deps = unique(c(deps, unlist(tools::package_dependencies(deps, db))))
     apt_get(sprintf('r-cran-%s', setdiff(deps, pkgs_deb)))
     # install extra dependencies not covered by apt-get
     lapply(
