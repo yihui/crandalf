@@ -85,11 +85,14 @@ if (Sys.getenv('TRAVIS') == 'true') {
       apt_get(broken, 'build-dep')
       install.packages(broken)
     }
+    # some packages that cannot be installed
+    broken = c('depth', 'mmod', 'pkgmaker', 'RcmdrMisc', 'spatstat', 'XLConnectJars')
     # install extra dependencies not covered by apt-get
     lapply(
       deps,
       function(p) {
-        if (!(p %in% .packages(TRUE))) install.packages(p, quiet = TRUE)
+        if (!(p %in% .packages(TRUE)))
+          install.packages(p, quiet = !(p %in% broken))
       }
     )
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
