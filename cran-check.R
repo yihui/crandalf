@@ -49,6 +49,9 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
 pkg_loadable = function(p) {
   (p %in% .packages(TRUE)) && requireNamespace(p, quietly = TRUE)
 }
+need_compile = function(p) {
+  (p %in% rownames(db)) && db[p, 'NeedsCompilation'] == 'yes'
+}
 
 if (Sys.getenv('TRAVIS') == 'true') {
   message('Checking reverse dependencies for ', pkg)
@@ -77,7 +80,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     # use apt-get install/build-dep (thanks to Michael Rutter)
     apt_get(p)
     # in case it has system dependencies
-    if (db[p, 'NeedsCompilation'] == 'yes') apt_get(p, 'build-dep')
+    if (need_compile(p)) apt_get(p, 'build-dep')
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db, recursive = TRUE))))
     apt_get(deps)
@@ -86,7 +89,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
       deps,
       function(p) {
         if (pkg_loadable(p)) return()
-        if (db[p, 'NeedsCompilation'] == 'yes') {
+        if (need_compile(p)) {
           apt_get(p, 'build-dep')
           switch(
             p,
