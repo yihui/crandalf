@@ -86,7 +86,13 @@ if (Sys.getenv('TRAVIS') == 'true') {
       deps,
       function(p) {
         if (pkg_loadable(p)) return()
-        if (db[p, 'NeedsCompilation'] == 'yes') apt_get(p, 'build-dep')
+        if (db[p, 'NeedsCompilation'] == 'yes') {
+          apt_get(p, 'build-dep')
+          switch(
+            p,
+            rJava = system2('sudo', 'R CMD javareconf')
+          )
+        }
         install.packages(p, quiet = TRUE)
         if (pkg_loadable(p)) return()
         # reinstall: why did it fail?
