@@ -3,7 +3,7 @@ install: yihui/formatR
 
 package: knitr
 install: yihui/knitr
-matrix: 10
+matrix: 30
 sysdeps: pandoc pandoc-citeproc
 
 package: mime
