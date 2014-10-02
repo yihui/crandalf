@@ -78,21 +78,17 @@ if (Sys.getenv('TRAVIS') == 'true') {
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db, recursive = TRUE))))
     apt_get(deps)
-    # known broken packages in the PPA
-    broken = c('abind', 'MCMCpack', 'rJava', 'timeDate', 'xtable')
-    broken = intersect(broken, deps)
-    if (length(broken)) {
-      apt_get(broken, 'build-dep')
-      install.packages(broken)
-    }
-    # some packages that cannot be installed
-    broken = c('depth', 'mmod', 'pkgmaker', 'rgbif', 'rgdal', 'spatstat', 'RcmdrMisc', 'RAppArmor', 'XLConnectJars')
     # install extra dependencies not covered by apt-get
     lapply(
       deps,
       function(p) {
-        if (!(p %in% .packages(TRUE)))
-          install.packages(p, quiet = !(p %in% broken))
+        if (p %in% .packages(TRUE))
+          if (require(p, character.only = TRUE, quietly = TRUE)) return()
+        if (db[p, 'NeedsCompilation'] == 'yes') apt_get(p, 'build-dep')
+        install.packages(p, quiet = TRUE)
+        if (require(p, character.only = TRUE, quietly = TRUE)) return()
+        # reinstall: why did it fail?
+        install.packages(p, quiet = FALSE)
       }
     )
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
