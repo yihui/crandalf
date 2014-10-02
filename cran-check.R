@@ -96,6 +96,8 @@ if (Sys.getenv('TRAVIS') == 'true') {
             rJava = system2('sudo', 'R CMD javareconf')
           )
         }
+        # p is not loadable, and it might be due to its dependencies are not loadable
+        for (k in tools::package_dependencies(p, db)[[1]]) Recall(k)
         install.packages(p, quiet = TRUE)
         if (pkg_loadable(p)) return()
         # reinstall: why did it fail?
