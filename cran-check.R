@@ -62,8 +62,13 @@ if (Sys.getenv('TRAVIS') == 'true') {
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db, recursive = TRUE))))
     apt_get(sprintf('r-cran-%s', intersect(tolower(deps), pkgs_deb)))
-    broken = intersect(c('xtable'), deps)  # known broken packages in the PPA
-    if (length(broken)) install.packages(broken, quiet = TRUE)
+    # known broken packages in the PPA
+    broken = c('rJava', 'xtable')
+    broken = intersect(broken, deps)
+    if (length(broken)) {
+      apt_get(intersect(tolower(broken), pkgs_deb), 'build-dep')
+      install.packages(broken, quiet = TRUE)
+    }
     # install extra dependencies not covered by apt-get
     lapply(
       deps,
