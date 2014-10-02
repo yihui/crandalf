@@ -22,7 +22,7 @@ rownames(config) = config[, 'package']
 
 download_source = function(pkg) {
   download.file(sprintf('http://cran.rstudio.com/src/contrib/%s', pkg), pkg,
-                method = 'wget', mode = 'wb')
+                method = 'wget', mode = 'wb', quiet = TRUE)
 }
 apt_get = function(pkgs, command = 'install') {
   if (length(pkgs) == 0) return()
