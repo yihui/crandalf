@@ -145,8 +145,9 @@ if (Sys.getenv('TRAVIS') == 'true') {
     while(!file.exists('done')) {
       Sys.sleep(1)
       s = s + 1
-      if (s < 30) next
-      s = 0
+      if (s %% 30 != 0) next
+      # if it has not finished in 10 minutes, print the log to see what happened
+      if (s > 10 * 60) system2('cat', sprintf('%s.Rcheck/00*.*', p))
       cat('.')  # write a dot to stdout every 30 seconds to avoid Travis timeouts
     }
     if (file.info('done')[, 'size'] == 0) {
