@@ -8,3 +8,8 @@ package: rgdal
 recipe: sudo apt-get install aptitude;
   yes | sudo aptitude install libgdal-dev;
   sudo aptitude install libproj-dev libgeos-dev
+
+package: rgeos
+recipe: sudo apt-get install aptitude;
+  yes | sudo aptitude install libgdal-dev;
+  sudo aptitude install libproj-dev libgeos-dev
