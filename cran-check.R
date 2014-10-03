@@ -33,6 +33,9 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   if (length(pkgs) == 0) return()
   if (length(pkgs) == 1 && (is.na(pkgs) || pkgs == '')) return()
   if (R) {
+    if (command == 'install') pkgs = unlist(lapply(pkgs, function(p) {
+      if (!pkg_loadable(p)) p
+    }), use.names = FALSE)
     pkgs = tolower(pkgs)
     if (command == 'install') {
       for (p in intersect(pkgs, rownames(recipes))) system(recipes[p, 'recipe'])
