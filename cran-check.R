@@ -41,6 +41,7 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
       for (p in intersect(pkgs, rownames(recipes))) system(recipes[p, 'recipe'])
       pkgs = setdiff(pkgs, tolower(pkgs_old))
     }
+    if (command == 'build-dep') pkgs = setdiff(pkgs, rownames(recipes))
     pkgs = intersect(pkgs, pkgs_deb)
     if (length(pkgs) == 0) return()
     pkgs = sprintf('r-cran-%s', pkgs)
