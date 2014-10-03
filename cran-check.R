@@ -16,6 +16,11 @@ if (is.na(match(pkg, config[, 'package'])))
   stop('The package ', pkg, ' was not specified in the PACKAGES file')
 rownames(config) = config[, 'package']
 
+# additional system dependencies for R packages that I cannot figure out by
+# apt-get build-dep
+recipes = read.dcf('RECIPES')
+rownames(recipes) = tolower(recipes[, 'package'])
+
 download_source = function(pkg) {
   download.file(sprintf('http://cran.rstudio.com/src/contrib/%s', pkg), pkg,
                 method = 'wget', mode = 'wb', quiet = TRUE)
@@ -28,8 +33,11 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   if (length(pkgs) == 1 && (is.na(pkgs) || pkgs == '')) return()
   if (R) {
     pkgs = tolower(pkgs)
+    if (command == 'install') {
+      pkgs = setdiff(pkgs, tolower(pkgs_old))
+      for (p in intersect(pkgs, rownames(recipes))) system(recipes[p, 'recipe'])
+    }
     pkgs = intersect(pkgs, pkgs_deb)
-    if (command == 'install') pkgs = setdiff(pkgs, tolower(pkgs_old))
     if (length(pkgs) == 0) return()
     pkgs = sprintf('r-cran-%s', pkgs)
   }
