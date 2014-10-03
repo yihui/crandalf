@@ -37,12 +37,13 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
       if (!pkg_loadable(p)) p
     }), use.names = FALSE)
     pkgs = tolower(pkgs)
-    if (command == 'install') {
+    if (command %in% c('install', 'build-dep')) {
       for (p in intersect(pkgs, rownames(recipes))) system(recipes[p, 'recipe'])
       pkgs = setdiff(pkgs, rownames(recipes))
+    }
+    if (command == 'install') {
       pkgs = setdiff(pkgs, tolower(pkgs_old))
     }
-    if (command == 'build-dep') pkgs = setdiff(pkgs, rownames(recipes))
     pkgs = intersect(pkgs, pkgs_deb)
     if (length(pkgs) == 0) return()
     pkgs = sprintf('r-cran-%s', pkgs)
