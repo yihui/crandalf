@@ -186,7 +186,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
   i1 = which(x == '# matrix-start')
   i2 = which(x == '# matrix-end')
   writeLines(c(x[1:i1], items, x[i2:length(x)]), '.travis.yml')
-  repo = 'https://travis-ci.org/yihui/cran-revdep-check'
+  repo = 'https://travis-ci.org/yihui/crandalf'
   writeLines(c(sprintf(
     '# %s\n\n[![Build Status](%s.svg?branch=%s)](%s)\n', pkg,
     repo, pkg, repo
