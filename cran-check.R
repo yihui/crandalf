@@ -27,6 +27,7 @@ download_source = function(pkg) {
 }
 # some old packages should not be installed from PPA, e.g. abind
 pkgs_old = rownames(db)[as.Date(db[, 'Published']) <= as.Date('2013-04-03')]
+pkgs_old = unname(pkgs_old)
 
 apt_get = function(pkgs, command = 'install', R = TRUE) {
   if (length(pkgs) == 0) return()
