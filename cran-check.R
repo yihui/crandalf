@@ -51,6 +51,7 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   if (cmd() == 0) return()
   # current I see it is possible to get the error "Unable to correct problems,
   # you have held broken packages", so see if `apt-get -f install` can fix it
+  system2('sudo', 'apt-get update -qq')
   system2('sudo', 'apt-get -f install')
   cmd('')  # write to stdout to diagnose the problem
 }
