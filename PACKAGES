@@ -4,6 +4,7 @@ install: yihui/formatR
 package: knitr
 install: yihui/knitr
 matrix: 30
+separate: BTYD R.rsp
 sysdeps: pandoc pandoc-citeproc
 
 package: mime
