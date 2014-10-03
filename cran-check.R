@@ -116,6 +116,9 @@ if (Sys.getenv('TRAVIS') == 'true') {
     lapply(deps, install_deps)
     # double check if all installed packages are up-to-date
     update_pkgs()
+    broken = c('abind', 'xtable')
+    broken = intersect(broken, .packages(TRUE))
+    for (k in broken) if (!pkg_loadable(k)) install.packages(k)
 
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
     for (j in 1:5) if (download_source(acv) == 0) break
