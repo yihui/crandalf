@@ -69,6 +69,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
   pkgs = strsplit(Sys.getenv('R_CHECK_PACKAGES'), '\\s+')[[1]]
   n = length(pkgs)
   if (n == 0) q('no')
+  db2 = available.packages()
 
   for (i in seq_len(n)) {
     p = pkgs[i]
@@ -82,12 +83,12 @@ if (Sys.getenv('TRAVIS') == 'true') {
     apt_get(deps)
 
     # update old debian R packages
-    old = rownames(old.packages(checkBuilt = TRUE, available = db))
+    old = rownames(old.packages(checkBuilt = TRUE, available = db2))
     if (length(old)) {
       apt_get(old, 'build-dep')
       if ('rJava' %in% old) system2('sudo', 'R CMD javareconf')
       try(update.packages(
-        ask = FALSE, checkBuilt = TRUE, available = db, instlib = .libPaths()[1]
+        ask = FALSE, checkBuilt = TRUE, available = db2, instlib = .libPaths()[1]
       ))
     }
 
@@ -105,7 +106,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     lapply(deps, install_deps)
     # double check if all installed packages are up-to-date
     try(update.packages(
-      ask = FALSE, checkBuilt = TRUE, available = db, instlib = .libPaths()[1]
+      ask = FALSE, checkBuilt = TRUE, available = db2, instlib = .libPaths()[1]
     ))
 
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
