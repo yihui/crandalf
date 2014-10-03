@@ -20,6 +20,7 @@ rownames(config) = config[, 'package']
 # apt-get build-dep
 recipes = read.dcf('RECIPES')
 rownames(recipes) = tolower(recipes[, 'package'])
+stopifnot(ncol(recipes) == 2, identical(colnames(recipes), c('package', 'recipe')))
 
 download_source = function(pkg) {
   download.file(sprintf('http://cran.rstudio.com/src/contrib/%s', pkg), pkg,
