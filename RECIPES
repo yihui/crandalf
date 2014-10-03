@@ -7,4 +7,4 @@ recipe: sudo apt-get install octave liboctave-dev
 package: rgdal
 recipe: sudo apt-get install aptitude;
   yes | sudo aptitude install libgdal-dev;
-  sudo aptitude install libproj-dev
+  sudo aptitude install libproj-dev libgeos-dev
