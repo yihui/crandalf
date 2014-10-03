@@ -1,3 +1,6 @@
+package: fftw
+recipe: sudo apt-get install libfftw3-dev
+
 package: RcppOctave
 recipe: sudo apt-get install octave liboctave-dev
 
