@@ -81,15 +81,19 @@ if (Sys.getenv('TRAVIS') == 'true') {
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db, recursive = TRUE))))
     apt_get(deps)
 
+    # update old debian R packages
+    old = rownames(old.packages(checkBuilt = TRUE, available = db))
+    if (length(old)) {
+      apt_get(old, 'build-dep')
+      if ('rJava' %in% old) system2('sudo', 'R CMD javareconf')
+      try(update.packages(
+        ask = FALSE, checkBuilt = TRUE, available = db, instlib = .libPaths()[1]
+      ))
+    }
+
     install_deps = function(p) {
       if (pkg_loadable(p)) return()
-      if (need_compile(p)) {
-        apt_get(p, 'build-dep')
-        switch(
-          p,
-          rJava = system2('sudo', 'R CMD javareconf')
-        )
-      }
+      if (need_compile(p)) apt_get(p, 'build-dep')
       # p is not loadable, and it might be due to its dependencies are not loadable
       for (k in tools::package_dependencies(p, db)[[1]]) Recall(k)
       install.packages(p, quiet = TRUE)
@@ -99,8 +103,10 @@ if (Sys.getenv('TRAVIS') == 'true') {
     }
     # install extra dependencies not covered by apt-get
     lapply(deps, install_deps)
-    # double check if all installed packages are loadable
-    lapply(.packages(TRUE), install_deps)
+    # double check if all installed packages are up-to-date
+    try(update.packages(
+      ask = FALSE, checkBuilt = TRUE, available = db, instlib = .libPaths()[1]
+    ))
 
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
     for (j in 1:5) if (download_source(acv) == 0) break
