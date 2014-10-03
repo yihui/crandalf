@@ -42,10 +42,13 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
     if (length(pkgs) == 0) return()
     pkgs = sprintf('r-cran-%s', pkgs)
   }
-  cmd = function(stdout = NULL) {
+  cmd = function(stdout = NULL, options = '') {
     system2(
       'sudo',
-      c(sprintf('apt-get %s %s', if (is.null(stdout)) '-qq' else '', command), pkgs),
+      c(sprintf(
+        'apt-get %s %s %s',
+        if (is.null(stdout)) '-qq' else '', options, command
+      ), pkgs),
       stdout = stdout
     )
   }
@@ -53,8 +56,7 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   # current I see it is possible to get the error "Unable to correct problems,
   # you have held broken packages", so see if `apt-get -f install` can fix it
   system2('sudo', 'apt-get update -qq')
-  system2('sudo', 'apt-get -f install')
-  cmd('')  # write to stdout to diagnose the problem
+  cmd('', '-f')  # write to stdout to diagnose the problem
 }
 pkg_loadable = function(p) {
   (p %in% .packages(TRUE)) && requireNamespace(p, quietly = TRUE)
