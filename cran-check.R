@@ -20,12 +20,16 @@ download_source = function(pkg) {
   download.file(sprintf('http://cran.rstudio.com/src/contrib/%s', pkg), pkg,
                 method = 'wget', mode = 'wb', quiet = TRUE)
 }
+# some old packages should not be installed from PPA, e.g. abind
+pkgs_old = rownames(db)[as.Date(db[, 'Published']) <= as.Date('2013-04-03')]
+
 apt_get = function(pkgs, command = 'install', R = TRUE) {
   if (length(pkgs) == 0) return()
   if (length(pkgs) == 1 && (is.na(pkgs) || pkgs == '')) return()
   if (R) {
     pkgs = tolower(pkgs)
     pkgs = intersect(pkgs, pkgs_deb)
+    if (command == 'install') pkgs = setdiff(pkgs, tolower(pkgs_old))
     if (length(pkgs) == 0) return()
     pkgs = sprintf('r-cran-%s', pkgs)
   }
@@ -88,6 +92,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db, recursive = TRUE))))
     apt_get(deps)
+    apt_get(pkgs_old, 'remove')
 
     # update old debian R packages
     old = rownames(old.packages(checkBuilt = TRUE, available = db2))
@@ -111,11 +116,6 @@ if (Sys.getenv('TRAVIS') == 'true') {
     lapply(deps, install_deps)
     # double check if all installed packages are up-to-date
     update_pkgs()
-    # it is weird that some packages just cannot be updated for reasons that I
-    # really cannot fiugre out, e.g. abind, so let's manually install them
-    old = old.packages(checkBuilt = TRUE, available = db2)
-    for (k in names(which(as.numeric_version(old[, 'Built']) < '3.0.0')))
-      if (!pkg_loadable(k)) install.packages(k)
 
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
     for (j in 1:5) if (download_source(acv) == 0) break
