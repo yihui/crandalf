@@ -69,7 +69,14 @@ if (Sys.getenv('TRAVIS') == 'true') {
   pkgs = strsplit(Sys.getenv('R_CHECK_PACKAGES'), '\\s+')[[1]]
   n = length(pkgs)
   if (n == 0) q('no')
+
   db2 = available.packages()
+  update_pkgs = function() {
+    try(suppressWarnings(update.packages(
+      ask = FALSE, checkBuilt = TRUE, available = db2, instlib = .libPaths()[1],
+      quiet = TRUE
+    )))
+  }
 
   for (i in seq_len(n)) {
     p = pkgs[i]
@@ -87,9 +94,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     if (length(old)) {
       apt_get(old, 'build-dep')
       if ('rJava' %in% old) system2('sudo', 'R CMD javareconf')
-      try(update.packages(
-        ask = FALSE, checkBuilt = TRUE, available = db2, instlib = .libPaths()[1]
-      ))
+      update_pkgs()
     }
 
     install_deps = function(p) {
@@ -105,9 +110,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     # install extra dependencies not covered by apt-get
     lapply(deps, install_deps)
     # double check if all installed packages are up-to-date
-    try(update.packages(
-      ask = FALSE, checkBuilt = TRUE, available = db2, instlib = .libPaths()[1]
-    ))
+    update_pkgs()
 
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
     for (j in 1:5) if (download_source(acv) == 0) break
