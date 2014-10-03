@@ -175,10 +175,10 @@ if (Sys.getenv('TRAVIS') == 'true') {
   items = sprintf(
     '    - R_CHECK_PACKAGES="%s"',
     c(
+      pkgs2,
       if (length(pkgs))
         sapply(split(pkgs, sort(rep(1:m, length.out = length(pkgs)))),
-               paste, collapse = ' '),
-      pkgs2
+               paste, collapse = ' ')
     )
   )
   if (length(items) == 0) q('no')
