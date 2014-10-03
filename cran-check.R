@@ -171,6 +171,8 @@ if (Sys.getenv('TRAVIS') == 'true') {
   setwd(owd)
 } else {
   pkgs = tools::package_dependencies(pkg, db, 'all', reverse = TRUE)[[1]]
+  pkgs_only = config[pkg, 'only']
+  if (!is.na(pkgs_only) && pkgs_only != '') pkgs = intersect(pkgs, pkgs_only)
   if (length(pkgs) == 0) q('no')  # are you kidding?
   m = as.numeric(config[pkg, 'matrix'])
   if (is.na(m) || m == 0) m = 5  # 5 parallel builds by default

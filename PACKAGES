@@ -4,6 +4,7 @@ install: yihui/formatR
 package: knitr
 install: yihui/knitr
 matrix: 30
+only: expp psd qdap RcppOctave rgbif rnoaa spocc soundecology tmap
 separate: BTYD R.rsp
 sysdeps: pandoc pandoc-citeproc
 
