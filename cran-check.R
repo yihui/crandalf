@@ -127,6 +127,9 @@ if (Sys.getenv('TRAVIS') == 'true') {
       for (k in tools::package_dependencies(p, db)[[1]]) Recall(k)
       install.packages(p, quiet = TRUE)
       if (pkg_loadable(p)) return()
+      tryCatch(library(p, character.only = TRUE), finally = {
+        if (p %in% .packages()) detach(sprintf('package:', p), unload = TRUE)
+      })
       # reinstall: why did it fail?
       install.packages(p, quiet = FALSE)
     }
