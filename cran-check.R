@@ -9,10 +9,6 @@ options(repos = c(CRAN = 'http://cran.rstudio.com'))
 
 con = url('http://cran.rstudio.com/web/packages/packages.rds', 'rb')
 db = tryCatch(readRDS(gzcon(con)), finally = close(con))
-db = db[, c(
-  'Package', 'Depends', 'Imports', 'LinkingTo', 'Suggests', 'Enhances', 'Version',
-  'Maintainer', 'NeedsCompilation'
-)]
 rownames(db) = db[, 'Package']
 
 config = read.dcf('PACKAGES')
