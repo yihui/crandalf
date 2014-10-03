@@ -4,7 +4,7 @@ install: yihui/formatR
 package: knitr
 install: yihui/knitr
 matrix: 30
-separate: dbmss doRNG BayesFactor BTYD HWxtest R.rsp
+separate: BTYD R.rsp
 sysdeps: pandoc pandoc-citeproc
 
 package: mime
