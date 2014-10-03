@@ -175,7 +175,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
   m = NA_integer_
   if (!is.na(pkgs_only) && pkgs_only != '') {
     m = 1
-    pkgs = intersect(pkgs, pkgs_only)
+    pkgs = intersect(pkgs, strsplit(pkgs_only, '\\s+')[[1]])
   }
   if (length(pkgs) == 0) q('no')  # are you kidding?
   if (is.na(m)) m = as.numeric(config[pkg, 'matrix'])
