@@ -111,6 +111,11 @@ if (Sys.getenv('TRAVIS') == 'true') {
     lapply(deps, install_deps)
     # double check if all installed packages are up-to-date
     update_pkgs()
+    # it is weird that some packages just cannot be updated for reasons that I
+    # really cannot fiugre out, e.g. abind, so let's manually install them
+    old = old.packages(checkBuilt = TRUE, available = db2)
+    for (k in names(which(as.numeric_version(old[, 'Built']) < '3.0.0')))
+      if (!pkg_loadable(k)) install.packages(k)
 
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
     for (j in 1:5) if (download_source(acv) == 0) break
