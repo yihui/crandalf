@@ -152,10 +152,22 @@ if (Sys.getenv('TRAVIS') == 'true') {
   if (length(pkgs) == 0) q('no')  # are you kidding?
   m = as.numeric(config[pkg, 'matrix'])
   if (is.na(m) || m == 0) m = 5  # 5 parallel builds by default
+  # packages that need to be checked in separate VM's
+  pkgs2 = config[pkg, 'separate']
+  pkgs2 = if (!is.na(pkgs2) && pkgs2 != '') strsplit(pkgs2, '\\s+')[[1]]
+  pkgs2 = intersect(pkgs2, pkgs)
+  # arrange the rest of packages in a matrix
+  pkgs  = setdiff(pkgs, pkgs2)
   items = sprintf(
     '    - R_CHECK_PACKAGES="%s"',
-    sapply(split(pkgs, sort(rep(1:m, length.out = length(pkgs)))), paste, collapse = ' ')
+    c(
+      if (length(pkgs))
+        sapply(split(pkgs, sort(rep(1:m, length.out = length(pkgs)))),
+               paste, collapse = ' '),
+      pkgs2
+    )
   )
+  if (length(items) == 0) q('no')
   x = readLines('.travis.yml')
   i1 = which(x == '# matrix-start')
   i2 = which(x == '# matrix-end')
