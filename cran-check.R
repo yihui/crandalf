@@ -41,7 +41,8 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
     }), use.names = FALSE)
     pkgs = tolower(pkgs)
     if (command %in% c('install', 'build-dep')) {
-      for (p in intersect(pkgs, rownames(recipes))) system(recipes[p, 'recipe'])
+      for (p in intersect(pkgs, rownames(recipes)))
+        system(paste('yes |', recipes[p, 'recipe']))
       pkgs = setdiff(pkgs, rownames(recipes))
       pkgs = setdiff(pkgs, switch(
         command,
