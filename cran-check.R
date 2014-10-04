@@ -112,7 +112,10 @@ if (Sys.getenv('TRAVIS') == 'true') {
   install_deps('devtools')
   install_deps(pkg)
   for (j in 1:5) {
-    if (!inherits(devtools::install_github(config[pkg, 'install']), 'try-error')) break
+    if (!inherits(
+      devtools::install_github(config[pkg, 'install'], quiet = TRUE),
+      'try-error'
+    )) break
     Sys.sleep(30)
   }
   if (j == 5) stop('Failed to install ', pkg, ' from Github')
