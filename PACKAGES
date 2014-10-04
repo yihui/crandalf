@@ -6,7 +6,7 @@ install: yihui/knitr
 matrix: 30
 only:
 exclude: localsolver
-separate: BTYD R.rsp
+separate: BTYD DLMtool R.rsp
 sysdeps: texlive-latex-recommended
 
 package: mime
