@@ -24,8 +24,8 @@ stopifnot(ncol(recipes) == 2, identical(colnames(recipes), c('package', 'recipe'
 
 last_time = Sys.Date()
 
-download_source = function(pkg) {
-  download.file(sprintf('http://cran.rstudio.com/src/contrib/%s', pkg), pkg,
+download_source = function(pkg, mirror = 'http://cran.rstudio.com') {
+  download.file(sprintf('%s/src/contrib/%s', pkg), mirror, pkg,
                 method = 'wget', mode = 'wb', quiet = TRUE)
 }
 
@@ -140,7 +140,10 @@ if (Sys.getenv('TRAVIS') == 'true') {
     lapply(deps, install_deps)
 
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
-    for (j in 1:5) if (download_source(acv) == 0) break
+    for (j in 1:5) {
+      if (download_source(acv) == 0) break
+      if (download_source(acv, 'http://cran.r-project.org') == 0) break
+    }
     if (j == 5) {
       writeLines('Download failed', sprintf('%s-00download', p))
       next
