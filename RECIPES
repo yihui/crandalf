@@ -3,7 +3,7 @@ recipe: sudo apt-get install libfftw3-dev
 
 package: RcppOctave
 recipe: sudo apt-get install aptitude;
-  sudo aptitude install octave liboctave-dev
+  yes | sudo aptitude install octave liboctave-dev
 
 package: rgdal
 recipe: sudo apt-get install aptitude;
