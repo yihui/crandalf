@@ -1,5 +1,6 @@
 package: formatR
 install: yihui/formatR
+matrix: 1
 
 package: knitr
 install: yihui/knitr
@@ -11,3 +12,4 @@ sysdeps: texlive-latex-recommended
 
 package: mime
 install: yihui/mime
+matrix: 1
