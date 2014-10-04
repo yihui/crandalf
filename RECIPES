@@ -3,7 +3,6 @@ recipe: sudo apt-get install libfftw3-dev
 
 package: RcppOctave
 recipe: sudo apt-add-repository -y ppa:octave/stable;
-  sudo apt-add-repository -y ppa:ppa-o/hdf5;
   sudo apt-get -qq update;
   sudo apt-get install octave liboctave-dev
 

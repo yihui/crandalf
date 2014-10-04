@@ -92,6 +92,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     apt_get(tools::package_dependencies('rmarkdown', db)[[1]])
     install.packages('rmarkdown', quiet = TRUE)
   }
+  if (!pkg_loadable('devtools')) install.packages('devtools')
   devtools::install_github(config[pkg, 'install'])
 
   pkgs = strsplit(Sys.getenv('R_CHECK_PACKAGES'), '\\s+')[[1]]
