@@ -1,4 +1,7 @@
-language: python
+language: java
+
+jdk:
+  - openjdk7
 
 env:
   global:
@@ -21,6 +24,7 @@ install:
   - sudo apt-get -qq install r-base-dev r-cran-devtools texinfo > /dev/null
   - sudo apt-get autoremove
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
+  - sudo R CMD javareconf
 
 script:
   - Rscript cran-check.R

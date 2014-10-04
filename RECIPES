@@ -14,11 +14,5 @@ recipe: sudo apt-get install aptitude;
   yes | sudo aptitude install libgdal-dev;
   sudo aptitude install libproj-dev libgeos-dev
 
-package: rJava
-recipe: sudo apt-get install openjdk-6-jdk;
-  sudo update-alternatives --remove "java" "/usr/lib/jvm/java-7-oracle/jre/bin/java";
-  sudo update-alternatives --remove "javac" "/usr/lib/jvm/java-7-oracle/bin/javac";
-  sudo R CMD javareconf
-
 package: seewave
 recipe: sudo apt-get install libsndfile1-dev
