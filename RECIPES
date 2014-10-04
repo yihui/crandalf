@@ -1,6 +1,10 @@
 package: fftw
 recipe: sudo apt-get install libfftw3-dev
 
+package: rmarkdown
+recipe: wget http://download1.rstudio.org/rstudio-0.98.1062-amd64.deb;
+  sudo dpkg -i rstudio*.deb;
+
 package: RcppOctave
 recipe: sudo apt-add-repository -y ppa:octave/stable;
   sudo apt-get -qq update;
