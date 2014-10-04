@@ -20,7 +20,8 @@ install:
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
   - sudo apt-get -qq update
   - sudo apt-get -qq install r-base-dev texinfo > /dev/null
-  - "sudo apt-get -qq install $(apt-cache pkgnames | grep -E ^r-cran- | tr '\n' ' ')"
+  - "sudo apt-get -f install $(apt-cache pkgnames | grep -E ^r-cran- | tr '\n' ' ')"
+  - sudo apt-get -f install
   - sudo apt-get autoremove
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - sudo R CMD javareconf
