@@ -11,14 +11,7 @@ recipe: sudo apt-add-repository -y ppa:octave/stable;
   sudo apt-get install -qq octave liboctave-dev
 
 package: rgdal
-recipe: sudo apt-add-repository -y ppa:sharpie/for-science;
-  sudo apt-get -qq update;
-  sudo apt-get install gdal-bin libgeos-c1 libgeos-dev libgdal-dev libproj-dev
-
-package: rgeos
-recipe: sudo apt-add-repository -y ppa:sharpie/for-science;
-  sudo apt-get -qq update;
-  sudo apt-get install gdal-bin libgeos-c1 libgeos-dev libgdal-dev libproj-dev
+recipe: sudo apt-get install libgdal-dev
 
 package: seewave
 recipe: sudo apt-get install libsndfile1-dev
