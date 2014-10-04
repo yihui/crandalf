@@ -1,5 +1,5 @@
 package: fftw
-recipe: sudo apt-get install libfftw3-dev
+recipe: sudo apt-get install -qq libfftw3-dev > /dev/null
 
 package: rmarkdown
 recipe: wget http://download1.rstudio.org/rstudio-0.98.1062-amd64.deb;
@@ -11,7 +11,7 @@ recipe: sudo apt-add-repository -y ppa:octave/stable;
   sudo apt-get install -qq octave liboctave-dev > /dev/null
 
 package: rgdal
-recipe: sudo apt-get install libgdal-dev libproj-dev > /dev/null
+recipe: sudo apt-get install -qq libgdal-dev libproj-dev > /dev/null
 
 package: seewave
-recipe: sudo apt-get install libsndfile1-dev > /dev/null
+recipe: sudo apt-get install -qq libsndfile1-dev > /dev/null
