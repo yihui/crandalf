@@ -26,7 +26,7 @@ install:
 
 script:
   - rm -rf travis_done
-  - "Rscript cran-check.R && echo 0 > travis_done || touch travis_done &"
+  - "Rscript cran-check.R | tee travis_out && echo 0 > travis_done || touch travis_done &"
   - sleep 5
-  - "while [ ! -e travis_done ]; do sleep 30; echo .; done"
+  - "while [ ! -e travis_done ]; do sleep 30; rm travis_out 2> /dev/null || echo .; done"
   - "[ -s travis_done ] || exit 1"
