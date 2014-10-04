@@ -2,19 +2,19 @@ package: fftw
 recipe: sudo apt-get install libfftw3-dev
 
 package: RcppOctave
-recipe: sudo apt-add-repository ppa:octave/stable;
-  sudo apt-get update;
+recipe: yes | sudo apt-add-repository ppa:octave/stable;
+  sudo apt-get -qq update;
   sudo apt-get install octave liboctave-dev
 
 package: rgdal
 recipe: sudo apt-add-repository ppa:sharpie/for-science;
-  sudo apt-get update;
-  sudo apt-get install gdal-bin libgeos-c1 libgeos-dev libgdal1-dev libproj-dev
+  sudo apt-get -qq update;
+  sudo apt-get install gdal-bin libgeos-c1 libgeos-dev libgdal-dev libproj-dev
 
 package: rgeos
 recipe: sudo apt-add-repository ppa:sharpie/for-science;
-  sudo apt-get update;
-  sudo apt-get install gdal-bin libgeos-c1 libgeos-dev libgdal1-dev libproj-dev
+  sudo apt-get -qq update;
+  sudo apt-get install gdal-bin libgeos-c1 libgeos-dev libgdal-dev libproj-dev
 
 package: seewave
 recipe: sudo apt-get install libsndfile1-dev
