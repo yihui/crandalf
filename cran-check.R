@@ -79,13 +79,21 @@ install_deps = function(p) {
   if (need_compile(p)) apt_get(p, 'build-dep')
   # p is not loadable, and it might be due to its dependencies are not loadable
   for (k in tools::package_dependencies(p, db)[[1]]) Recall(k)
-  install.packages(p, quiet = TRUE)
+  install = function(p, quiet = TRUE) {
+    if (p %in% rownames(db)) return(install.packages(p, quiet = quiet))
+    # perhaps it is a BioC package...
+    if (!exists('biocLite', mode = 'function'))
+      source('http://bioconductor.org/biocLite.R')
+    biocLite(p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE,
+             quiet = quiet)
+  }
+  install(p)
   if (pkg_loadable(p)) return()
   tryCatch(library(p, character.only = TRUE), error = identity, finally = {
     if (p %in% .packages()) detach(sprintf('package:', p), unload = TRUE)
   })
   # reinstall: why did it fail?
-  install.packages(p, quiet = FALSE)
+  install(p, FALSE)
 }
 cat_notok = function(logs, ...) {
   system2('cat', c(logs, ' | grep -v "... OK"'), ...)
