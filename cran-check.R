@@ -34,8 +34,10 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   if (length(pkgs) == 0) return()
   if (length(pkgs) == 1 && (is.na(pkgs) || pkgs == '')) return()
   if (R) {
-    if (command == 'install') pkgs = unlist(lapply(pkgs, function(p) {
-      if (!pkg_loadable(p)) p
+    pkgs = unlist(lapply(pkgs, function(p) {
+      if (command %in% c('install', 'build-dep'))
+        if (!need_compile(p) || pkg_loadable(p)) return()
+      p
     }), use.names = FALSE)
     pkgs = tolower(pkgs)
     if (command %in% c('install', 'build-dep')) {
