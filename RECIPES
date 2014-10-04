@@ -8,10 +8,10 @@ recipe: wget http://download1.rstudio.org/rstudio-0.98.1062-amd64.deb;
 package: RcppOctave
 recipe: sudo apt-add-repository -y ppa:octave/stable;
   sudo apt-get -qq update;
-  sudo apt-get install -qq octave liboctave-dev
+  sudo apt-get install -qq octave liboctave-dev > /dev/null
 
 package: rgdal
 recipe: sudo apt-get install libgdal-dev
 
 package: seewave
-recipe: sudo apt-get install libsndfile1-dev
+recipe: sudo apt-get install libsndfile1-dev > /dev/null
