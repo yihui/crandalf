@@ -45,7 +45,7 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
           command,
           'install'   = tolower(pkgs_old),
           'build-dep' = c('rJava')
-        )
+        ))
       }
     }
     pkgs = intersect(pkgs, pkgs_deb)
