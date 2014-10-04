@@ -14,6 +14,9 @@ recipe: wget http://download1.rstudio.org/rstudio-0.98.1062-amd64.deb;
 package: optiRum
 recipe: sudo apt-get -qq texlive-xetex > /dev/null
 
+package: RAppArmor
+recipe: sudo apt-get -qq install libapparmor-dev > /dev/null
+
 package: RcppOctave
 recipe: sudo apt-add-repository -y ppa:octave/stable;
   sudo apt-get -qq update;
@@ -21,6 +24,9 @@ recipe: sudo apt-add-repository -y ppa:octave/stable;
 
 package: Rmpfr
 recipe: sudo apt-get install -qq libmpfr-dev > /dev/null
+
+package: RProtoBuf
+recipe: sudo apt-get install -qq libprotobuf-dev > /dev/null
 
 package: rgdal
 recipe: sudo apt-get install -qq libgdal-dev libproj-dev > /dev/null
