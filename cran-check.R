@@ -25,7 +25,7 @@ stopifnot(ncol(recipes) == 2, identical(colnames(recipes), c('package', 'recipe'
 last_time = Sys.Date()
 
 download_source = function(pkg, mirror = 'http://cran.rstudio.com') {
-  download.file(sprintf('%s/src/contrib/%s', pkg), mirror, pkg,
+  download.file(sprintf('%s/src/contrib/%s', mirror, pkg), pkg,
                 method = 'wget', mode = 'wb', quiet = TRUE)
 }
 
