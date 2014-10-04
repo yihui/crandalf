@@ -26,9 +26,6 @@ download_source = function(pkg) {
   download.file(sprintf('http://cran.rstudio.com/src/contrib/%s', pkg), pkg,
                 method = 'wget', mode = 'wb', quiet = TRUE)
 }
-# some old packages should not be installed from PPA, e.g. abind
-pkgs_old = rownames(db)[as.Date(db[, 'Published']) <= as.Date('2013-04-03')]
-pkgs_old = unname(pkgs_old)
 
 apt_get = function(pkgs, command = 'install', R = TRUE) {
   if (length(pkgs) == 0) return()
@@ -42,13 +39,8 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
     pkgs = tolower(pkgs)
     if (command %in% c('install', 'build-dep')) {
       for (p in intersect(pkgs, rownames(recipes)))
-        system(paste('yes |', recipes[p, 'recipe']))
+        system(recipes[p, 'recipe'])
       pkgs = setdiff(pkgs, rownames(recipes))
-      pkgs = setdiff(pkgs, switch(
-        command,
-        'install'   = tolower(pkgs_old),
-        'build-dep' = c('rJava')
-      ))
     }
     pkgs = intersect(pkgs, pkgs_deb)
     if (length(pkgs) == 0) return()
@@ -76,6 +68,19 @@ pkg_loadable = function(p) {
 need_compile = function(p) {
   (p %in% rownames(db)) && db[p, 'NeedsCompilation'] == 'yes'
 }
+install_deps = function(p) {
+  if (pkg_loadable(p)) return()
+  if (need_compile(p)) apt_get(p, 'build-dep')
+  # p is not loadable, and it might be due to its dependencies are not loadable
+  for (k in tools::package_dependencies(p, db)[[1]]) Recall(k)
+  install.packages(p, quiet = TRUE)
+  if (pkg_loadable(p)) return()
+  tryCatch(library(p, character.only = TRUE), error = identity, finally = {
+    if (p %in% .packages()) detach(sprintf('package:', p), unload = TRUE)
+  })
+  # reinstall: why did it fail?
+  install.packages(p, quiet = FALSE)
+}
 
 if (Sys.getenv('TRAVIS') == 'true') {
   message('Checking reverse dependencies for ', pkg)
@@ -86,26 +91,18 @@ if (Sys.getenv('TRAVIS') == 'true') {
   pkgs_deb = system2('apt-cache', 'pkgnames', stdout = TRUE)
   pkgs_deb = grep('^r-cran-.+', pkgs_deb, value = TRUE)
   pkgs_deb = gsub('^r-cran-', '', pkgs_deb)
-  apt_get(pkg)
   # knitr's reverse dependencies may need rmarkdown for R Markdown v2 vignettes
-  if (pkg == 'knitr' && !('rmarkdown' %in% .packages(TRUE))) {
-    apt_get(tools::package_dependencies('rmarkdown', db)[[1]])
+  if (pkg == 'knitr' && !pkg_loadable('rmarkdown')) {
+    apt_get(c('rmarkdown', tools::package_dependencies('rmarkdown', db)[[1]]))
     install.packages('rmarkdown', quiet = TRUE)
   }
-  if (!pkg_loadable('devtools')) install.packages('devtools')
+  install_deps('devtools')
+  install_deps(pkg)
   devtools::install_github(config[pkg, 'install'])
 
   pkgs = strsplit(Sys.getenv('R_CHECK_PACKAGES'), '\\s+')[[1]]
   n = length(pkgs)
   if (n == 0) q('no')
-
-  db2 = available.packages()
-  update_pkgs = function() {
-    try(suppressWarnings(update.packages(
-      ask = FALSE, checkBuilt = TRUE, available = db2, instlib = .libPaths()[1],
-      quiet = TRUE
-    )))
-  }
 
   for (i in seq_len(n)) {
     p = pkgs[i]
@@ -117,35 +114,9 @@ if (Sys.getenv('TRAVIS') == 'true') {
     deps = tools::package_dependencies(p, db, which = 'all')[[1]]
     deps = unique(c(deps, unlist(tools::package_dependencies(deps, db, recursive = TRUE))))
     apt_get(deps)
-    apt_get(pkgs_old, 'remove')
 
-    # update old debian R packages
-    old = rownames(old.packages(checkBuilt = TRUE, available = db2))
-    if (length(old)) {
-      apt_get(old, 'build-dep')
-      update_pkgs()
-    }
-
-    install_deps = function(p) {
-      if (pkg_loadable(p)) return()
-      if (need_compile(p)) apt_get(p, 'build-dep')
-      # p is not loadable, and it might be due to its dependencies are not loadable
-      for (k in tools::package_dependencies(p, db)[[1]]) Recall(k)
-      install.packages(p, quiet = TRUE)
-      if (pkg_loadable(p)) return()
-      tryCatch(library(p, character.only = TRUE), error = identity, finally = {
-        if (p %in% .packages()) detach(sprintf('package:', p), unload = TRUE)
-      })
-      # reinstall: why did it fail?
-      install.packages(p, quiet = FALSE)
-    }
     # install extra dependencies not covered by apt-get
     lapply(deps, install_deps)
-    # double check if all installed packages are up-to-date
-    update_pkgs()
-    broken = c('abind', 'xtable')
-    broken = intersect(broken, .packages(TRUE))
-    for (k in broken) if (!pkg_loadable(k)) install.packages(k)
 
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
     for (j in 1:5) if (download_source(acv) == 0) break
