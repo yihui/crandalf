@@ -25,4 +25,4 @@ install:
   - sudo R CMD javareconf
 
 script:
-  - Rscript cran-check.R
+  - travis_wait Rscript cran-check.R

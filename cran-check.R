@@ -22,8 +22,6 @@ recipes = read.dcf('RECIPES')
 rownames(recipes) = tolower(recipes[, 'package'])
 stopifnot(ncol(recipes) == 2, identical(colnames(recipes), c('package', 'recipe')))
 
-last_time = Sys.Date()
-
 download_source = function(pkg, mirror = 'http://cran.rstudio.com') {
   download.file(sprintf('%s/src/contrib/%s', mirror, pkg), pkg,
                 method = 'wget', mode = 'wb', quiet = TRUE)
@@ -65,10 +63,6 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   cmd('', '-f')  # write to stdout to diagnose the problem
 }
 pkg_loadable = function(p) {
-  if (as.numeric(Sys.time() - last_time) >= 30) {
-    last_time <<- Sys.time()
-    cat('.')  # to avoid Travis timeout during R package installation
-  }
   (p %in% .packages(TRUE)) && requireNamespace(p, quietly = TRUE)
 }
 need_compile = function(p) {
@@ -94,9 +88,6 @@ install_deps = function(p) {
   })
   # reinstall: why did it fail?
   install(p, FALSE)
-}
-cat_notok = function(logs, ...) {
-  system2('cat', c(logs, ' | grep -v "... OK"'), ...)
 }
 split_pkgs = function(string) {
   if (is.na(string) || string == '') return()
@@ -153,31 +144,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
       next
     }
     # run R CMD check as a background process; write 0 to done on success,
-    # otherwise create an empty done
-    unlink('done')
-    cmd = system2(
-      'R', c('CMD check --no-codoc --no-manual', acv, '> /dev/null && echo 0 > done || touch done'),
-      stdout = NULL, wait = FALSE
-    )
-    s = 0
-    logs = NULL
-    while(!file.exists('done')) {
-      Sys.sleep(1)
-      s = s + 1
-      if (s %% 30 != 0) next
-      # if it has not finished in 10 minutes, print the log to see what happened
-      if (s > 10 * 60) {
-        old_len = length(logs)
-        logs = cat_notok(sprintf('%s.Rcheck/00*.*', p), stdout = TRUE)
-        cat(if (old_len == 0) logs else tail(logs, -old_len), sep = '\n')
-      }
-      cat('.')  # write a dot to stdout every 30 seconds to avoid Travis timeouts
-    }
-    if (file.info('done')[, 'size'] == 0) {
-      out = list.files(sprintf('%s.Rcheck', p), '^00.+[.](log|out)$', full.names = TRUE)
-      file.copy(out, sprintf('%s-%s', p, basename(out)), overwrite = TRUE)
-    }
-    unlink('done')
+    system2('R', c('CMD check --no-codoc --no-manual', acv), stdout = NULL)
   }
   # output in the order of maintainers
   authors = split(pkgs, db[pkgs, 'Maintainer'])
@@ -188,7 +155,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     fail   = unique(gsub('^(.+)-00.*$', '\\1', logs))
     failed = c(failed, fail)
     cat('\n\n', paste(c(i, fail), collapse = '\n'), '\n\n')
-    cat_notok(logs)
+    system2('cat', c(logs, ' | grep -v "... OK"'), ...)
   }
   if (length(failed))
     stop('These packages failed:\n', paste(formatUL(unique(failed)), collapse = '\n'))
