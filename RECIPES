@@ -11,12 +11,12 @@ recipe: sudo apt-add-repository -y ppa:octave/stable;
   sudo apt-get install octave liboctave-dev
 
 package: rgdal
-recipe: sudo apt-add-repository ppa:sharpie/for-science;
+recipe: sudo apt-add-repository -y ppa:sharpie/for-science;
   sudo apt-get -qq update;
   sudo apt-get install gdal-bin libgeos-c1 libgeos-dev libgdal-dev libproj-dev
 
 package: rgeos
-recipe: sudo apt-add-repository ppa:sharpie/for-science;
+recipe: sudo apt-add-repository -y ppa:sharpie/for-science;
   sudo apt-get -qq update;
   sudo apt-get install gdal-bin libgeos-c1 libgeos-dev libgdal-dev libproj-dev
 
