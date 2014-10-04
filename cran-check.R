@@ -41,12 +41,11 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
     if (command %in% c('install', 'build-dep')) {
       for (p in intersect(pkgs, rownames(recipes))) system(recipes[p, 'recipe'])
       pkgs = setdiff(pkgs, rownames(recipes))
-        pkgs = setdiff(pkgs, switch(
-          command,
-          'install'   = tolower(pkgs_old),
-          'build-dep' = c('rJava')
-        ))
-      }
+      pkgs = setdiff(pkgs, switch(
+        command,
+        'install'   = tolower(pkgs_old),
+        'build-dep' = c('rJava')
+      ))
     }
     pkgs = intersect(pkgs, pkgs_deb)
     if (length(pkgs) == 0) return()
