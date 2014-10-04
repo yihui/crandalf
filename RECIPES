@@ -1,17 +1,35 @@
 package: fftw
 recipe: sudo apt-get install -qq libfftw3-dev > /dev/null
 
+package: gmp
+recipe: sudo apt-get install -qq libgmp-dev > /dev/null
+
+package: gsl
+recipe: sudo apt-get install -qq libgsl0-dev > /dev/null
+
 package: rmarkdown
 recipe: wget http://download1.rstudio.org/rstudio-0.98.1062-amd64.deb;
   sudo dpkg -i rstudio*.deb;
+
+package: optiRum
+recipe: sudo apt-get -qq texlive-xetex > /dev/null
 
 package: RcppOctave
 recipe: sudo apt-add-repository -y ppa:octave/stable;
   sudo apt-get -qq update;
   sudo apt-get install -qq octave liboctave-dev > /dev/null
 
+package: Rmpfr
+recipe: sudo apt-get install -qq libmpfr-dev > /dev/null
+
 package: rgdal
 recipe: sudo apt-get install -qq libgdal-dev libproj-dev > /dev/null
 
+package: rjags
+recipe: sudo apt-get install jags
+
 package: seewave
 recipe: sudo apt-get install -qq libsndfile1-dev > /dev/null
+
+package: survSNP
+recipe: sudo apt-get install -qq libgsl0-dev > /dev/null
