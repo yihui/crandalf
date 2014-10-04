@@ -2,8 +2,9 @@ pkg = Sys.getenv(
   'TRAVIS_BRANCH',
   system2('git', 'rev-parse --abbrev-ref HEAD', stdout = TRUE)
 )
-if (pkg == 'master')
+if (nchar(pkg) < 5 || substr(pkg, 1, 4) != 'pkg/')
   q('no')  # master branch? no, there is no package called master
+pkg = substr(pkg, 5, nchar(pkg))
 
 options(repos = c(CRAN = 'http://cran.rstudio.com'))
 
