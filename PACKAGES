@@ -6,7 +6,7 @@ install: yihui/knitr
 matrix: 30
 only: RcppOctave rgbif rnoaa spocc tmap
 separate: BTYD R.rsp
-sysdeps:
+sysdeps: texlive-latex-recommended
 
 package: mime
 install: yihui/mime
