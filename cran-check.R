@@ -87,6 +87,9 @@ install_deps = function(p) {
   # reinstall: why did it fail?
   install.packages(p, quiet = FALSE)
 }
+cat_notok = function(logs, ...) {
+  system2('cat', c(logs, ' | grep -v "... OK"'), ...)
+}
 
 if (Sys.getenv('TRAVIS') == 'true') {
   message('Checking reverse dependencies for ', pkg)
@@ -138,12 +141,17 @@ if (Sys.getenv('TRAVIS') == 'true') {
       stdout = NULL, wait = FALSE
     )
     s = 0
+    logs = NULL
     while(!file.exists('done')) {
       Sys.sleep(1)
       s = s + 1
       if (s %% 30 != 0) next
       # if it has not finished in 10 minutes, print the log to see what happened
-      if (s > 10 * 60) system2('cat', sprintf('%s.Rcheck/00*.*', p))
+      if (s > 10 * 60) {
+        old_len = length(logs)
+        logs = cat_notok(sprintf('%s.Rcheck/00*.*', p), stdout = TRUE)
+        cat(if (old_len == 0) logs else tail(logs, -old_len), sep = '\n')
+      }
       cat('.')  # write a dot to stdout every 30 seconds to avoid Travis timeouts
     }
     if (file.info('done')[, 'size'] == 0) {
@@ -161,7 +169,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     fail   = unique(gsub('^(.+)-00.*$', '\\1', logs))
     failed = c(failed, fail)
     cat('\n\n', paste(c(i, fail), collapse = '\n'), '\n\n')
-    system2('cat', c(logs, ' | grep -v "... OK"'))
+    cat_notok(logs)
   }
   if (length(failed))
     stop('These packages failed:\n', paste(formatUL(unique(failed)), collapse = '\n'))
