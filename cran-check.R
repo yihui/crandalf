@@ -22,6 +22,8 @@ recipes = read.dcf('RECIPES')
 rownames(recipes) = tolower(recipes[, 'package'])
 stopifnot(ncol(recipes) == 2, identical(colnames(recipes), c('package', 'recipe')))
 
+last_time = Sys.Date()
+
 download_source = function(pkg) {
   download.file(sprintf('http://cran.rstudio.com/src/contrib/%s', pkg), pkg,
                 method = 'wget', mode = 'wb', quiet = TRUE)
@@ -63,6 +65,10 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   cmd('', '-f')  # write to stdout to diagnose the problem
 }
 pkg_loadable = function(p) {
+  if (as.numeric(Sys.time() - last_time) >= 30) {
+    last_time <<- Sys.time()
+    cat('.')  # to avoid Travis timeout during R package installation
+  }
   (p %in% .packages(TRUE)) && requireNamespace(p, quietly = TRUE)
 }
 need_compile = function(p) {
