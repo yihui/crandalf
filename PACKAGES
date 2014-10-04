@@ -4,7 +4,7 @@ install: yihui/formatR
 package: knitr
 install: yihui/knitr
 matrix: 30
-only: RcppOctave rgbif rnoaa spocc tmap
+only:
 separate: BTYD R.rsp
 sysdeps: texlive-latex-recommended
 
