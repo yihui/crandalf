@@ -98,6 +98,10 @@ install_deps = function(p) {
 cat_notok = function(logs, ...) {
   system2('cat', c(logs, ' | grep -v "... OK"'), ...)
 }
+split_pkgs = function(string) {
+  if (is.na(string) || string == '') return()
+  unlist(strsplit(string, '\\s+'))
+}
 
 if (Sys.getenv('TRAVIS') == 'true') {
   message('Checking reverse dependencies for ', pkg)
@@ -117,7 +121,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
   install_deps(pkg)
   devtools::install_github(config[pkg, 'install'])
 
-  pkgs = strsplit(Sys.getenv('R_CHECK_PACKAGES'), '\\s+')[[1]]
+  pkgs = split_pkgs(Sys.getenv('R_CHECK_PACKAGES'), '\\s+')
   n = length(pkgs)
   if (n == 0) q('no')
 
@@ -184,18 +188,17 @@ if (Sys.getenv('TRAVIS') == 'true') {
   setwd(owd)
 } else {
   pkgs = tools::package_dependencies(pkg, db, 'all', reverse = TRUE)[[1]]
-  pkgs_only = config[pkg, 'only']
+  pkgs_only = split_pkgs(config[pkg, 'only'])
   m = NA_integer_
-  if (!is.na(pkgs_only) && pkgs_only != '') {
+  if (length(pkgs_only)) {
     m = 1
-    pkgs = intersect(pkgs, strsplit(pkgs_only, '\\s+')[[1]])
+    pkgs = intersect(pkgs, pkgs_only)
   }
   if (length(pkgs) == 0) q('no')  # are you kidding?
   if (is.na(m)) m = as.numeric(config[pkg, 'matrix'])
   if (is.na(m) || m == 0) m = 5  # 5 parallel builds by default
   # packages that need to be checked in separate VM's
-  pkgs2 = config[pkg, 'separate']
-  pkgs2 = if (!is.na(pkgs2) && pkgs2 != '') strsplit(pkgs2, '\\s+')[[1]]
+  pkgs2 = split_pkgs(config[pkg, 'separate'])
   pkgs2 = intersect(pkgs2, pkgs)
   # arrange the rest of packages in a matrix
   pkgs  = setdiff(pkgs, pkgs2)
