@@ -188,6 +188,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
   setwd(owd)
 } else {
   pkgs = tools::package_dependencies(pkg, db, 'all', reverse = TRUE)[[1]]
+  pkgs = setdiff(pkgs, split_pkgs(config[pkg, 'exclude']))
   pkgs_only = split_pkgs(config[pkg, 'only'])
   m = NA_integer_
   if (length(pkgs_only)) {

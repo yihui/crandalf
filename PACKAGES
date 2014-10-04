@@ -5,6 +5,7 @@ package: knitr
 install: yihui/knitr
 matrix: 30
 only:
+exclude: localsolver
 separate: BTYD R.rsp
 sysdeps: texlive-latex-recommended
 
