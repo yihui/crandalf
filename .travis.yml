@@ -27,4 +27,5 @@ install:
   - sudo R CMD javareconf
 
 script:
+  - Rscript -e "x=NULL;for (i in .packages(TRUE)) if (!requireNamespace(i)) x=c(x,i); cat(x,sep='\\n')"
   - Rscript cran-check.R
