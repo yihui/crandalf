@@ -80,8 +80,9 @@ install_deps = function(p) {
     # perhaps it is a BioC package...
     if (!exists('biocLite', mode = 'function'))
       source('http://bioconductor.org/biocLite.R')
-    biocLite(p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE,
-             quiet = quiet)
+    suppressMessages(biocLite(
+      p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE, quiet = quiet
+    ))
   }
   install(p)
   if (pkg_loadable(p)) return()
