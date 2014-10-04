@@ -48,12 +48,13 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
     pkgs = sprintf('r-cran-%s', pkgs)
   }
   cmd = function(stdout = NULL, options = '') {
+    quiet = is.null(stdout)
     system2(
       'sudo',
       c(sprintf(
         'apt-get %s %s %s',
-        if (is.null(stdout)) '-qq' else '', options, command
-      ), pkgs),
+        if (quiet) '-qq' else '', options, command
+      ), pkgs, if (quiet) '> /dev/null'),
       stdout = stdout
     )
   }
