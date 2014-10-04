@@ -125,7 +125,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
   }
   if (j == 5) stop('Failed to install ', pkg, ' from Github')
 
-  pkgs = split_pkgs(Sys.getenv('R_CHECK_PACKAGES'), '\\s+')
+  pkgs = split_pkgs(Sys.getenv('R_CHECK_PACKAGES'))
   n = length(pkgs)
   if (n == 0) q('no')
 
