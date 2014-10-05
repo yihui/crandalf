@@ -26,7 +26,7 @@ package: Rmpfr
 recipe: sudo apt-get install -qq libmpfr-dev > /dev/null
 
 package: RProtoBuf
-recipe: sudo apt-get install -qq libprotobuf-dev > /dev/null
+recipe: sudo apt-get install -qq libprotoc-dev > /dev/null
 
 package: rgdal
 recipe: sudo apt-get install -qq libgdal-dev libproj-dev > /dev/null
