@@ -5,9 +5,9 @@ matrix: 1
 package: knitr
 install: yihui/knitr
 matrix: 30
-only:
+only: BTYD R.rsp
 exclude: localsolver
-separate: dbmss BTYD DLMtool R.rsp
+separate: dbmss DLMtool
 sysdeps: texlive-latex-recommended
 
 package: mime
