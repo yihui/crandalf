@@ -28,6 +28,9 @@ recipe: sudo apt-get install -qq libmpfr-dev > /dev/null
 package: RProtoBuf
 recipe: sudo apt-get install -qq libprotoc-dev > /dev/null
 
+package: R.rsp
+recipe: sudo apt-get -qq install texlive-latex-extra
+
 package: rgdal
 recipe: sudo apt-get install -qq libgdal-dev libproj-dev > /dev/null
 
