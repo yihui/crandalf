@@ -12,7 +12,7 @@ recipe: wget http://download1.rstudio.org/rstudio-0.98.1062-amd64.deb;
   sudo dpkg -i rstudio*.deb;
 
 package: optiRum
-recipe: sudo apt-get -qq texlive-latex-base texlive-xetex texlive-latex-recommended texlive-fonts-extra > /dev/null
+recipe: sudo apt-get -qq install texlive-latex-base texlive-xetex texlive-latex-recommended texlive-fonts-extra > /dev/null
 
 package: RAppArmor
 recipe: sudo apt-get -qq install libapparmor-dev > /dev/null
