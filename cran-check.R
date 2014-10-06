@@ -135,12 +135,12 @@ timer = local({
   )
 })
 travis_start = function(job) {
-  cat(sprintf('travis_fold:start:%s%s\r', commandArgs(TRUE), job))
+  cat(sprintf('travis_fold:start:%s\r', job))
   timer$start(job)
 }
 travis_end = function(job) {
   timer$finish(job)
-  cat(sprintf('travis_fold:end:%s%s\r', commandArgs(TRUE), job))
+  cat(sprintf('travis_fold:end:%s\r', job))
 }
 travis_fold  = function(job, code) {
   travis_start(job)
