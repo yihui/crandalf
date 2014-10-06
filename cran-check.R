@@ -113,23 +113,44 @@ split_pkgs = function(string) {
   if (is.na(string) || string == '') return()
   unlist(strsplit(string, '\\s+'))
 }
+travis_start = function(job) cat(sprintf('travis_fold:start:#{%s}\r', job))
+travis_end   = function(job) cat(sprintf('travis_fold:end:#{%s}\r',   job))
+travis_fold  = function(job, code) {
+  travis_start(job)
+  code
+  travis_end(job)
+}
 
 if (Sys.getenv('TRAVIS') == 'true') {
   message('Checking reverse dependencies for ', pkg)
-  apt_get(config[pkg, 'sysdeps'], R = FALSE)
+  travis_fold(
+    'system_dependencies',
+    apt_get(config[pkg, 'sysdeps'], R = FALSE)
+  )
 
   owd = setwd(tempdir())
   unlink(c('*00check.log', '*00install.out', '*.tar.gz'))
   pkgs_deb = system2('apt-cache', 'pkgnames', stdout = TRUE)
   pkgs_deb = grep('^r-cran-.+', pkgs_deb, value = TRUE)
   pkgs_deb = gsub('^r-cran-', '', pkgs_deb)
+
   # knitr's reverse dependencies may need rmarkdown for R Markdown v2 vignettes
+  travis_start('install_rmarkdown')
   if (pkg == 'knitr' && !pkg_loadable('rmarkdown')) {
     apt_get(c('rmarkdown', tools::package_dependencies('rmarkdown', db)[[1]]))
     install.packages('rmarkdown', quiet = TRUE)
   }
-  install_deps('devtools')
-  install_deps(pkg)
+  travis_end('install_rmarkdown')
+
+  travis_fold(
+    'install_devtools',
+    install_deps('devtools')
+  )
+  travis_fold(
+    sprintf('install_%s_apt', pkg),
+    install_deps(pkg)
+  )
+  travis_start('devtools_install')
   for (j in 1:5) {
     if (!inherits(
       devtools::install_github(config[pkg, 'install'], quiet = TRUE),
@@ -138,6 +159,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     Sys.sleep(30)
   }
   if (j == 5) stop('Failed to install ', pkg, ' from Github')
+  travis_end('devtools_install')
 
   pkgs = split_pkgs(Sys.getenv('R_CHECK_PACKAGES'))
   if (length(pkgs) == 0)
@@ -147,7 +169,10 @@ if (Sys.getenv('TRAVIS') == 'true') {
 
   for (i in seq_len(n)) {
     p = pkgs[i]
-    message(sprintf('Checking %s (%d/%d)', p, i, n))
+    msg1 = sprintf('check_%s_(%d/%d)', p, i, n)
+    travis_start(msg1)
+    msg2 = sprintf('install_deps_%s', p)
+    travis_start(msg2)
     # use apt-get install/build-dep (thanks to Michael Rutter)
     apt_get(p)
     # in case it has system dependencies
@@ -158,18 +183,24 @@ if (Sys.getenv('TRAVIS') == 'true') {
 
     # install extra dependencies not covered by apt-get
     lapply(deps, install_deps)
+    travis_end(msg2)
 
     acv = sprintf('%s_%s.tar.gz', p, db[p, 'Version'])
     for (j in 1:5) {
       if (download_source(acv) == 0) break
       if (download_source(acv, 'http://cran.r-project.org') == 0) break
+      Sys.sleep(5)
     }
     if (j == 5) {
       writeLines('Download failed', sprintf('%s-00download', p))
       next
     }
+    msg3 = sprintf('check_%s', p)
+    travis_start(msg3)
     # run R CMD check as a background process; write 0 to done on success,
     system2('R', c('CMD check --no-codoc --no-manual', acv), stdout = NULL)
+    travis_end(msg3)
+    travis_end(msg1)
   }
   # output in the order of maintainers
   authors = split(pkgs, db[pkgs, 'Maintainer'])
