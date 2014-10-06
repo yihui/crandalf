@@ -114,8 +114,34 @@ split_pkgs = function(string) {
   if (is.na(string) || string == '') return()
   unlist(strsplit(string, '\\s+'))
 }
-travis_start = function(job) cat(sprintf('travis_fold:start:#{%s}\r', job))
-travis_end   = function(job) cat(sprintf('travis_fold:end:#{%s}\r',   job))
+timer = local({
+  nano = function() system2('date', '+%s%N', stdout = TRUE)
+  timers = list()
+  list(
+    start = function(job) {
+      id = paste(sample(c(0:9, letters), 8, TRUE), collapse = '')
+      timers[[job]] <<- list(id = id, t1 = nano())
+      cat(sprintf('travis_time:start:%s\r', id))
+    },
+    finish = function(job) {
+      t2 = nano()
+      t1 = timers[[job]][['t1']]
+      id = timers[[job]][['id']]
+      cat(sprintf(
+        'travis_time:end:%s:start=%s,finish=%s,duration=%s\r',
+        id, t1, t2, system2('echo', sprintf('$((%s - %s))', t2, t1), stdout = TRUE)
+      ))
+    }
+  )
+})
+travis_start = function(job) {
+  cat(sprintf('travis_fold:start:%s%s\r', commandArgs(TRUE), job))
+  timer$start(job)
+}
+travis_end = function(job) {
+  timer$finish(job)
+  cat(sprintf('travis_fold:end:%s%s\r', commandArgs(TRUE), job))
+}
 travis_fold  = function(job, code) {
   travis_start(job)
   code
