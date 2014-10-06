@@ -91,6 +91,7 @@ need_compile = function(p) {
 }
 install_deps = function(p) {
   if (pkg_loadable(p)) return()
+  message('Installing ', p)
   if (need_compile(p)) apt_get(p, 'build-dep')
   # p is not loadable, and it might be due to its dependencies are not loadable
   for (k in tools::package_dependencies(p, db)[[1]]) Recall(k)
