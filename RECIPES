@@ -22,6 +22,9 @@ recipe: sudo apt-add-repository -y ppa:octave/stable;
   sudo apt-get -qq update;
   sudo apt-get install -qq octave liboctave-dev > /dev/null
 
+package: Rglpk
+recipe: sudo apt-get install -qq libglpk-dev > /dev/null
+
 package: Rmpfr
 recipe: sudo apt-get install -qq libmpfr-dev > /dev/null
 
