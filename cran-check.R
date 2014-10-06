@@ -1,20 +1,33 @@
+config = read.dcf('PACKAGES')
+
 pkg = Sys.getenv(
   'TRAVIS_BRANCH',
   system2('git', 'rev-parse --abbrev-ref HEAD', stdout = TRUE)
 )
-if (nchar(pkg) < 5 || substr(pkg, 1, 4) != 'pkg/')
-  q('no')  # master branch? no, there is no package called master
-pkg = substr(pkg, 5, nchar(pkg))
+if (nchar(pkg) > 5 && substr(pkg, 1, 4) == 'pkg/') {
+  pkg = substr(pkg, 5, nchar(pkg))
+} else {
+  msg = Sys.getenv('TRAVIS_COMMIT_MSG')
+  reg = '.*\\[crandalf ([[:alpha:]][[:alnum:].]+)(@[-[:alnum:]/@]+)?\\].*'
+  if (!grepl(reg, msg)) q('no')  # no pkg branch, and no [crandalf] message
+  pkg = sub(reg, '\\1', msg)
+  pkg_src = sub('^@', '', sub(reg, '\\2', msg))
+  if (is.na(match(pkg, config[, 'package']))) {
+    config = rbind(config, '')
+    n = nrow(config)
+    config[n, c('package', 'install')] = c(pkg, pkg_src)
+  }
+}
 
 options(repos = c(CRAN = 'http://cran.rstudio.com'))
 
 con = url('http://cran.rstudio.com/web/packages/packages.rds', 'rb')
 db = tryCatch(readRDS(gzcon(con)), finally = close(con))
 rownames(db) = db[, 'Package']
-
-config = read.dcf('PACKAGES')
+if (!(pkg %in% rownames(db)))
+  stop('The package ', pkg, ' is not found on CRAN')
 if (is.na(match(pkg, config[, 'package'])))
-  stop('The package ', pkg, ' was not specified in the PACKAGES file')
+  stop('The package ', pkg, ' was not specified in the PACKAGES file or commit message')
 rownames(config) = config[, 'package']
 
 # additional system dependencies for R packages that I cannot figure out by
@@ -123,8 +136,9 @@ if (Sys.getenv('TRAVIS') == 'true') {
   if (j == 5) stop('Failed to install ', pkg, ' from Github')
 
   pkgs = split_pkgs(Sys.getenv('R_CHECK_PACKAGES'))
-  n = length(pkgs)
-  if (n == 0) q('no')
+  if (length(pkgs) == 0)
+    pkgs = tools::package_dependencies(pkg, db, 'all', reverse = TRUE)[[1]]
+  if (length(pkgs) == 0) q('no')
 
   for (i in seq_len(n)) {
     p = pkgs[i]
