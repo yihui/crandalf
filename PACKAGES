@@ -4,7 +4,7 @@ matrix: 1
 
 package: knitr
 install: yihui/knitr
-matrix: 20
+matrix: 25
 only:
 exclude: localsolver
 separate: dbmss DLMtool
