@@ -77,8 +77,14 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   system2('sudo', 'apt-get update -qq')
   cmd('', '-f')  # write to stdout to diagnose the problem
 }
+require_ok = function(p, quiet = TRUE) {
+  system2(
+    'Rscript', c('-e', shQuote(sprintf('library(%s)', p))),
+    stdout = !quiet, stderr = !quiet
+  ) == 0
+}
 pkg_loadable = function(p) {
-  (p %in% .packages(TRUE)) && requireNamespace(p, quietly = TRUE)
+  (p %in% .packages(TRUE)) && require_ok(p)
 }
 need_compile = function(p) {
   (p %in% rownames(db)) && db[p, 'NeedsCompilation'] == 'yes'
@@ -99,9 +105,7 @@ install_deps = function(p) {
   }
   install(p)
   if (pkg_loadable(p)) return()
-  tryCatch(library(p, character.only = TRUE), error = identity, finally = {
-    if (p %in% .packages()) detach(sprintf('package:', p), unload = TRUE)
-  })
+  require_ok(p, FALSE)
   # reinstall: why did it fail?
   install(p, FALSE)
 }
