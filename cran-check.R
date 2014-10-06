@@ -138,7 +138,8 @@ if (Sys.getenv('TRAVIS') == 'true') {
   pkgs = split_pkgs(Sys.getenv('R_CHECK_PACKAGES'))
   if (length(pkgs) == 0)
     pkgs = tools::package_dependencies(pkg, db, 'all', reverse = TRUE)[[1]]
-  if (length(pkgs) == 0) q('no')
+  n = length(pkgs)
+  if (n == 0) q('no')
 
   for (i in seq_len(n)) {
     p = pkgs[i]
