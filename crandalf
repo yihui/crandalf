@@ -9,8 +9,8 @@ sleep 5
 
 while [ ! -e travis_done ];
 do
-  sleep 30
-  rm travis_out 2> /dev/null || echo .
+  sleep 1
+  rm travis_out 2> /dev/null || [ $(date +%S) == 30 ] && echo .
 done
 
 [ -s travis_done ] || exit 1
