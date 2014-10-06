@@ -134,8 +134,9 @@ timer = local({
     }
   )
 })
-travis_start = function(job) {
+travis_start = function(job, msg = paste('Running', job)) {
   cat(sprintf('travis_fold:start:%s\r', job))
+  cat('\033[32;1m', msg, '\033[0m \n', sep = '')
   timer$start(job)
 }
 travis_end = function(job) {
