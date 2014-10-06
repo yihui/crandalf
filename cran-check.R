@@ -197,8 +197,7 @@ if (Sys.getenv('TRAVIS') == 'true') {
     }
     msg3 = sprintf('check_%s', p)
     travis_start(msg3)
-    # run R CMD check as a background process; write 0 to done on success,
-    system2('R', c('CMD check --no-codoc --no-manual', acv), stdout = NULL)
+    system2('R', c('CMD check --no-codoc --no-manual', acv, '| grep -v "... OK"'))
     travis_end(msg3)
     travis_end(msg1)
   }
