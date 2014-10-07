@@ -20,7 +20,7 @@ install:
   - sudo apt-add-repository -y "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
   - sudo apt-get -qq update
-  - sudo apt-get -qq install r-base-dev texinfo > /dev/null
+  - sudo apt-get -qq install r-base-dev texinfo
   - sudo apt-get autoremove
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - sudo R CMD javareconf
