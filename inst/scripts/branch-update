@@ -10,7 +10,7 @@ do
   if git show-ref --verify --quiet refs/heads/$i; then
     git checkout $i
     git rebase master
-    Rscript -e "crandalf::branch_update()"
+    Rscript -e "crandalf:::branch_update()"
     echo `git add -A && git commit -m"${USER} updated branch ${i} $(date)"`
     git checkout master
   else
