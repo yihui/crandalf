@@ -5,7 +5,7 @@
 #' the config file \file{inst/config/PACKAGES}. Basically it divides packages to
 #' be checked into groups for the Travis matrix.
 #' @noRd
-update_branch = function() {
+branch_update = function() {
   if (!file.exists('.travis.yml')) {
     warning('.travis.yml not found under ', getwd())
     return()
