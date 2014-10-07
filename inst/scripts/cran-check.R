@@ -63,7 +63,7 @@ if (n == 0) q('no')
 
 for (i in seq_len(n)) {
   p = pkgs[i]
-  msg1 = sprintf('check_%s_(%d/%d)', p, i, n)
+  msg1 = sprintf('check_%s_%d.%d', p, n, i)
   travis_start(msg1, c('Checking', p))
 
   msg2 = sprintf('install_deps_%s', p)
