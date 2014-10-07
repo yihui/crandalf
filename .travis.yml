@@ -28,4 +28,4 @@ install:
   - R CMD INSTALL crandalf_*.tar.gz
 
 script:
-  - Rscript -e "crandalf::summon()"
+  - ./inst/scripts/crandalf
