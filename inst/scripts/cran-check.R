@@ -33,7 +33,7 @@ unlink(c('*00check.log', '*00install.out', '*.tar.gz'))
 # knitr's reverse dependencies may need rmarkdown for R Markdown v2 vignettes
 travis_fold(
   'install_rmarkdown',
-  if (pkg == 'knitr' && !pkg_loadable('rmarkdown')) {
+  if (pkg == 'knitr' && !crandalf:::pkg_loadable('rmarkdown')) {
     apt_get(c('rmarkdown', pkg_deps('rmarkdown', pkg_db)[[1]]))
     install.packages('rmarkdown', quiet = TRUE)
   },
@@ -70,7 +70,7 @@ for (i in seq_len(n)) {
   travis_start(msg2, '  Installing dependencies')
   apt_get(p)  # use apt-get install
   # and in case it has system dependencies
-  if (need_compile(p)) apt_get(p, 'build-dep')
+  if (crandalf:::need_compile(p)) apt_get(p, 'build-dep')
   deps = pkg_deps(p, pkg_db, which = 'all')[[1]]
   deps = unique(c(deps, unlist(pkg_deps(deps, pkg_db, recursive = TRUE))))
   apt_get(deps)
