@@ -7,7 +7,7 @@ install: yihui/knitr
 matrix: 25
 only:
 exclude: localsolver
-separate: dbmss DLMtool
+separate: dbmss DLMtool hot.deck pkgmaker
 sysdeps: texlive-latex-recommended
 
 package: mime
