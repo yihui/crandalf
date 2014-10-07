@@ -15,4 +15,6 @@ LaTeX: pdfLaTeX
 AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
 
-BuildType: Makefile
+BuildType: Package
+PackageInstallArgs: -v; Rscript -e "Rd2roxygen::rab('crandalf', install=TRUE)" #
+PackageCheckArgs: --as-cran --no-manual

@@ -24,6 +24,8 @@ install:
   - sudo apt-get autoremove
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - sudo R CMD javareconf
+  - cd .. && R CMD build crandalf
+  - R CMD INSTALL crandalf_*.tar.gz
 
 script:
-  - ./crandalf
+  - Rscript -e "crandalf::summon()"
