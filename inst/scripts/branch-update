@@ -2,13 +2,15 @@
 
 [ `git rev-parse --abbrev-ref HEAD` != master ] && exit 0
 
+R CMD INSTALL .
+
 # create branches from the current master if they do not exist
-for i in `grep -G '^package:' PACKAGES | sed 's@^package:\s*@pkg/@' | sed 's/\s*//'`;
+for i in `grep -G '^package:' inst/config/PACKAGES | sed 's@^package:\s*@pkg/@' | sed 's/\s*//'`;
 do
   if git show-ref --verify --quiet refs/heads/$i; then
     git checkout $i
     git rebase master
-    Rscript cran-check.R
+    Rscript -e "crandalf::branch_update()"
     echo `git add -A && git commit -m"${USER} updated branch ${i} $(date)"`
     git checkout master
   else

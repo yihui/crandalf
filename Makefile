@@ -1,3 +1,3 @@
 update:
-	./branch-update
+	./inst/scripts/branch-update
 
