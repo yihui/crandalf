@@ -117,6 +117,7 @@ if (!('roxygen2' %in% loadedNamespaces())) {
 #'
 #' This function is a wrapper for \code{\link[tools]{package_dependencies}()}.
 #' @param ... passed to \code{\link[tools]{package_dependencies}()}
+#' @export
 #' @keywords internal
 pkg_deps = function(...) tools::package_dependencies(...)
 
