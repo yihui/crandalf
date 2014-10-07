@@ -26,6 +26,7 @@ install:
   - sudo R CMD javareconf
   - cd .. && R CMD build crandalf
   - R CMD INSTALL crandalf_*.tar.gz
+  - cd crandalf
 
 # summon crandalf!
 script:
