@@ -27,5 +27,6 @@ install:
   - cd .. && R CMD build crandalf
   - R CMD INSTALL crandalf_*.tar.gz
 
+# summon crandalf!
 script:
   - ./inst/scripts/crandalf
