@@ -96,7 +96,7 @@ for (i in names(authors)) {
   fail   = unique(gsub('^(.+)-00.*$', '\\1', logs))
   failed = c(failed, fail)
   cat('\n\n', paste(c(i, fail), collapse = '\n'), '\n\n')
-  system2('cat', c(logs, ' | grep -v "... OK"'), ...)
+  system2('cat', c(logs, ' | grep -v "... OK"'))
 }
 if (length(failed))
   stop('These packages failed:\n', paste(formatUL(unique(failed)), collapse = '\n'))
