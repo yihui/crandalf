@@ -256,10 +256,9 @@ install_deps = function(p) {
   install = function(p, quiet = TRUE) {
     if (p %in% rownames(pkg_db)) return(install.packages(p, quiet = quiet))
     # perhaps it is a BioC package...
-    if (pkg_loadable('BiocInstaller')) library(BiocInstaller)
-    if (!exists('biocLite', mode = 'function'))
+    if (!pkg_loadable('BiocInstaller'))
       source('http://bioconductor.org/biocLite.R')
-    suppressMessages(biocLite(
+    suppressMessages(BiocInstaller::biocLite(
       p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE, quiet = quiet
     ))
   }
