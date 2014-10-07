@@ -31,4 +31,4 @@ install:
 # summon crandalf!
 script:
   - ./inst/scripts/crandalf
-  - "[ $TRAVIS_BRANCH == master ] && R CMD check --no-manual ../crandalf_*.tar.gz"
+  - "[ $TRAVIS_BRANCH == master ] && R CMD check --no-manual ../crandalf_*.tar.gz || true"
