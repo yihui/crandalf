@@ -12,6 +12,7 @@ branch_update = function() {
   }
   if (is.null(pkg <- pkg_branch())) return()
   config = pkg_config()
+  rownames(config) = config[, 'package']
   pkgs = pkg_deps(pkg, pkg_db, 'all', reverse = TRUE)[[1]]
   pkgs = setdiff(pkgs, split_pkgs(config[pkg, 'exclude']))
   pkgs_only = split_pkgs(config[pkg, 'only'])
