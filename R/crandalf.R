@@ -100,7 +100,10 @@ pkg_db  = NULL
 
 # create the recipes data during R CMD INSTALL but not roxygenize
 if (!('roxygen2' %in% loadedNamespaces())) {
-  recipes = read.dcf('inst/config/RECIPES')
+  recipes = read.dcf(file.path(
+    if ('devtools' %in% loadedNamespaces()) '..' else '.',
+    'inst/config/RECIPES'
+  ))
   rownames(recipes) = tolower(recipes[, 'package'])
   stopifnot(ncol(recipes) == 2, identical(colnames(recipes), c('package', 'recipe')))
 
