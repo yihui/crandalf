@@ -13,7 +13,7 @@ branch_update = function() {
   if (is.null(pkg <- pkg_branch())) return()
   config = pkg_config()
   rownames(config) = config[, 'package']
-  pkgs = pkg_deps(pkg, pkg_db, 'all', reverse = TRUE)[[1]]
+  pkgs = pkg_deps(pkg, 'all', reverse = TRUE)[[1]]
   pkgs = setdiff(pkgs, split_pkgs(config[pkg, 'exclude']))
   pkgs_only = split_pkgs(config[pkg, 'only'])
   m = NA_integer_
@@ -119,7 +119,7 @@ if (!('roxygen2' %in% loadedNamespaces())) {
 #' @param ... passed to \code{\link[tools]{package_dependencies}()}
 #' @export
 #' @keywords internal
-pkg_deps = function(...) tools::package_dependencies(...)
+pkg_deps = function(...) tools::package_dependencies(..., db = pkg_db)
 
 #' Install a package from Github using \pkg{devtools}
 #'
@@ -253,7 +253,7 @@ install_deps = function(p) {
   message('Installing ', p)
   if (need_compile(p)) apt_get(p, 'build-dep')
   # p is not loadable, and it might be due to its dependencies are not loadable
-  for (k in pkg_deps(p, pkg_db)[[1]]) Recall(k)
+  for (k in pkg_deps(p)[[1]]) Recall(k)
   install = function(p, quiet = TRUE) {
     if (p %in% rownames(pkg_db)) return(install.packages(p, quiet = quiet))
     # perhaps it is a BioC package...

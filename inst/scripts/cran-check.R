@@ -34,7 +34,7 @@ unlink(c('*00check.log', '*00install.out', '*.tar.gz'))
 travis_fold(
   'install_rmarkdown',
   if (pkg == 'knitr' && !crandalf:::pkg_loadable('rmarkdown')) {
-    apt_get(c('rmarkdown', pkg_deps('rmarkdown', pkg_db)[[1]]))
+    apt_get(c('rmarkdown', pkg_deps('rmarkdown')[[1]]))
     install.packages('rmarkdown', quiet = TRUE)
   },
   'Installing rmarkdown'
@@ -57,7 +57,7 @@ travis_fold(
 )
 
 pkgs = split_pkgs(Sys.getenv('R_CHECK_PACKAGES'))
-if (length(pkgs) == 0) pkgs = pkg_deps(pkg, pkg_db, 'all', reverse = TRUE)[[1]]
+if (length(pkgs) == 0) pkgs = pkg_deps(pkg, 'all', reverse = TRUE)[[1]]
 n = length(pkgs)
 if (n == 0) q('no')
 
@@ -71,8 +71,8 @@ for (i in seq_len(n)) {
   apt_get(p)  # use apt-get install
   # and in case it has system dependencies
   if (crandalf:::need_compile(p)) apt_get(p, 'build-dep')
-  deps = pkg_deps(p, pkg_db, which = 'all')[[1]]
-  deps = unique(c(deps, unlist(pkg_deps(deps, pkg_db, recursive = TRUE))))
+  deps = pkg_deps(p, which = 'all')[[1]]
+  deps = unique(c(deps, unlist(pkg_deps(deps, recursive = TRUE))))
   apt_get(deps)
   # install extra R dependencies not covered by apt-get
   lapply(deps, install_deps)
