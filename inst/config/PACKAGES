@@ -8,7 +8,7 @@ matrix: 25
 only:
 exclude: localsolver
 separate: dbmss DLMtool hot.deck pkgmaker
-sysdeps: texlive-latex-recommended
+sysdeps:
 
 package: mime
 install: yihui/mime
