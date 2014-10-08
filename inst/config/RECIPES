@@ -8,10 +8,7 @@ package: gsl
 recipe: sudo apt-get install -qq libgsl0-dev > /dev/null
 
 package: rmarkdown
-recipe: wget https://github.com/yihui/pandoc-ubuntu/releases/download/latest/pandoc;
-  wget https://github.com/yihui/pandoc-ubuntu/releases/download/latest/pandoc-citeproc;
-  chmod +x pandoc pandoc-citeproc;
-  sudo mv pandoc pandoc-citeproc /usr/local/bin/
+recipe: ~/R/crandalf/scripts/install-pandoc
 
 package: optiRum
 recipe: sudo apt-get -qq install texlive-latex-base texlive-xetex texlive-latex-recommended texlive-fonts-extra > /dev/null

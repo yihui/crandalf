@@ -1,0 +1,10 @@
+#!/bin/bash
+
+[ -e /usr/local/bin/pandoc ] && exit 0
+
+cd ~
+wget https://github.com/yihui/ubuntu-bin/releases/download/latest/pandoc
+wget https://github.com/yihui/ubuntu-bin/releases/download/latest/pandoc-citeproc
+chmod +x pandoc pandoc-citeproc
+sudo mv pandoc pandoc-citeproc /usr/local/bin/
+
