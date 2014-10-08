@@ -11,7 +11,7 @@ package: rmarkdown
 recipe: ~/R/crandalf/scripts/install-pandoc
 
 package: optiRum
-recipe: sudo apt-get -qq install texlive-latex-base texlive-xetex texlive-latex-recommended texlive-fonts-extra > /dev/null
+recipe: tlmgr install xetex; sudo tlmgr path add
 
 package: RAppArmor
 recipe: sudo apt-get -qq install libapparmor-dev > /dev/null
@@ -31,7 +31,7 @@ package: RProtoBuf
 recipe: sudo apt-get install -qq libprotoc-dev > /dev/null
 
 package: R.rsp
-recipe: sudo apt-get -qq install texlive-latex-extra
+recipe: tlmgr install titlesec
 
 package: rgdal
 recipe: sudo apt-get install -qq libgdal-dev libproj-dev > /dev/null
