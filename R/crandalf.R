@@ -379,3 +379,22 @@ missing_latex = function(log) {
   }
   pkgs
 }
+
+# packages that probably errored
+error_pkgs = function(log) {
+  x = readLines(log)
+  r1 = '.*travis_fold:start:check_([^_]+)_[0-9]+[.][0-9].*'
+  r2 = '.*travis_fold:end:check_([^_]+)_[0-9]+[.][0-9].*'
+  i1 = grep(r1, x)
+  i2 = grep(r2, x)
+  p1 = gsub(r1, '\\1', x[i1])
+  p2 = gsub(r2, '\\1', x[i2])
+  # these packages must have errored (started without ending)
+  pa = setdiff(p1, p2)
+  n  = length(i1)
+  for (j in seq_len(n)) {
+    if (any(grepl('Error', x[seq(i1[j], if (j == n) n else i1[j + 1])])))
+      pa = c(pa, p1[j])
+  }
+  unique(pa)
+}
