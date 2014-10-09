@@ -194,7 +194,7 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   if (R) {
     pkgs = unlist(lapply(pkgs, function(p) {
       if (command %in% c('install', 'build-dep'))
-        if (!need_compile(p) || pkg_loadable(p)) return()
+        if (pkg_loadable(p)) return()
       p
     }), use.names = FALSE)
     pkgs = tolower(pkgs)
