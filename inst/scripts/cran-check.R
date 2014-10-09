@@ -23,7 +23,7 @@ rownames(config) = config[, 'package']
 message('Checking reverse dependencies for ', pkg)
 travis_fold(
   'system_dependencies',
-  system(config[pkg, 'sysdeps']),
+  if (!grepl('^\\s*$', sysdeps <- config[pkg, 'sysdeps'])) system(sysdeps),
   c('Installing system libraries for', pkg)
 )
 
