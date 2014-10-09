@@ -1,3 +1,6 @@
+package: argparse
+recipe: sudo apt-get install -qq rst2pdf
+
 package: fftw
 recipe: sudo apt-get install -qq libfftw3-dev > /dev/null
 
