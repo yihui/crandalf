@@ -4,8 +4,8 @@ matrix: 1
 
 package: knitr
 install: yihui/knitr
-matrix: 25
-only:
+matrix: 10
+only: lme4 tabplot agridat Anthropometry argparse bcpa BEQI2 BHMSMAfMRI BTYD causalsens ChemoSpec chipPCR coenocliner confidence corrgram Crossover DAAG devtools doRNG eHOF EpiModel ESGtoolkit fastR FuzzyNumbers glarma GlobalOptions gMCP googleVis gstudio iBUGS jsonlite kitagawa knitcitations MALDIquant MALDIquantForeign mapmisc MarkowitzR memgene mkin monitoR mosaic MVN nCal NlsyLinks NMF nplr opencpu optiRum optparse plspm PopGenReport poppr poweRlaw prospectr psd pt qdap quipu RcppOctave RefManageR rmongodb rngtools rotations rYoutheria saps SCGLR sdcMicro SharpeR shotGroups simPH snplist spacetime spdynmod ss3sim TopKLists TurtleGraphics vegdata WeightedCluster wsrf R.rsp
 exclude: localsolver
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
 sysdeps:
