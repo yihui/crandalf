@@ -10,9 +10,6 @@ recipe: sudo apt-get install -qq libgmp-dev > /dev/null
 package: gsl
 recipe: sudo apt-get install -qq libgsl0-dev > /dev/null
 
-package: optiRum
-recipe: tlmgr install xetex; sudo tlmgr path add
-
 package: optparse
 recipe: sudo apt-get install -qq rst2pdf
 
