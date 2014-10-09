@@ -5,7 +5,7 @@ matrix: 1
 package: knitr
 install: yihui/knitr
 matrix: 10
-only: agridat Anthropometry bcpa BEQI2 causalsens ChemoSpec confidence corrgram Crossover DAAG doRNG EpiModel ESGtoolkit fastR FuzzyNumbers gMCP googleVis gstudio iBUGS jsonlite knitcitations lme4 MALDIquant MALDIquantForeign mapmisc memgene mkin mosaic NMF nplr opencpu optiRum plspm PopGenReport poppr poweRlaw prospectr psd pt qdap quipu RcppOctave rotations rYoutheria saps SCGLR sdcMicro SharpeR shotGroups simPH snplist spacetime spdynmod TurtleGraphics vegdata WeightedCluster wsrf
+only: ChemoSpec gstudio agridat causalsens corrgram DAAG doRNG EpiModel ESGtoolkit FuzzyNumbers iBUGS lme4 mapmisc memgene mkin NMF nplr optiRum PopGenReport poweRlaw prospectr pt qdap RcppOctave rotations saps SCGLR sdcMicro spacetime spdynmod TurtleGraphics vegdata WeightedCluster wsrf
 exclude: localsolver
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
 sysdeps:
