@@ -25,10 +25,13 @@ branch_update = function() {
   if (is.na(m)) m = as.numeric(config[pkg, 'matrix'])
   if (is.na(m) || m == 0) m = 5  # 5 parallel builds by default
   # packages that need to be checked in separate VM's
-  pkgs2 = split_pkgs(config[pkg, 'separate'])
-  pkgs2 = intersect(pkgs2, pkgs)
-  # arrange the rest of packages in a matrix
-  pkgs  = setdiff(pkgs, pkgs2)
+  pkgs2 = split_pkgs(config[pkg, 'separate'], '\\s*\\|\\s*')
+  pkgs2 = unlist(lapply(pkgs2, function(x) {
+    x = intersect(split_pkgs(x), pkgs)
+    pkgs <<- setdiff(pkgs, x)
+    x = paste(x, collapse = ' ')
+    x[x != '']
+  }))
   items = sprintf(
     '    - R_CHECK_PACKAGES="%s"',
     c(
@@ -270,17 +273,19 @@ install_deps = function(p) {
   install(p, FALSE)
 }
 
-#' Given a character string, split it by white spaces
+#' Given a character string, split it by white spaces or a custom string
 #'
 #' This package often reads R package names as a character string from
 #' environment variables or YAML, and we need to split the character string into
 #' a character vector.
 #' @param string a charactor string of length 1
+#' @param split a character string as the separator to split the string
 #' @return A character vector
 #' @export
-split_pkgs = function(string) {
+split_pkgs = function(string, split = '\\s+') {
   if (is.na(string) || string == '') return()
-  unlist(strsplit(string, '\\s+'))
+  x = unlist(strsplit(string, split))
+  x[x != '']
 }
 
 timer = local({
