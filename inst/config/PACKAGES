@@ -7,7 +7,7 @@ install: yihui/knitr
 matrix: 25
 only:
 exclude: localsolver
-separate: dbmss DLMtool hot.deck pkgmaker
+separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
 sysdeps:
 
 package: mime
