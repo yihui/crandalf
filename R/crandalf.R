@@ -395,5 +395,8 @@ error_pkgs = function(log) {
     if (any(grepl('Error', x[seq(i1[j], if (j == n) n else i1[j + 1])])))
       pa = c(pa, p1[j])
   }
+  # some package might not have been checked due to timeout
+  r = '^\\$\\s*export R_CHECK_PACKAGES="([^"]+)"\\s*$'
+  pa = c(pa, setdiff(split_pkgs(gsub(r, '\\1', grep(r, x, value = TRUE))), c(p1, p2)))
   unique(pa)
 }
