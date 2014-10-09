@@ -7,4 +7,5 @@ wget https://github.com/yihui/ubuntu-bin/releases/download/latest/pandoc
 wget https://github.com/yihui/ubuntu-bin/releases/download/latest/pandoc-citeproc
 chmod +x pandoc pandoc-citeproc
 sudo mv pandoc pandoc-citeproc /usr/local/bin/
+pandoc --version
 

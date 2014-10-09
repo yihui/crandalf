@@ -19,6 +19,7 @@ install:
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
   - sudo apt-get -qq update
   - ./inst/scripts/install-texlive
+  - ./inst/scripts/install-pandoc
   - sudo apt-get -qq install r-base-dev
   - sudo apt-get autoremove
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"

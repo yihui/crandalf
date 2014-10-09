@@ -10,9 +10,6 @@ recipe: sudo apt-get install -qq libgmp-dev > /dev/null
 package: gsl
 recipe: sudo apt-get install -qq libgsl0-dev > /dev/null
 
-package: rmarkdown
-recipe: ~/R/crandalf/scripts/install-pandoc
-
 package: optiRum
 recipe: tlmgr install xetex; sudo tlmgr path add
 
