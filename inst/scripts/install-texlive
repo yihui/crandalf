@@ -2,13 +2,11 @@
 
 [ -e ~/texlive ] && exit 0
 
-sudo apt-get install perl
-
 cd ~
 wget https://github.com/yihui/ubuntu-bin/releases/download/latest/texlive-local.deb
 sudo dpkg -i texlive-local.deb
 
 wget https://github.com/yihui/ubuntu-bin/releases/download/latest/texlive.tar.gz
 tar zxf texlive.tar.gz
-sudo texlive/bin/x86_64-linux/tlmgr path add
+sudo ./texlive/bin/x86_64-linux/tlmgr path add
 # now you can use `tlmgr install` to install whatever package you want
