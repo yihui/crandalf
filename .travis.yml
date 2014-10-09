@@ -5,7 +5,7 @@ jdk:
 
 env:
   global:
-    - R_LIBS_USER=~/R _R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=false RSTUDIO_PANDOC=/usr/lib/rstudio/bin/pandoc
+    - R_LIBS_USER=~/R _R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=false
   matrix:
 # matrix-start
     - R_CHECK_PACKAGES=""
