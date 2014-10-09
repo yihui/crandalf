@@ -33,6 +33,9 @@ recipe: sudo apt-get install -qq libnetcdf-dev libudunits2-dev
 package: RProtoBuf
 recipe: sudo apt-get install -qq libprotoc-dev > /dev/null
 
+package: R2jags
+recipe: sudo apt-get install jags
+
 package: rgdal
 recipe: sudo apt-get install -qq libgdal-dev libproj-dev > /dev/null
 
