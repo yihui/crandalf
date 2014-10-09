@@ -352,11 +352,11 @@ travis_end = function(job) {
 #' @return A character vector
 #' @export
 missing_latex = function(log) {
-  r = ".*! LaTeX Error: File `(.+)' not found.*"
+  r = ".*! LaTeX Error: File `(.+)' not found.*|.*! Font [^=]+=([^ ]+).+ not loadable.*"
   x = grep(r, readLines(log), value = TRUE)
   if (length(x) == 0)
     stop('Sorry, I was unable to find any missing LaTeX packages')
-  x = unique(gsub(r, '\\1', x))
+  x = unique(gsub(r, '\\1\\2', x))
   pkgs = NULL
   for (j in seq_along(x)) {
     l = system2('tlmgr', c('search --global --file', x[j]), stdout = TRUE)
@@ -366,7 +366,7 @@ missing_latex = function(log) {
     #   texmf-dist/tex/latex/endfloat/endfloat.sty
     # float:
     #   texmf-dist/tex/latex/float/float.sty
-    k = grep(paste0('/', x[j], '$'), l)  # only match /fload.sty
+    k = grep(paste0('/', x[j], '([.][a-z]+)?$'), l)  # only match /fload.sty
     if (length(k) == 0) stop('Failed to find a package that contains ', x)
     k = k[k > 2]
     p = grep(':$', l)
