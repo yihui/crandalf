@@ -5,10 +5,10 @@ matrix: 1
 package: knitr
 install: yihui/knitr
 matrix: 10
-only: lme4 tabplot agridat Anthropometry argparse bcpa BEQI2 BHMSMAfMRI BTYD causalsens ChemoSpec chipPCR coenocliner confidence corrgram Crossover DAAG devtools doRNG eHOF EpiModel ESGtoolkit fastR FuzzyNumbers glarma GlobalOptions gMCP googleVis gstudio iBUGS jsonlite kitagawa knitcitations MALDIquant MALDIquantForeign mapmisc MarkowitzR memgene mkin monitoR mosaic MVN nCal NlsyLinks NMF nplr opencpu optiRum optparse plspm PopGenReport poppr poweRlaw prospectr psd pt qdap quipu RcppOctave RefManageR rmongodb rngtools rotations rYoutheria saps SCGLR sdcMicro SharpeR shotGroups simPH snplist spacetime spdynmod ss3sim TopKLists TurtleGraphics vegdata WeightedCluster wsrf R.rsp
+only: agridat Anthropometry bcpa BEQI2 causalsens ChemoSpec confidence corrgram Crossover DAAG doRNG EpiModel ESGtoolkit fastR FuzzyNumbers gMCP googleVis gstudio iBUGS jsonlite knitcitations lme4 MALDIquant MALDIquantForeign mapmisc memgene mkin mosaic NMF nplr opencpu optiRum plspm PopGenReport poppr poweRlaw prospectr psd pt qdap quipu RcppOctave rotations rYoutheria saps SCGLR sdcMicro SharpeR shotGroups simPH snplist spacetime spdynmod TurtleGraphics vegdata WeightedCluster wsrf
 exclude: localsolver
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
-sysdeps: tlmgr install a4wide appendix beamer breakurl caption cite fancyvrb float floatrow kerkis koma-script l3packages listings lm memoir mhchem microtype multirow paralist parskip pdfpages pgf preprint sectsty subfig titlesec todonotes tufte-latex tufte-latex ucs vmargin xcolor
+sysdeps: tlmgr install a4wide algorithms apacite appendix beamer bibtex booktabs breakurl caption cite csquotes diagbox doi enumitem eurosym fancyvrb float floatrow kerkis koma-script l3kernel l3packages listings lm mathtools mdwtools memoir mhchem microtype ms multirow ntgclass paralist parskip pdfpages pgf preprint rotating sectsty setspace subfig thumbpdf titlesec titling todonotes tufte-latex txfonts ucs vmargin xcolor xstring
 
 package: mime
 install: yihui/mime
