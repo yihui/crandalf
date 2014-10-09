@@ -285,7 +285,7 @@ install_deps = function(p) {
 split_pkgs = function(string, split = '\\s+') {
   if (is.na(string) || string == '') return()
   x = unlist(strsplit(string, split))
-  x[x != '']
+  unique(x[x != ''])
 }
 
 timer = local({
