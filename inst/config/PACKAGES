@@ -8,7 +8,7 @@ matrix: 10
 only: agridat Anthropometry bcpa BEQI2 causalsens ChemoSpec confidence corrgram Crossover DAAG doRNG EpiModel ESGtoolkit fastR FuzzyNumbers gMCP googleVis gstudio iBUGS jsonlite knitcitations lme4 MALDIquant MALDIquantForeign mapmisc memgene mkin mosaic NMF nplr opencpu optiRum plspm PopGenReport poppr poweRlaw prospectr psd pt qdap quipu RcppOctave rotations rYoutheria saps SCGLR sdcMicro SharpeR shotGroups simPH snplist spacetime spdynmod TurtleGraphics vegdata WeightedCluster wsrf
 exclude: localsolver
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
-sysdeps: tlmgr install a4wide algorithms apacite appendix beamer bibtex booktabs breakurl caption cite csquotes diagbox doi enumitem eurosym fancyvrb float floatrow kerkis koma-script l3kernel l3packages listings lm mathtools mdwtools memoir mhchem microtype ms multirow ntgclass paralist parskip pdfpages pgf preprint rotating sectsty setspace subfig thumbpdf titlesec titling todonotes tufte-latex txfonts ucs vmargin xcolor xstring
+sysdeps:
 
 package: mime
 install: yihui/mime
