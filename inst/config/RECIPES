@@ -13,6 +13,9 @@ recipe: sudo apt-get install -qq libgsl0-dev > /dev/null
 package: optiRum
 recipe: tlmgr install xetex; sudo tlmgr path add
 
+package: optparse
+recipe: sudo apt-get install -qq rst2pdf
+
 package: RAppArmor
 recipe: sudo apt-get -qq install libapparmor-dev > /dev/null
 
@@ -26,6 +29,9 @@ recipe: sudo apt-get install -qq libglpk-dev > /dev/null
 
 package: Rmpfr
 recipe: sudo apt-get install -qq libmpfr-dev > /dev/null
+
+package: RNetCDF
+recipe: sudo apt-get install -qq libnetcdf-dev libudunits2-dev
 
 package: RProtoBuf
 recipe: sudo apt-get install -qq libprotoc-dev > /dev/null
