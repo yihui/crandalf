@@ -18,7 +18,6 @@ branch_update = function() {
   pkgs_only = split_pkgs(config[pkg, 'only'])
   m = NA_integer_
   if (length(pkgs_only)) {
-    m = 1
     pkgs = intersect(pkgs, pkgs_only)
   }
   if (length(pkgs) == 0) q('no')  # are you kidding?
