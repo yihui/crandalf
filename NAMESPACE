@@ -1,6 +1,7 @@
 export(apt_get)
 export(download_source)
 export(install_deps)
+export(missing_latex)
 export(pkg_branch)
 export(pkg_commit)
 export(pkg_db)

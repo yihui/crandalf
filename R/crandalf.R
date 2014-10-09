@@ -342,3 +342,40 @@ travis_end = function(job) {
   timer$finish(job)
   cat(sprintf('travis_fold:end:%s\r', job))
 }
+
+#' Find missing LaTeX packages from the log file
+#'
+#' This function mimics the behavior of MikTeX to find out the missing packages
+#' for a LaTeX document automatically. The packages can be installed, for
+#' example, via \command{tlmgr install}. Searching for missing packages is based
+#' on \command{tlmgr search --global --file}.
+#' @param log the filename of the LaTeX log
+#' @return A character vector
+#' @export
+missing_latex = function(log) {
+  r = ".*! LaTeX Error: File `(.+)' not found.*"
+  x = grep(r, readLines(log), value = TRUE)
+  if (length(x) == 0)
+    stop('Sorry, I was unable to find any missing LaTeX packages')
+  x = unique(gsub(r, '\\1', x))
+  pkgs = NULL
+  for (j in seq_along(x)) {
+    l = system2('tlmgr', c('search --global --file', x[j]), stdout = TRUE)
+    if (length(l) == 0) next
+    # e.g. searching for fload.sty returns a list like this
+    # endfloat:
+    #   texmf-dist/tex/latex/endfloat/endfloat.sty
+    # float:
+    #   texmf-dist/tex/latex/float/float.sty
+    k = grep(paste0('/', x[j], '$'), l)  # only match /fload.sty
+    if (length(k) == 0) stop('Failed to find a package that contains ', x)
+    k = k[k > 2]
+    p = grep(':$', l)
+    if (length(p) == 0) next
+    lapply(k, function(i) {
+      l = gsub(':$', '', l[max(p[p < k])])  # find the package name
+      pkgs <<- c(pkgs, setNames(l, x[j]))
+    })
+  }
+  pkgs
+}
