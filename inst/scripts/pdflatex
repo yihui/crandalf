@@ -1,0 +1,24 @@
+#!/usr/bin/env Rscript
+
+args = commandArgs(TRUE)
+file = grep('[.]tex$', args, value = TRUE, ignore.case = TRUE)
+logs = sub('[.]tex$', '.log', file)
+args = shQuote(args)
+compiler = Sys.getenv(
+  'PDFLATEX', file.path(normalizePath('~'), 'texlive/bin/x86_64-linux/pdflatex')
+)
+i = 1
+while (system2(compiler, args) != 0 && i < 10) {
+  # without the LaTeX log, I do not know what to do
+  if (!file.exists(logs))
+    stop('Failed to compile ', file, ' and no LaTeX logs found!')
+  i = i + 1
+  pkgs = crandalf::missing_latex(logs)
+  if (length(pkgs) == 0) next
+  message(
+    'Installing ', paste(pkgs, collapse = ', '),
+    ' for the missing ', paste(names(pkgs), collapse = ', ')
+  )
+  system2('tlmgr', c('install', pkgs))
+}
+if (i == 10) stop('Failed to install the missing LaTeX packages for ', file)
