@@ -400,3 +400,14 @@ error_pkgs = function(log) {
   pa = c(pa, setdiff(split_pkgs(gsub(r, '\\1', grep(r, x, value = TRUE))), c(p1, p2)))
   unique(pa)
 }
+
+analyze_logs = function() {
+  log = '/tmp/travis.log'
+  unlink(log)
+  system('./inst/scripts/travis-logs >> /tmp/travis.log')
+  path = '../ubuntu-bin/TeXLive.pkgs'
+  pkg = missing_latex(log)
+  pkg = c(pkg, readLines(path))
+  writeLines(sort(unique(pkg)), path)
+  cat(sort(error_pkgs(log)))
+}
