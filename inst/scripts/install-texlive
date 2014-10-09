@@ -2,6 +2,8 @@
 
 [ -e ~/texlive ] && exit 0
 
+sudo apt-get install perl
+
 cd ~
 wget https://github.com/yihui/ubuntu-bin/releases/download/latest/texlive-local.deb
 sudo dpkg -i texlive-local.deb
