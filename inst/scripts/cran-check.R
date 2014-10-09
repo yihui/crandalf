@@ -78,7 +78,9 @@ for (i in seq_len(n)) {
   lapply(deps, install_deps)
   # re-install the old packages built with R < 3.0.0
   built = installed.packages(.libPaths()[-1])[, 'Built']
-  lapply(names(built[as.numeric_version(built) < '3.0.0']), install_deps)
+  old = names(built[as.numeric_version(built) < '3.0.0'])
+  message('Re-installing packages built before R 3.0.0')
+  lapply(old, install_deps)
   travis_end(msg2)
 
   if (is.null(acv <- download_source(p))) next
