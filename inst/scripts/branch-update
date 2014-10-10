@@ -2,7 +2,11 @@
 
 [ `git rev-parse --abbrev-ref HEAD` != master ] && exit 0
 
-R CMD INSTALL .
+cd ..
+rm -f crandalf_*.tar.gz
+R CMD build crandalf
+R CMD INSTALL crandalf_*.tar.gz
+cd crandalf
 
 # create branches from the current master if they do not exist
 for i in `grep -G '^package:' inst/config/PACKAGES | sed 's@^package:\s*@pkg/@' | sed 's/\s*//'`;
