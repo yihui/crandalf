@@ -46,10 +46,12 @@ branch_update = function() {
   i2 = which(x == '# matrix-end')
   writeLines(c(x[1:i1], items, x[i2:length(x)]), '.travis.yml')
   repo = 'https://travis-ci.org/yihui/crandalf'
-  writeLines(c(sprintf(
-    '# %s\n\n[![Build Status](%s.svg?branch=pkg/%s)](%s)\n', pkg,
+  txt = readLines('README.md')[-(1:2)]
+  txt[1] = sprintf(
+    '# %s\n\n[![Build Status](%s.svg?branch=pkg/%s)](%s)', pkg,
     repo, pkg, repo
-  ), 'Results of checking CRAN reverse dependencies.'), 'README.md')
+  )
+  writeLines(txt, 'README.md')
 }
 
 #' Get the package name of which the reverse dependencies are to be checked
