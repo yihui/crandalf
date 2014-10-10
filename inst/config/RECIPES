@@ -33,7 +33,7 @@ package: RProtoBuf
 deb: libprotoc-dev
 
 package: R2jags
-deb: sudo apt-get install jags
+deb: jags
 
 package: rgdal
 deb: libgdal-dev libproj-dev
