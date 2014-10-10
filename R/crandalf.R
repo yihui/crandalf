@@ -257,6 +257,7 @@ require_ok = function(p) {
 #' remove all the side effects brought by \code{\link{library}()}, such as
 #' DLL's. Instead of cleaning up everything, we just use a new R session to test
 #' if a package is loadable.
+#' @param p the package name (must be of length 1)
 #' @return \code{TRUE} or \code{FALSE}.
 #' @export
 pkg_loadable = function(p) {
@@ -270,6 +271,7 @@ pkg_loadable = function(p) {
 #' C/C++/Fortran code, it has to be compiled. For such packages, we might need
 #' to install additional system dependencies (e.g. \pkg{libxml2-dev} for the
 #' \pkg{XML} package).
+#' @inheritParams pkg_loadable
 #' @return \code{TRUE} or \code{FALSE}.
 #' @export
 need_compile = function(p) {

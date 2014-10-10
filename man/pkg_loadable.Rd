@@ -4,6 +4,9 @@
 \usage{
 pkg_loadable(p)
 }
+\arguments{
+\item{p}{the package name (must be of length 1)}
+}
 \value{
 \code{TRUE} or \code{FALSE}.
 }
