@@ -463,9 +463,10 @@ error_pkgs = function(log) {
 }
 
 analyze_logs = function() {
-  log = '/tmp/travis.log'
+  log = tempfile()
   unlink(log)
-  system('./inst/scripts/travis-logs 207 >> /tmp/travis.log')
+  system(paste('./inst/scripts/travis-logs >>', shQuote(log)))
+  message('Travis logs written to ', log)
   path = '../ubuntu-bin/TeXLive.pkgs'
   pkg = missing_latex(log)
   pkg = c(pkg, readLines(path))
