@@ -5,7 +5,7 @@ matrix: 1
 package: knitr
 install: yihui/knitr
 matrix:
-only: agridat DAAG SCGLR spacetime spdynmod WeightedCluster
+only: spacetime spdynmod WeightedCluster
 exclude: localsolver tabplot
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
 sysdeps:
