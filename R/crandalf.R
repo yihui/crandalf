@@ -407,10 +407,13 @@ error_pkgs = function(log) {
   p2 = gsub(r2, '\\1', x[i2])
   # these packages must have errored (started without ending)
   pa = setdiff(p1, p2)
+  i1 = i1[p1 %in% p2]
   n  = length(i1)
   for (j in seq_len(n)) {
-    if (any(grepl('Error', x[seq(i1[j], if (j == n) n else i1[j + 1])])))
-      pa = c(pa, p1[j])
+    txt = x[seq(i1[j], i2[j])]
+    i = grep('\\* using log directory.+[.]Rcheck.\\s*', txt)
+    if (length(i) == 1) txt = txt[i:length(txt)]
+    if (any(grepl('Error', txt))) pa = c(pa, p1[j])
   }
   # some package might not have been checked due to timeout
   r = '^\\$\\s*export R_CHECK_PACKAGES="([^"]+)"\\s*$'
