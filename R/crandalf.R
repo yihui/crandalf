@@ -54,6 +54,14 @@ branch_update = function() {
 
 config_path = function(...) system.file('config', ..., package = 'crandalf')
 
+#' The configuration for packages
+#'
+#' The file \file{config/PACKAGES} in this package stores some configuration
+#' information for packages of which the reverse dependencies are to be checked,
+#' such as the package name, the Github repo, and the number of jobs in a build
+#' matrix, etc.
+#' @return A character matrix.
+#' @export
 pkg_config = function() read.dcf(config_path('PACKAGES'))
 
 #' Get the package name of which the reverse dependencies are to be checked
@@ -241,10 +249,29 @@ require_ok = function(p) {
   ) == 0
 }
 
+#' Whether a package is loadable
+#'
+#' This function is like \code{\link{require}()}, but it does not load the
+#' package in the current R session. Instead, it launches a new R session to
+#' test if a package is loadable. The reason for that is it is not trivial to
+#' remove all the side effects brought by \code{\link{library}()}, such as
+#' DLL's. Instead of cleaning up everything, we just use a new R session to test
+#' if a package is loadable.
+#' @return \code{TRUE} or \code{FALSE}.
+#' @export
 pkg_loadable = function(p) {
   (p %in% .packages(TRUE)) && require_ok(p)
 }
 
+#' Whether a package needs to be compiled
+#'
+#' This function uses the column \code{NeedsCompilation} of the package database
+#' on CRAN to check if a package needes to be compiled. When it contains
+#' C/C++/Fortran code, it has to be compiled. For such packages, we might need
+#' to install additional system dependencies (e.g. \pkg{libxml2-dev} for the
+#' \pkg{XML} package).
+#' @return \code{TRUE} or \code{FALSE}.
+#' @export
 need_compile = function(p) {
   (p %in% rownames(pkg_db)) && pkg_db[p, 'NeedsCompilation'] == 'yes'
 }
