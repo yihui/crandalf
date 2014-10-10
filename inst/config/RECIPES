@@ -36,7 +36,7 @@ package: R2jags
 deb: jags
 
 package: rgdal
-deb: libgdal1-dev libproj-dev
+deb: gdal-bin libgdal-dev libgdal1-dev libgdal1h libproj-dev
 
 package: rjags
 deb: jags
