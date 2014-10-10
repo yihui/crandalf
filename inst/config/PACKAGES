@@ -5,7 +5,7 @@ matrix: 1
 package: knitr
 install: yihui/knitr
 matrix: 5
-only: ChemoSpec DAAG doRNG EpiModel lme4 mapmisc memgene NMF nplr optiRum PopGenReport pt RcppOctave rotations saps SCGLR sdcMicro spacetime wsrf
+only: doRNG lme4 mapmisc memgene NMF nplr optiRum PopGenReport pt RcppOctave rotations saps sdcMicro spacetime wsrf
 exclude: localsolver
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
 sysdeps:
