@@ -3,7 +3,8 @@
 \alias{pkg_db}
 \alias{recipes}
 \title{Datasets for the package info on CRAN and R package recipes in \pkg{crandalf}}
-\format{Data frames.}
+\format{\code{pkg_db} is a data frame, and \code{recipes} is a character
+  matrix.}
 \description{
 The data frame \code{pkg_db} is read from
 \url{http://cran.rstudio.com/web/packages/packages.rds}, and \code{recipes}
