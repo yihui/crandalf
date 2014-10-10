@@ -1,7 +1,7 @@
 if (Sys.getenv('TRAVIS') != 'true') q('no')
 
 library(crandalf)
-config = pkg_config()
+config = pkg_config
 
 if (is.null(pkg <- pkg_branch())) {
   if (is.null(pkg <- pkg_commit()))

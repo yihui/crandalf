@@ -11,7 +11,7 @@ branch_update = function() {
     return()
   }
   if (is.null(pkg <- pkg_branch())) return()
-  config = pkg_config()
+  config = pkg_config
   rownames(config) = config[, 'package']
   pkgs = pkg_deps(pkg, 'all', reverse = TRUE)[[1]]
   pkgs = setdiff(pkgs, split_pkgs(config[pkg, 'exclude']))
@@ -52,18 +52,6 @@ branch_update = function() {
   ), 'Results of checking CRAN reverse dependencies.'), 'README.md')
 }
 
-config_path = function(...) system.file('config', ..., package = 'crandalf')
-
-#' The configuration for packages
-#'
-#' The file \file{config/PACKAGES} in this package stores some configuration
-#' information for packages of which the reverse dependencies are to be checked,
-#' such as the package name, the Github repo, and the number of jobs in a build
-#' matrix, etc.
-#' @return A character matrix.
-#' @export
-pkg_config = function() read.dcf(config_path('PACKAGES'))
-
 #' Get the package name of which the reverse dependencies are to be checked
 #'
 #' For \code{pkg_branch()}, the package name is obtained from the environment
@@ -102,12 +90,25 @@ pkg_commit = function() {
 #' is from the file \file{RECIPES} under the \file{config} directory of the
 #' \pkg{crandalf} package.
 #' @usage NULL
-#' @format Data frames.
+#' @format \code{pkg_db} is a data frame, and \code{recipes} is a character
+#'   matrix.
 #' @aliases pkg_db
 #' @export recipes pkg_db
 #' @examples str(recipes); str(pkg_db)
 recipes = NULL
 pkg_db  = NULL
+
+#' The configuration for packages
+#'
+#' The file \file{config/PACKAGES} in this package stores some configuration
+#' information for packages of which the reverse dependencies are to be checked,
+#' such as the package name, the Github repo, and the number of jobs in a build
+#' matrix, etc.
+#' @usage NULL
+#' @format A character matrix.
+#' @export
+#' @examples str(pkg_config)
+pkg_config = NULL
 
 pkg_path = function(...) {
   root = if (file.exists('DESCRIPTION')) '.' else '..'
@@ -124,6 +125,12 @@ if (!('roxygen2' %in% loadedNamespaces())) {
   write.dcf(
     recipes[order(recipes[, 'package']), ],
     pkg_path('inst/config/RECIPES')
+  )
+
+  pkg_config = read.dcf(pkg_path('inst/config/PACKAGES'))
+  write.dcf(
+    pkg_config[order(pkg_config[, 'package']), ],
+    pkg_path('inst/config/PACKAGES')
   )
 
   con = url('http://cran.rstudio.com/web/packages/packages.rds', 'rb')
