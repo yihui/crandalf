@@ -268,7 +268,8 @@ install_deps = function(p) {
   suppressMessages(BiocInstaller::biocLite(
     p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE
   ))
-  if (!pkg_loadable(p)) warning('Failed to install ', p, immediate. = TRUE)
+  if (!pkg_loadable(p))
+    warning('Failed to install ', p, call. = FALSE, immediate. = TRUE)
 }
 
 #' Re-install packages that were built with R < 3.0.0
@@ -420,7 +421,7 @@ error_pkgs = function(log) {
 analyze_logs = function() {
   log = '/tmp/travis.log'
   unlink(log)
-  system('./inst/scripts/travis-logs >> /tmp/travis.log')
+  system('./inst/scripts/travis-logs 207 >> /tmp/travis.log')
   path = '../ubuntu-bin/TeXLive.pkgs'
   pkg = missing_latex(log)
   pkg = c(pkg, readLines(path))
