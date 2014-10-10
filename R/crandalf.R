@@ -16,13 +16,10 @@ branch_update = function() {
   pkgs = pkg_deps(pkg, 'all', reverse = TRUE)[[1]]
   pkgs = setdiff(pkgs, split_pkgs(config[pkg, 'exclude']))
   pkgs_only = split_pkgs(config[pkg, 'only'])
-  m = NA_integer_
   if (length(pkgs_only)) {
     pkgs = intersect(pkgs, pkgs_only)
   }
   if (length(pkgs) == 0) q('no')  # are you kidding?
-  if (is.na(m)) m = as.numeric(config[pkg, 'matrix'])
-  if (is.na(m) || m == 0) m = 5  # 5 parallel builds by default
   # packages that need to be checked in separate VM's
   pkgs2 = split_pkgs(config[pkg, 'separate'], '\\s*\\|\\s*')
   pkgs2 = unlist(lapply(pkgs2, function(x) {
@@ -31,6 +28,10 @@ branch_update = function() {
     x = paste(x, collapse = ' ')
     x[x != '']
   }))
+  m = as.numeric(config[pkg, 'matrix'])
+  if (is.na(m) || m == 0)
+    m = ceiling(length(pkgs)/7)  # 7 packages per job by default
+  if (m <= 0) m = 1
   items = sprintf(
     '    - R_CHECK_PACKAGES="%s"',
     c(

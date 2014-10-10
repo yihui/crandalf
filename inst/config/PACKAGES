@@ -4,7 +4,7 @@ matrix: 1
 
 package: knitr
 install: yihui/knitr
-matrix: 30
+matrix:
 only:
 exclude: localsolver tabplot
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
