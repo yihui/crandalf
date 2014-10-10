@@ -218,7 +218,10 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
   cmd = function(options = '') {
     system2('sudo', c(sprintf('apt-get -q %s %s', options, command), pkgs))
   }
-  if (cmd() == 0) return()
+  if (cmd() == 0) {
+    fix_R2()
+    return()
+  }
   # current I see it is possible to get the error "Unable to correct problems,
   # you have held broken packages", so see if `apt-get -f install` can fix it
   warning('Failed to install ', paste(pkgs, collapse = ' '), immediate. = TRUE)
@@ -265,6 +268,20 @@ install_deps = function(p) {
     p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE, quiet = TRUE
   ))
   if (!pkg_loadable(p)) warning('Failed to install ', p, immediate. = TRUE)
+}
+
+#' Re-install packages that were built with R < 3.0.0
+#'
+#' Some Debian R packages were built with R 2.x, and such packages are not
+#' loadable in R 3.x, so we need to find and reinstall them under R 3.x.
+#' @param lib the library locations
+#' @export
+fix_R2 = function(lib = .libPaths()[-1]) {
+  built = installed.packages(lib)[, 'Built']
+  old = names(built[as.numeric_version(built) < '3.0.0'])
+  if (length(old) == 0) return()
+  message('Re-installing packages built before R 3.0.0')
+  lapply(old, install_deps)
 }
 
 #' Given a character string, split it by white spaces or a custom string

@@ -76,11 +76,7 @@ for (i in seq_len(n)) {
   apt_get(deps)
   # install extra R dependencies not covered by apt-get
   lapply(deps, install_deps)
-  # re-install the old packages built with R < 3.0.0
-  built = installed.packages(.libPaths()[-1])[, 'Built']
-  old = names(built[as.numeric_version(built) < '3.0.0'])
-  message('Re-installing packages built before R 3.0.0')
-  lapply(old, install_deps)
+  fix_R2()
   travis_end(msg2)
 
   if (is.null(acv <- download_source(p))) next

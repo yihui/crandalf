@@ -1,5 +1,6 @@
 export(apt_get)
 export(download_source)
+export(fix_R2)
 export(install_deps)
 export(missing_latex)
 export(pkg_branch)
