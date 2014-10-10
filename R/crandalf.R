@@ -367,7 +367,10 @@ missing_latex = function(log) {
     # float:
     #   texmf-dist/tex/latex/float/float.sty
     k = grep(paste0('/', x[j], '([.][a-z]+)?$'), l)  # only match /fload.sty
-    if (length(k) == 0) stop('Failed to find a package that contains ', x[j])
+    if (length(k) == 0) {
+      warning('Failed to find a package that contains ', x[j])
+      next
+    }
     k = k[k > 2]
     p = grep(':$', l)
     if (length(p) == 0) next
