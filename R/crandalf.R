@@ -109,16 +109,21 @@ pkg_commit = function() {
 recipes = NULL
 pkg_db  = NULL
 
+pkg_path = function(...) {
+  root = if (file.exists('DESCRIPTION')) '.' else '..'
+  file.path(root, ...)
+}
 # create the recipes data during R CMD INSTALL but not roxygenize
 if (!('roxygen2' %in% loadedNamespaces())) {
-  recipes = read.dcf(file.path(
-    if ('devtools' %in% loadedNamespaces()) '..' else '.',
-    'inst/config/RECIPES'
-  ))
+  recipes = read.dcf(pkg_path('inst/config/RECIPES'))
   rownames(recipes) = tolower(recipes[, 'package'])
   stopifnot(
     ncol(recipes) == 3,
     identical(sort(colnames(recipes)), sort(c('package', 'repo', 'deb')))
+  )
+  write.dcf(
+    recipes[order(recipes[, 'package']), ],
+    pkg_path('inst/config/RECIPES')
   )
 
   con = url('http://cran.rstudio.com/web/packages/packages.rds', 'rb')

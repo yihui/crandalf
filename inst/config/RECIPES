@@ -13,15 +13,24 @@ deb: libgsl0-dev
 package: optparse
 deb: rst2pdf
 
+package: R2jags
+deb: jags
+
 package: RAppArmor
 deb: libapparmor-dev
 
 package: RcppOctave
-repo: ppa:octave/stable
 deb: octave liboctave-dev
+repo: ppa:octave/stable
+
+package: rgdal
+deb: gdal-bin libgdal-dev libgdal1-dev libgdal1h libproj-dev
 
 package: Rglpk
 deb: libglpk-dev
+
+package: rjags
+deb: jags
 
 package: Rmpfr
 deb: libmpfr-dev
@@ -31,15 +40,6 @@ deb: libnetcdf-dev libudunits2-dev
 
 package: RProtoBuf
 deb: libprotoc-dev
-
-package: R2jags
-deb: jags
-
-package: rgdal
-deb: gdal-bin libgdal-dev libgdal1-dev libgdal1h libproj-dev
-
-package: rjags
-deb: jags
 
 package: seewave
 deb: libsndfile1-dev
