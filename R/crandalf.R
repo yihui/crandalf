@@ -262,11 +262,11 @@ install_deps = function(p) {
   if (need_compile(p)) apt_get(p, 'build-dep')
   # p is not loadable, and it might be due to its dependencies are not loadable
   for (k in pkg_deps(p)[[1]]) Recall(k)
-  if (p %in% rownames(pkg_db)) return(install.packages(p, quiet = TRUE))
+  if (p %in% rownames(pkg_db)) return(install.packages(p))
   # perhaps it is a BioC package...
   if (!pkg_loadable('BiocInstaller')) source('http://bioconductor.org/biocLite.R')
   suppressMessages(BiocInstaller::biocLite(
-    p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE, quiet = TRUE
+    p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE
   ))
   if (!pkg_loadable(p)) warning('Failed to install ', p, immediate. = TRUE)
 }
