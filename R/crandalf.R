@@ -352,7 +352,7 @@ travis_end = function(job) {
 #' @return A character vector
 #' @export
 missing_latex = function(log) {
-  r = ".*! LaTeX Error: File `(.+)' not found.*|.*! Font [^=]+=([^ ]+).+ not loadable.*"
+  r = ".*! LaTeX Error: File `([-[:alnum:]]+[.][[:alpha:]]{1,3})' not found.*|.*! Font [^=]+=([^ ]+).+ not loadable.*"
   x = grep(r, readLines(log), value = TRUE)
   if (length(x) == 0)
     stop('Sorry, I was unable to find any missing LaTeX packages')
