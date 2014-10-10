@@ -5,7 +5,7 @@ matrix: 1
 package: knitr
 install: yihui/knitr
 matrix: 4
-only: mapmisc PopGenReport pt rotations sdcMicro spacetime wsrf
+only: pt
 exclude: localsolver
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
 sysdeps:
