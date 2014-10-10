@@ -236,7 +236,8 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
 # session to test the package to keep the current session clean
 require_ok = function(p) {
   system2(
-    'Rscript', c('-e', shQuote(sprintf('library(%s)', p)))
+    'Rscript', c('-e', shQuote(sprintf('library(%s)', p))),
+    stdout = NULL, stderr = NULL
   ) == 0
 }
 
