@@ -219,7 +219,7 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
     system2('sudo', c(sprintf('apt-get -q %s %s', options, command), pkgs))
   }
   if (cmd() == 0) {
-    fix_R2()
+    if (command == 'install') fix_R2()
     return()
   }
   # current I see it is possible to get the error "Unable to correct problems,
