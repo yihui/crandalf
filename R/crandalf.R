@@ -207,7 +207,7 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
         lapply(repo, function(r) {
           system2('sudo', c('apt-get apt-add-repository -y', r))
         })
-        if (length(deb)) system2('sudo', c('apt-get -qq install', deb))
+        if (length(deb)) system2('sudo', c('apt-get -q install', deb))
       }
       pkgs = setdiff(pkgs, rownames(recipes))
     }
@@ -215,32 +215,25 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
     if (length(pkgs) == 0) return()
     pkgs = sprintf('r-cran-%s', pkgs)
   }
-  cmd = function(stdout = NULL, options = '') {
-    quiet = is.null(stdout)
-    system2(
-      'sudo',
-      c(sprintf(
-        'apt-get %s %s %s',
-        if (quiet) '-qq' else '', options, command
-      ), pkgs, if (quiet) '> /dev/null'),
-      stdout = stdout
-    )
+  cmd = function(options = '') {
+    system2('sudo', c(sprintf('apt-get -q %s %s', options, command), pkgs))
   }
   if (cmd() == 0) return()
   # current I see it is possible to get the error "Unable to correct problems,
   # you have held broken packages", so see if `apt-get -f install` can fix it
+  warning('Failed to install ', paste(pkgs, collapse = ' '), immediate. = TRUE)
   system2('sudo', 'apt-get update -qq')
-  cmd('', '-f')  # write to stdout to diagnose the problem
+  system2('sudo', 'apt-get -f install')
+  cmd('-f')
 }
 
 # do not use requireNamespace() because there is a limit on the number of dll's
 # to be loaded in the system, and detach()/unloadNamespace() cannot unload them;
 # I do not want to check the dark magic, either, so simply launch a new R
 # session to test the package to keep the current session clean
-require_ok = function(p, quiet = TRUE) {
+require_ok = function(p) {
   system2(
-    'Rscript', c('-e', shQuote(sprintf('library(%s)', p))),
-    stdout = !quiet, stderr = !quiet
+    'Rscript', c('-e', shQuote(sprintf('library(%s)', p)))
   ) == 0
 }
 
@@ -265,20 +258,13 @@ install_deps = function(p) {
   if (need_compile(p)) apt_get(p, 'build-dep')
   # p is not loadable, and it might be due to its dependencies are not loadable
   for (k in pkg_deps(p)[[1]]) Recall(k)
-  install = function(p, quiet = TRUE) {
-    if (p %in% rownames(pkg_db)) return(install.packages(p, quiet = quiet))
-    # perhaps it is a BioC package...
-    if (!pkg_loadable('BiocInstaller'))
-      source('http://bioconductor.org/biocLite.R')
-    suppressMessages(BiocInstaller::biocLite(
-      p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE, quiet = quiet
-    ))
-  }
-  install(p)
-  if (pkg_loadable(p)) return()
-  require_ok(p, FALSE)
-  # reinstall: why did it fail?
-  install(p, FALSE)
+  if (p %in% rownames(pkg_db)) return(install.packages(p, quiet = TRUE))
+  # perhaps it is a BioC package...
+  if (!pkg_loadable('BiocInstaller')) source('http://bioconductor.org/biocLite.R')
+  suppressMessages(BiocInstaller::biocLite(
+    p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE, quiet = TRUE
+  ))
+  if (!pkg_loadable(p)) warning('Failed to install ', p, immediate. = TRUE)
 }
 
 #' Given a character string, split it by white spaces or a custom string
