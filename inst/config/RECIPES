@@ -1,49 +1,48 @@
 package: argparse
-recipe: sudo apt-get install -qq rst2pdf
+deb: rst2pdf
 
 package: fftw
-recipe: sudo apt-get install -qq libfftw3-dev > /dev/null
+deb: libfftw3-dev
 
 package: gmp
-recipe: sudo apt-get install -qq libgmp-dev > /dev/null
+deb: libgmp-dev
 
 package: gsl
-recipe: sudo apt-get install -qq libgsl0-dev > /dev/null
+deb: libgsl0-dev
 
 package: optparse
-recipe: sudo apt-get install -qq rst2pdf
+deb: rst2pdf
 
 package: RAppArmor
-recipe: sudo apt-get -qq install libapparmor-dev > /dev/null
+deb: libapparmor-dev
 
 package: RcppOctave
-recipe: sudo apt-add-repository -y ppa:octave/stable;
-  sudo apt-get -qq update;
-  sudo apt-get install -qq octave liboctave-dev > /dev/null
+repo: ppa:octave/stable
+deb: octave liboctave-dev
 
 package: Rglpk
-recipe: sudo apt-get install -qq libglpk-dev > /dev/null
+deb: libglpk-dev
 
 package: Rmpfr
-recipe: sudo apt-get install -qq libmpfr-dev > /dev/null
+deb: libmpfr-dev
 
 package: RNetCDF
-recipe: sudo apt-get install -qq libnetcdf-dev libudunits2-dev
+deb: libnetcdf-dev libudunits2-dev
 
 package: RProtoBuf
-recipe: sudo apt-get install -qq libprotoc-dev > /dev/null
+deb: libprotoc-dev
 
 package: R2jags
-recipe: sudo apt-get install jags
+deb: sudo apt-get install jags
 
 package: rgdal
-recipe: sudo apt-get install -qq libgdal-dev libproj-dev > /dev/null
+deb: libgdal-dev libproj-dev
 
 package: rjags
-recipe: sudo apt-get install jags
+deb: jags
 
 package: seewave
-recipe: sudo apt-get install -qq libsndfile1-dev > /dev/null
+deb: libsndfile1-dev
 
 package: survSNP
-recipe: sudo apt-get install -qq libgsl0-dev > /dev/null
+deb: libgsl0-dev

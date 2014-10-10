@@ -108,7 +108,10 @@ if (!('roxygen2' %in% loadedNamespaces())) {
     'inst/config/RECIPES'
   ))
   rownames(recipes) = tolower(recipes[, 'package'])
-  stopifnot(ncol(recipes) == 2, identical(colnames(recipes), c('package', 'recipe')))
+  stopifnot(
+    ncol(recipes) == 3,
+    identical(sort(colnames(recipes)), sort(c('package', 'repo', 'deb')))
+  )
 
   con = url('http://cran.rstudio.com/web/packages/packages.rds', 'rb')
   pkg_db = tryCatch(readRDS(gzcon(con)), finally = close(con))
@@ -198,8 +201,14 @@ apt_get = function(pkgs, command = 'install', R = TRUE) {
     }), use.names = FALSE)
     pkgs = tolower(pkgs)
     if (command %in% c('install', 'build-dep')) {
-      for (p in intersect(pkgs, rownames(recipes)))
-        system(recipes[p, 'recipe'], ignore.stdout = TRUE)
+      for (p in intersect(pkgs, rownames(recipes))) {
+        deb  = split_pkgs(recipes[p, 'deb'])
+        repo = split_pkgs(recipes[p, 'repo'], ';')
+        lapply(repo, function(r) {
+          system2('sudo', c('apt-get apt-add-repository -y', r))
+        })
+        if (length(deb)) system2('sudo', c('apt-get -qq install', deb))
+      }
       pkgs = setdiff(pkgs, rownames(recipes))
     }
     pkgs = intersect(pkgs, pkgs_deb())
