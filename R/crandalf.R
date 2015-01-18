@@ -74,7 +74,7 @@ pkg_branch = function() {
 #' @rdname pkg_branch
 #' @description For \code{pkg_commit()}, the package named is detected from the
 #'   current commit message, which should contain a character string of the form
-#'   \code{[crandalf pkg@user/repo]}, where \code{user/repo} is a repository on
+#'   \code{[crandalf pkg@@user/repo]}, where \code{user/repo} is a repository on
 #'   Github.
 #' @export
 pkg_commit = function() {
