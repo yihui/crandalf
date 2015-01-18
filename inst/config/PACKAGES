@@ -4,8 +4,8 @@ matrix: 1
 
 package: knitr
 install: yihui/knitr
-matrix: 5
-only: dataRetrieval EGRET ergm FAOSTAT HiveR pkgmaker Rchoice RCMIP5 spacetime spca spdep tikzDevice WeightedCluster
+matrix:
+only: FAOSTAT Rchoice
 exclude: localsolver tabplot
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
 sysdeps:
