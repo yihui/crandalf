@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{pkg_branch}
 \alias{pkg_branch}
 \alias{pkg_commit}
@@ -18,6 +19,6 @@ package name with the \code{pkg/} prefix.
 
 For \code{pkg_commit()}, the package named is detected from the
   current commit message, which should contain a character string of the form
-  \code{[crandalf user/repo]}, where \code{user/repo} is a repository on
+  \code{[crandalf pkg@user/repo]}, where \code{user/repo} is a repository on
   Github.
 }

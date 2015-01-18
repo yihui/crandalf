@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{pkg_deps}
 \alias{pkg_deps}
 \title{Compute package dependencies}

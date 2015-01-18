@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{missing_latex}
 \alias{missing_latex}
 \title{Find missing LaTeX packages from the log file}

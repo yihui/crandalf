@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{split_pkgs}
 \alias{split_pkgs}
 \title{Given a character string, split it by white spaces or a custom string}

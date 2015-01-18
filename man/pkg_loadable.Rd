@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{pkg_loadable}
 \alias{pkg_loadable}
 \title{Whether a package is loadable}

@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{install_deps}
 \alias{install_deps}
 \title{Install a package and its dependencies}

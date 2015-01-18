@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{travis_fold}
 \alias{travis_end}
 \alias{travis_fold}

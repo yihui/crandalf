@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{apt_get}
 \alias{apt_get}
 \title{A wrapper for \command{apt-get} on Ubuntu/Debian}

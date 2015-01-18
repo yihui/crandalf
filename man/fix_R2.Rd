@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{fix_R2}
 \alias{fix_R2}
 \title{Re-install packages that were built with R < 3.0.0}

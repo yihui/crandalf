@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{pkg_install}
 \alias{pkg_install}
 \title{Install a package from Github using \pkg{devtools}}

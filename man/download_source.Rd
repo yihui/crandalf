@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{download_source}
 \alias{download_source}
 \title{Download a source package from CRAN}

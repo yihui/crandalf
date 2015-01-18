@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \docType{data}
 \name{pkg_config}
 \alias{pkg_config}

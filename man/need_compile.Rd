@@ -1,3 +1,4 @@
+% Please edit documentation in R/crandalf.R
 \name{need_compile}
 \alias{need_compile}
 \title{Whether a package needs to be compiled}
