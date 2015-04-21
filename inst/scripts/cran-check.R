@@ -82,9 +82,15 @@ for (i in seq_len(n)) {
   if (is.null(acv <- download_source(p))) next
   travis_fold(
     sprintf('check_%s', p),
-    system2('R', c('CMD check --no-codoc --no-manual', acv, '| grep -v "... OK"')),
+    res <- system2('R', c('CMD check --no-codoc --no-manual', acv, '| grep -v "... OK"')),
     c('  R CMD check', acv)
   )
+  if (res != 0) {
+    file.copy(
+      sprintf('%s.Rcheck/%s', p, c('00check.log', '00install.out')),
+      sprintf('%s-%s', p, c('00check.log', '00install.out'))
+    )
+  }
 
   travis_end(msg1)
 }
