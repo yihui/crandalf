@@ -82,7 +82,7 @@ for (i in seq_len(n)) {
   if (is.null(acv <- download_source(p))) next
   travis_fold(
     sprintf('check_%s', p),
-    res <- system2('R', c('CMD check --no-codoc --no-manual', acv, '| grep -v "... OK"')),
+    res <- system2('R', c('CMD check --no-codoc --no-manual', acv)),
     c('  R CMD check', acv)
   )
   print(res)
