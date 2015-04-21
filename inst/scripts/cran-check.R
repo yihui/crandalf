@@ -85,11 +85,14 @@ for (i in seq_len(n)) {
     res <- system2('R', c('CMD check --no-codoc --no-manual', acv, '| grep -v "... OK"')),
     c('  R CMD check', acv)
   )
+  print(res)
   if (res != 0) {
-    file.copy(
+    print(list.files(sprintf('%s.Rcheck', p)))
+    print(file.copy(
       sprintf('%s.Rcheck/%s', p, c('00check.log', '00install.out')),
       sprintf('%s-%s', p, c('00check.log', '00install.out'))
-    )
+    ))
+    print(list.files())
   }
 
   travis_end(msg1)
