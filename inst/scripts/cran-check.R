@@ -85,7 +85,6 @@ for (i in seq_len(n)) {
     res <- system2('R', c('CMD check --no-codoc --no-manual', acv)),
     c('  R CMD check', acv)
   )
-  print(res)
   if (res != 0) {
     print(list.files(sprintf('%s.Rcheck', p)))
     print(file.copy(
