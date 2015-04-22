@@ -72,6 +72,6 @@ cache:
 script:
   - ./inst/scripts/install-r
   - ./inst/scripts/install-pandoc
-  - R CMD INSTALL .
+  - cd ..; R CMD build crandalf && R CMD INSTALL crandalf_*.tar.gz; cd crandalf
   - ./inst/scripts/crandalf
   - "[ $TRAVIS_BRANCH == master ] && R CMD check --no-manual ../crandalf_*.tar.gz || true"
