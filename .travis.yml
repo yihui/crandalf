@@ -3,9 +3,11 @@ language: java
 jdk:
   - openjdk7
 
+sudo: false
+
 env:
   global:
-    - R_LIBS_USER=~/R R_TEXI2DVICMD=texi2dvi _R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=false
+    - _R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=false
   matrix:
 # matrix-start
     - R_CHECK_PACKAGES=""
@@ -14,23 +16,62 @@ env:
 before_install:
   - "export TRAVIS_COMMIT_MSG=\"$(git log --format=%B --no-merges -n 1)\""
   - "export DISPLAY=:99.0"
+  - "export PATH=$PATH:$HOME/bin"
   - "sh -e /etc/init.d/xvfb start"
 
-install:
-  - sudo apt-add-repository -y "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-  - sudo apt-get -qq update
-  - ./inst/scripts/install-texlive
-  - ./inst/scripts/install-pandoc
-  - sudo apt-get -qq install r-base-dev
-  - sudo apt-get autoremove
-  - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
-  - sudo R CMD javareconf
-  - cd .. && R CMD build crandalf
-  - R CMD INSTALL crandalf_*.tar.gz
-  - cd crandalf
+addons:
+  apt:
+    packages:
+    - gcc
+    - g++
+    - gfortran
+    - libblas-dev
+    - liblapack-dev
+    - tcl8.5-dev
+    - tk8.5-dev
+    - bison
+    - groff-base
+    - libncurses5-dev
+    - libreadline-dev
+    - debhelper
+    - texi2html
+    - texinfo
+    - libbz2-dev
+    - liblzma-dev
+    - libpcre3-dev
+    - xdg-utils
+    - zlib1g-dev
+    - libpng-dev
+    - libjpeg-dev
+    - libx11-dev
+    - libxt-dev
+    - x11proto-core-dev
+    - libpango1.0-dev
+    - libcairo2-dev
+    - libtiff5-dev
+    - xvfb
+    - xauth
+    - xfonts-base
+    - texlive-base
+    - texlive-latex-base
+    - texlive-generic-recommended
+    - texlive-fonts-recommended
+    - texlive-fonts-extra
+    - texlive-extra-utils
+    - texlive-latex-recommended
+    - texlive-latex-extra
+    - default-jdk
+    - libcurl4-openssl-dev
+
+cache:
+  directories:
+  - $HOME/bin
+  - $HOME/R-base
 
 # summon crandalf!
 script:
+  - ./inst/scripts/install-r
+  - ./inst/scripts/install-pandoc
+  - R CMD INSTALL .
   - ./inst/scripts/crandalf
   - "[ $TRAVIS_BRANCH == master ] && R CMD check --no-manual ../crandalf_*.tar.gz || true"
