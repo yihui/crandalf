@@ -21,11 +21,6 @@ if (is.na(match(pkg, config[, 'package'])))
 rownames(config) = config[, 'package']
 
 message('Checking reverse dependencies for ', pkg)
-travis_fold(
-  'system_dependencies',
-  if (!grepl('^\\s*$', sysdeps <- config[pkg, 'sysdeps'])) system(sysdeps),
-  c('Installing system libraries for', pkg)
-)
 
 setwd(tempdir())
 unlink(c('*00check.log', '*00install.out', '*.tar.gz'))
@@ -33,10 +28,7 @@ unlink(c('*00check.log', '*00install.out', '*.tar.gz'))
 # knitr's reverse dependencies may need rmarkdown for R Markdown v2 vignettes
 travis_fold(
   'install_rmarkdown',
-  if (pkg == 'knitr' && !pkg_loadable('rmarkdown')) {
-    apt_get(c('rmarkdown', pkg_deps('rmarkdown')[[1]]))
-    install.packages('rmarkdown', quiet = TRUE)
-  },
+  if (pkg == 'knitr') install_deps('rmarkdown'),
   'Installing rmarkdown'
 )
 
@@ -44,11 +36,6 @@ travis_fold(
   'install_devtools',
   install_deps('devtools'),
   'Installing devtools'
-)
-travis_fold(
-  sprintf('install_%s_apt', pkg),
-  install_deps(pkg),
-  c('Installing R package dependencies and system libraries for', pkg)
 )
 travis_fold(
   'devtools_install',
@@ -68,15 +55,9 @@ for (i in seq_len(n)) {
 
   msg2 = sprintf('install_deps_%s', p)
   travis_start(msg2, '  Installing dependencies')
-  apt_get(p)  # use apt-get install
-  # and in case it has system dependencies
-  if (need_compile(p)) apt_get(p, 'build-dep')
   deps = pkg_deps(p, which = 'all')[[1]]
   deps = unique(c(deps, unlist(pkg_deps(deps, recursive = TRUE))))
-  apt_get(deps)
-  # install extra R dependencies not covered by apt-get
   lapply(deps, install_deps)
-  fix_R2()
   travis_end(msg2)
 
   if (is.null(acv <- download_source(p))) next

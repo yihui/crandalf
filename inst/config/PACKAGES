@@ -8,7 +8,6 @@ matrix:
 only:
 exclude: localsolver tabplot
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
-sysdeps:
 
 package: mime
 install: yihui/mime
