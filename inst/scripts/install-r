@@ -1,0 +1,17 @@
+#!/bin/bash
+
+which R && exit 0
+
+cd ~
+rm R-* -rf
+wget http://cran.rstudio.com/src/base/R-3/R-3.2.0.tar.gz
+tar zxf R-*.tar.gz
+rm R-*.tar.gz
+mv R-* R-base
+cd R-base
+./configure --with-recommended-packages=no --enable-R-shlib
+make -j2
+ln -s $PWD/bin/R ~/bin/
+ln -s $PWD/bin/Rscript ~/bin/
+R --version
+R CMD javareconf
