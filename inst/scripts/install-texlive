@@ -3,11 +3,8 @@
 [ -e ~/texlive ] && exit 0
 
 cd ~
-wget https://github.com/yihui/ubuntu-bin/releases/download/latest/texlive-local.deb
-sudo dpkg -i texlive-local.deb
 
 wget https://github.com/yihui/ubuntu-bin/releases/download/latest/texlive.tar.gz
 tar zxf texlive.tar.gz
-sudo ./texlive/bin/x86_64-linux/tlmgr path add
 pdflatex --version
 # now you can use `tlmgr install` to install whatever package you want

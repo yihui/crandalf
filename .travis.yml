@@ -16,7 +16,7 @@ env:
 before_install:
   - "export TRAVIS_COMMIT_MSG=\"$(git log --format=%B --no-merges -n 1)\""
   - "export DISPLAY=:99.0"
-  - "export PATH=$PATH:$HOME/bin"
+  - "export PATH=$PATH:$HOME/bin:$HOME/texlive/bin/x86_64-linux"
   - "sh -e /etc/init.d/xvfb start"
 
 addons:
@@ -52,24 +52,17 @@ addons:
     - xvfb
     - xauth
     - xfonts-base
-    - texlive-base
-    - texlive-latex-base
-    - texlive-generic-recommended
-    - texlive-fonts-recommended
-    - texlive-fonts-extra
-    - texlive-extra-utils
-    - texlive-latex-recommended
-    - texlive-latex-extra
-    - default-jdk
     - libcurl4-openssl-dev
 
 cache:
   directories:
   - $HOME/bin
   - $HOME/R-base
+  - $HOME/texlive
 
 # summon crandalf!
 script:
+  - ./inst/scripts/install-texlive
   - ./inst/scripts/install-r
   - ./inst/scripts/install-pandoc
   - cd ..; R CMD build crandalf && R CMD INSTALL crandalf_*.tar.gz; cd crandalf
