@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ -e ~/texlive ] && exit 0
+which pdflatex && exit 0
 
 cd ~
 
