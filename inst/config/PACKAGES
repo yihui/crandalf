@@ -5,8 +5,8 @@ matrix: 1
 package: knitr
 install: yihui/knitr
 matrix:
-only: ChemoSpec clifro D2C dplR dplyr DiagrammeR ergm EpiModel js internetarchive kitagawa MazamaSpatialUtils lucid mapmisc metaMix mosaic mwaved nCal PopGenReport RCMIP5 rjade RODBCext rnoaa rWBclimate runjags soundecology survSNP spocc tmap
-exclude: localsolver tabplot RcppOctave
+only: dplyr DiagrammeR ergm EpiModel js MazamaSpatialUtils lucid mapmisc metaMix mosaic nCal PopGenReport rjade rnoaa rWBclimate runjags spocc tmap
+exclude: ergm localsolver rjags tabplot RcppOctave Rmpi V8
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
 
 package: mime

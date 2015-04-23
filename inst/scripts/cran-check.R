@@ -48,8 +48,14 @@ if (length(pkgs) == 0) pkgs = pkg_deps(pkg, 'all', reverse = TRUE)[[1]]
 n = length(pkgs)
 if (n == 0) q('no')
 
+excludes = split_pkgs(config[pkg, 'exclude'])
+
 for (i in seq_len(n)) {
   p = pkgs[i]
+  if (any(pkg_deps(p, recursive = TRUE) %in% excludes)) {
+    message('Package ', p, ' was skipped since some dependencies cannot be installed')
+    next
+  }
   msg1 = sprintf('check_%s_%d.%d', p, n, i)
   travis_start(msg1, c('Checking', p))
 
