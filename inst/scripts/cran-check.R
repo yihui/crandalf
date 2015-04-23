@@ -52,7 +52,7 @@ excludes = split_pkgs(config[pkg, 'exclude'])
 
 for (i in seq_len(n)) {
   p = pkgs[i]
-  if (any(pkg_deps(p, recursive = TRUE) %in% excludes)) {
+  if (any(unlist(pkg_deps(p, recursive = TRUE)) %in% excludes)) {
     message('Package ', p, ' was skipped since some dependencies cannot be installed')
     next
   }
