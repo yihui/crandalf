@@ -67,12 +67,10 @@ for (i in seq_len(n)) {
     c('  R CMD check', acv)
   )
   if (res != 0) {
-    print(list.files(sprintf('%s.Rcheck', p)))
-    print(file.copy(
+    file.copy(
       sprintf('%s.Rcheck/%s', p, c('00check.log', '00install.out')),
       sprintf('%s-%s', p, c('00check.log', '00install.out'))
-    ))
-    print(list.files())
+    )
   }
 
   travis_end(msg1)
