@@ -5,9 +5,9 @@ matrix: 1
 package: knitr
 install: yihui/knitr
 matrix:
-only: mosaic
+only:
 exclude: ergm localsolver rgdal rjags tabplot RcppOctave Rmpi V8
-separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
+separate: DLMtool | hot.deck | HiveR pkgmaker
 
 package: mime
 install: yihui/mime
