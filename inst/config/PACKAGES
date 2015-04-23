@@ -6,7 +6,7 @@ package: knitr
 install: yihui/knitr
 matrix:
 only:
-exclude: localsolver tabplot
+exclude: localsolver tabplot RcppOctave
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
 
 package: mime
