@@ -56,7 +56,6 @@ for (i in seq_len(n)) {
   msg2 = sprintf('install_deps_%s', p)
   travis_start(msg2, '  Installing dependencies')
   deps = pkg_deps(p, which = 'all')[[1]]
-  deps = unique(c(deps, unlist(pkg_deps(deps, recursive = TRUE))))
   lapply(deps, install_deps)
   travis_end(msg2)
 

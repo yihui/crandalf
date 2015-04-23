@@ -302,8 +302,7 @@ need_compile = function(p) {
 install_deps = function(p) {
   if (pkg_loadable(p)) return()
   message('Installing ', p)
-  if (p %in% rownames(pkg_db)) return(install.packages(p))
-  # perhaps it is a BioC package...
+  # use biocLite() to install both BioC and CRAN packages
   if (!pkg_loadable('BiocInstaller')) source('http://bioconductor.org/biocLite.R')
   suppressMessages(BiocInstaller::biocLite(
     p, suppressUpdates = TRUE, suppressAutoUpdate = TRUE, ask = FALSE
