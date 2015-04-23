@@ -5,7 +5,7 @@ matrix: 1
 package: knitr
 install: yihui/knitr
 matrix:
-only: dplyr DiagrammeR ergm EpiModel js MazamaSpatialUtils lucid mapmisc metaMix mosaic nCal PopGenReport rjade rnoaa rWBclimate runjags spocc tmap
+only: mosaic
 exclude: ergm localsolver rgdal rjags tabplot RcppOctave Rmpi V8
 separate: dbmss | DLMtool | hot.deck | HiveR pkgmaker
 

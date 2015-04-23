@@ -39,7 +39,7 @@ travis_fold(
 )
 travis_fold(
   'devtools_install',
-  install.packages(pkg, repos = c('http://yihui.name/xran', 'http://cran.rstudio.com')),
+  pkg_install(config[pkg, 'install']),
   c('Installing', pkg, 'from source')
 )
 
