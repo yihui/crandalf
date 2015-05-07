@@ -63,6 +63,7 @@ cache:
 # summon crandalf!
 script:
   - ./inst/scripts/install-texlive
+  - rm -rf ~/bin/R
   - ./inst/scripts/install-r
   - ./inst/scripts/install-pandoc
   - cd ..; R CMD build crandalf && R CMD INSTALL crandalf_*.tar.gz; cd crandalf
