@@ -43,6 +43,11 @@ travis_fold(
   c('Installing', pkg, 'from source')
 )
 
+travis_fold(
+  'install_recommended',
+  for (i in na.omit(pkg_db[pkg_db[, 3] == 'recommended', 1])) install_deps(i)
+)
+
 pkgs = split_pkgs(Sys.getenv('R_CHECK_PACKAGES'))
 if (length(pkgs) == 0) pkgs = pkg_deps(pkg, 'all', reverse = TRUE)[[1]]
 n = length(pkgs)
