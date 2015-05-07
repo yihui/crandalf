@@ -12,3 +12,7 @@ separate: DLMtool | hot.deck | HiveR pkgmaker
 package: mime
 install: yihui/mime
 matrix: 1
+
+package: rmarkdown
+install: rstudio/rmarkdown
+matrix: 1
