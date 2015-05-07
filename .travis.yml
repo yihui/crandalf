@@ -64,6 +64,7 @@ cache:
 script:
   - ./inst/scripts/install-texlive
   - ./inst/scripts/install-r
+  - R -e "sapply(.libPaths(), list.files)"
   - ./inst/scripts/install-pandoc
   - cd ..; R CMD build crandalf && R CMD INSTALL crandalf_*.tar.gz; cd crandalf
   - ./inst/scripts/crandalf
