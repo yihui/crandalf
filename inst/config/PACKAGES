@@ -15,4 +15,4 @@ matrix: 1
 
 package: rmarkdown
 install: rstudio/rmarkdown
-matrix: 1
+matrix: 3
