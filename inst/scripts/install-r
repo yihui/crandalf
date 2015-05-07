@@ -9,7 +9,7 @@ tar zxf R-*.tar.gz
 rm R-*.tar.gz
 mv R-* R-base
 cd R-base
-./configure --with-recommended-packages=no --enable-R-shlib
+./tools/rsync-recommended
 ./configure --enable-R-shlib
 make -j2
 ln -s $PWD/bin/R ~/bin/
