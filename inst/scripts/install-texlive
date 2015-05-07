@@ -1,5 +1,12 @@
 #!/bin/bash
 
+texlive_pkgs() {
+  wget https://github.com/yihui/ubuntu-bin/raw/master/TeXLive.pkgs
+  which tlmgr && tlmgr install $(cat TeXLive.pkgs | tr '\n' ' ')
+  rm TeXLive.pkgs
+}
+
+texlive_pkgs
 which pdflatex && exit 0
 
 cd ~
@@ -8,3 +15,4 @@ wget https://github.com/yihui/ubuntu-bin/releases/download/latest/texlive.tar.gz
 tar zxf texlive.tar.gz
 pdflatex --version
 # now you can use `tlmgr install` to install whatever package you want
+texlive_pkgs
