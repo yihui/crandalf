@@ -460,19 +460,15 @@ error_pkgs = function(log) {
   unique(pa)
 }
 
-analyze_logs = function(build = '', job, length) {
+analyze_logs = function(job, length) {
   log = tempfile()
   unlink(log)
-  if (length(system2('./inst/scripts/travis-logs', build, stdout = TRUE)) == 0) {
-    i = seq(job, length.out = length)
-    u = sprintf(
-      'wget -O - https://api.travis-ci.org/jobs/%d/log.txt?deansi=true >> %s',
-      i, shQuote(log)
-    )
-    lapply(u, system)
-  } else {
-    system(paste('./inst/scripts/travis-logs', build, '>>', shQuote(log)))
-  }
+  i = seq(job, length.out = length)
+  u = sprintf(
+    'wget -O - https://api.travis-ci.org/jobs/%d/log.txt?deansi=true >> %s',
+    i, shQuote(log)
+  )
+  lapply(u, system)
   message('Travis logs written to ', log)
   path = '../ubuntu-bin/TeXLive.pkgs'
   pkg = missing_latex(log)
