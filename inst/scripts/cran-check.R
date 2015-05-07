@@ -71,9 +71,10 @@ for (i in seq_len(n)) {
     res <- system2('R', c('CMD check --no-codoc --no-manual', acv)),
     c('  R CMD check', acv)
   )
-  if (res != 0) {
+  logs = sprintf('%s.Rcheck/%s', p, c('00check.log', '00install.out'))
+  if (res != 0 || length(grep('^Error in', readLines(logs[1])))) {
     file.copy(
-      sprintf('%s.Rcheck/%s', p, c('00check.log', '00install.out')),
+      logs,
       sprintf('%s-%s', p, c('00check.log', '00install.out'))
     )
   }
