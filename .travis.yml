@@ -62,7 +62,6 @@ cache:
 
 # summon crandalf!
 script:
-  - rm ~/texlive -rf
   - ./inst/scripts/install-texlive
   - ./inst/scripts/install-r
   - R -e "sapply(.libPaths(), list.files)"
