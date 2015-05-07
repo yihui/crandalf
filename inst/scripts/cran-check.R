@@ -55,6 +55,7 @@ if (n == 0) q('no')
 
 excludes = split_pkgs(config[pkg, 'exclude'])
 skip_check = grepl('skip_check', Sys.getenv('TRAVIS_COMMIT_MSG', ''))
+time_start = Sys.time()
 
 for (i in seq_len(n)) {
   p = pkgs[i]
@@ -72,7 +73,11 @@ for (i in seq_len(n)) {
   travis_end(msg2)
 
   if (is.null(acv <- download_source(p))) next
-  if (skip_check) next
+  if (skip_check) {
+    # skip the rest of packages after 30 minutes
+    if (as.numeric(Sys.time() - time_start) > 30 * 60) break
+    next
+  }
   travis_fold(
     sprintf('check_%s', p),
     res <- system2('R', c('CMD check --no-codoc --no-manual', acv)),
