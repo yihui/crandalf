@@ -99,7 +99,9 @@ for (i in seq_len(n)) {
 # depends on
 local({
   pkgs = setdiff(.packages(TRUE), c(crandalf:::pkg_base, crandalf:::pkg_recommended))
-  i = unlist(lapply(pkgs, need_compile))
+  i = unlist(lapply(pkgs, function(x) {
+    system.file('libs', package = x) != ''
+  }))
   x1 = pkgs[i]  # needs compilation
   x2 = pkgs[!i] # no compilation
   for (i in x2) {
