@@ -45,7 +45,7 @@ travis_fold(
 
 travis_fold(
   'install_recommended',
-  for (i in na.omit(pkg_db[pkg_db[, 3] == 'recommended', 1])) install_deps(i)
+  for (i in crandalf:::pkg_recommended) install_deps(i)
 )
 
 pkgs = split_pkgs(Sys.getenv('R_CHECK_PACKAGES'))
@@ -93,6 +93,25 @@ for (i in seq_len(n)) {
 
   travis_end(msg1)
 }
+
+# clean up packages that do not need to compile (pure R packages) so that the
+# size of travis cache is not too big; be careful not to remove packages that x1
+# depends on
+local({
+  pkgs = setdiff(.packages(TRUE), c(crandalf:::pkg_base, crandalf:::pkg_recommended))
+  i = unlist(lapply(pkgs, need_compile))
+  x1 = pkgs[i]  # needs compilation
+  x2 = pkgs[!i] # no compilation
+  for (i in x2) {
+    x3 = unlist(pkg_deps(i, reverse = TRUE, which = 'all', recursive = TRUE))
+    if (length(intersect(x1, x3)) > 0) x2 = setdiff(x2, i)
+  }
+  if (length(x2)) {
+    message('Removing ', paste(x2, collapse = ', '))
+    remove.packages(x2)
+  }
+})
+
 # output in the order of maintainers
 authors = split(pkgs, pkg_db[pkgs, 'Maintainer'])
 failed = NULL

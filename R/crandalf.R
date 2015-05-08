@@ -141,6 +141,12 @@ if (!('roxygen2' %in% loadedNamespaces())) {
   rownames(pkg_db) = pkg_db[, 'Package']
 }
 
+pkg_recommended = c(na.omit(pkg_db[pkg_db[, 'Priority'] == 'recommended', 'Package']))
+pkg_base = local({
+  x = installed.packages()
+  c(unname(na.omit(x[x[, 'Priority'] == 'base', 'Package'])))
+})
+
 #' Compute package dependencies
 #'
 #' This function is a wrapper for \code{\link[tools]{package_dependencies}()}.
