@@ -97,7 +97,7 @@ for (i in seq_len(n)) {
 # clean up packages that do not need to compile (pure R packages) so that the
 # size of travis cache is not too big; be careful not to remove packages that x1
 # depends on
-local({
+if (pkg == 'knitr') local({
   pkgs = setdiff(.packages(TRUE), c(crandalf:::pkg_base, crandalf:::pkg_recommended))
   i = unlist(lapply(pkgs, function(x) {
     system.file('libs', package = x) != ''
