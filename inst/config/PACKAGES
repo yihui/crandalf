@@ -6,7 +6,7 @@ package: knitr
 install: yihui/knitr
 matrix: 30
 only:
-exclude: ergm localsolver rgdal rjags tabplot RcppOctave Rmpi V8
+exclude: argparse ergm localsolver optparse rgdal rjags tabplot RcppOctave Rmpi V8
 separate: DLMtool | hot.deck | HiveR pkgmaker
 
 package: mime
