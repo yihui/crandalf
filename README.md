@@ -85,7 +85,7 @@ have a limit on how many jobs in a build matrix you can submit each time.
 Therefore, if you have 100 packages to check, you may group them in 10 jobs,
 each job checking 10 packages.
 
-You will have to add your package to the file <inst/config/PACKAGES>. There have
+You will have to add your package to the file `<inst/config/PACKAGES>`. There have
 been some examples in this file. Let me explain the **knitr** configuration:
 
 ```dcf
