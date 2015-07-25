@@ -16,54 +16,32 @@ env:
 before_install:
   - "export TRAVIS_COMMIT_MSG=\"$(git log --format=%B --no-merges -n 1)\""
   - "export DISPLAY=:99.0"
-  - "export PATH=$PATH:$HOME/bin:$HOME/texlive/bin/x86_64-linux"
+  - "export PATH=$HOME/bin:$HOME/texlive/bin/x86_64-linux:$PATH"
   - "sh -e /etc/init.d/xvfb start"
 
 addons:
   apt:
+    sources:
+    - r-packages-precise
     packages:
-    - gcc
-    - g++
-    - gfortran
-    - libblas-dev
-    - liblapack-dev
-    - tcl8.5-dev
-    - tk8.5-dev
-    - bison
-    - groff-base
-    - libncurses5-dev
-    - libreadline-dev
-    - debhelper
-    - texi2html
-    - texinfo
-    - libbz2-dev
-    - liblzma-dev
-    - libpcre3-dev
-    - xdg-utils
-    - zlib1g-dev
-    - libpng-dev
-    - libjpeg-dev
-    - libx11-dev
-    - libxt-dev
-    - x11proto-core-dev
-    - libpango1.0-dev
-    - libcairo2-dev
-    - libtiff5-dev
-    - xvfb
-    - xauth
-    - xfonts-base
-    - libcurl4-openssl-dev
+    - r-base-dev
+    - r-recommended
 
 cache:
   directories:
   - $HOME/bin
-  - $HOME/R-base
+  - $HOME/R
   - $HOME/texlive
+
+install:
+  - "[ ! -d ~/bin ] && mkdir ~/bin || true"
+  - "wget -q -O - http://yihui.name/xran/r-config | bash"
+  - Rscript -e "if (!require('devtools')) install.packages('devtools')"
+  - Rscript -e 'devtools::install_deps(dep = TRUE)'
 
 # summon crandalf!
 script:
   - ./inst/scripts/install-texlive
-  - ./inst/scripts/install-r
   - R -e "sapply(.libPaths(), list.files, simplify=F)"
   - ./inst/scripts/install-pandoc
   - cd ..; R CMD build crandalf && R CMD INSTALL crandalf_*.tar.gz; cd crandalf
