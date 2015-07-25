@@ -2,12 +2,12 @@
 
 texlive_pkgs() {
   wget https://github.com/yihui/ubuntu-bin/raw/master/TeXLive.pkgs
-  which tlmgr && tlmgr install $(cat TeXLive.pkgs | tr '\n' ' ')
+  [ -e $HOME/texlive/bin/x86_64-linux/tlmgr ] && tlmgr install $(cat TeXLive.pkgs | tr '\n' ' ')
   rm TeXLive.pkgs
 }
 
 texlive_pkgs
-which pdflatex && exit 0
+[ -e $HOME/texlive/bin/x86_64-linux/pdflatex ] && exit 0
 
 cd ~
 
