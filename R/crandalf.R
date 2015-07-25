@@ -136,7 +136,7 @@ if (!('roxygen2' %in% loadedNamespaces())) {
     pkg_path('inst/config/PACKAGES')
   )
 
-  con = url('http://cran.rstudio.com/web/packages/packages.rds', 'rb')
+  con = url('https://cran.rstudio.com/web/packages/packages.rds', 'rb', method = 'libcurl')
   pkg_db = tryCatch(readRDS(gzcon(con)), finally = close(con))
   rownames(pkg_db) = pkg_db[, 'Package']
 }
