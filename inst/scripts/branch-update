@@ -22,4 +22,5 @@ do
   else
     git branch $i
   fi
+  sleep 1
 done
