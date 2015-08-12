@@ -3,6 +3,7 @@
 texlive_pkgs() {
   wget https://github.com/yihui/ubuntu-bin/raw/master/TeXLive.pkgs
   [ -e $HOME/texlive/bin/x86_64-linux/tlmgr ] && tlmgr install $(cat TeXLive.pkgs | tr '\n' ' ') > /dev/null
+  tlmgr update --all
   rm TeXLive.pkgs
 }
 
