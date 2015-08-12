@@ -1,7 +1,4 @@
-language: java
-
-jdk:
-  - openjdk7
+language: c
 
 sudo: false
 
@@ -25,6 +22,7 @@ addons:
     - r-packages-precise
     packages:
     - libmpfr-dev
+    - openjdk-7-jdk
     - r-base-dev
     - r-recommended
     - texinfo
