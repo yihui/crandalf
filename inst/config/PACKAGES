@@ -4,10 +4,10 @@ matrix: 1
 
 package: knitr
 install: yihui/knitr
-matrix: 20
-only:
-exclude: amen argparse ergm localsolver optparse rgdal rjags tabplot RcppOctave Rmpi V8
-separate: DLMtool | hot.deck | HiveR pkgmaker
+matrix: 2
+only: agridat biogas boxr ctmm ctsem DAAG decisionSupport devtools DiagrammeR EMbC EpiBayes EpiModel gamclass geojsonio HWxtest HydeNet js lawn leaflet LogisticDx lucid mapmisc MazamaSpatialUtils metaMix mldr mlr MM2S mosaic nCal NMF OasisR patchDVI PopGenReport pt pweight RCMIP5 REDCapR repijson rgbif rjade rnoaa rprintf rsatscan runjags rWBclimate satellite secr shinyjs simcausal simmr smacof snht spacetime SpaDES spca spocc spoccutils StMoMo tikzDevice tmap trip vegdata WeightedCluster
+exclude: amen argparse ergm localsolver optparse rgdal rjags tabplot RcppOctave rJava Rmpi V8 xlsx
+separate: DLMtool hot.deck HiveR pkgmaker
 
 package: mime
 install: yihui/mime
