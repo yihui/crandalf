@@ -413,8 +413,10 @@ travis_end = function(job) {
 missing_latex = function(log) {
   r = ".*! LaTeX Error: File `([-[:alnum:]]+[.][[:alpha:]]{1,3})' not found.*|.*! Font [^=]+=([^ ]+).+ not loadable.*"
   x = grep(r, readLines(log), value = TRUE)
-  if (length(x) == 0)
-    stop('Sorry, I was unable to find any missing LaTeX packages')
+  if (length(x) == 0) {
+    message('Sorry, I was unable to find any missing LaTeX packages')
+    return()
+  }
   x = unique(gsub(r, '\\1\\2', x))
   pkgs = NULL
   for (j in seq_along(x)) {
