@@ -14,13 +14,12 @@ cd crandalf
 for i in `grep -G '^package:' inst/config/PACKAGES | sed 's@^package:\s*@pkg/@' | sed 's/\s*//'`;
 do
   if git show-ref --verify --quiet refs/heads/$i; then
-    git checkout $i
-    git rebase master
-    Rscript -e "crandalf:::branch_update()"
-    echo `git add -A && git commit -m"${USER} updated branch ${i} $(date)"`
-    git checkout master
-  else
-    git branch $i
+    git branch -D $i
   fi
+  git checkout -b $i
+  git rebase master
+  Rscript -e "crandalf:::branch_update()"
+  echo `git add -A && git commit -m"${USER} updated branch ${i} $(date)"`
+  git checkout master
   sleep 1
 done
