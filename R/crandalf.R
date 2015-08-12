@@ -136,7 +136,7 @@ if (!('roxygen2' %in% loadedNamespaces())) {
     pkg_path('inst/config/PACKAGES')
   )
 
-  system('wget -O /tmp/packages.rds https://cran.rstudio.com/web/packages/packages.rds')
+  system('wget -q -O /tmp/packages.rds https://cran.rstudio.com/web/packages/packages.rds')
   pkg_db = tryCatch(readRDS('/tmp/packages.rds'), finally = unlink('/tmp/packages.rds'))
   rownames(pkg_db) = pkg_db[, 'Package']
 }
