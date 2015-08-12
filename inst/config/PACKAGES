@@ -4,9 +4,9 @@ matrix: 1
 
 package: knitr
 install: yihui/knitr
-matrix: 50
+matrix: 20
 only:
-exclude: argparse ergm localsolver optparse rgdal rjags tabplot RcppOctave Rmpi V8
+exclude: amen argparse ergm localsolver optparse rgdal rjags tabplot RcppOctave Rmpi V8
 separate: DLMtool | hot.deck | HiveR pkgmaker
 
 package: mime
