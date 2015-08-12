@@ -24,6 +24,7 @@ addons:
     sources:
     - r-packages-precise
     packages:
+    - libmpfr-dev
     - r-base-dev
     - r-recommended
     - texinfo
