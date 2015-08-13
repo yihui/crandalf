@@ -4,8 +4,8 @@ matrix: 1
 
 package: knitr
 install: yihui/knitr
-matrix: 1
-only: biogas ctmm ctsem DAAG DiagrammeR EMbC EpiBayes EpiModel gamclass geojsonio HydeNet js lawn leaflet LogisticDx lucid mapmisc MazamaSpatialUtils metaMix mldr mlr MM2S mosaic nCal NMF OasisR PopGenReport pt RCMIP5 REDCapR repijson rgbif rjade rnoaa rsatscan runjags rWBclimate satellite secr shinyjs simcausal simmr smacof snht spacetime SpaDES spocc spoccutils StMoMo tikzDevice tmap trip vegdata WeightedCluster
+matrix: 10
+only:
 exclude: amen argparse boxr ergm localsolver optparse rgdal rjags tabplot RcppOctave rJava Rmpi V8 xlsx
 separate: DLMtool hot.deck HiveR pkgmaker
 
