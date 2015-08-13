@@ -468,6 +468,16 @@ error_pkgs = function(log) {
   unique(pa)
 }
 
+error_cran = function () {
+  x = readLines('https://cran.rstudio.com/web/checks/check_summary.html')
+  x = grep('ERROR', x, value = TRUE)[-1]
+  x = gsub('http://www.R-project.org/nosvn/R.check/', '', x, fixed = TRUE)
+  if (length(x) == 0) return()
+  x = do.call(rbind, strsplit(x, '</td> <td>'))
+  j = grep('r-release-linux-x86_64', x[1, ])
+  gsub('^.*x86_64/(.+)-00check.*$', '\\1', grep('ERROR', x[, j], value = TRUE))
+}
+
 analyze_logs = function(job, length) {
   log = tempfile()
   unlink(log)
@@ -482,5 +492,10 @@ analyze_logs = function(job, length) {
   pkg = missing_latex(log)
   pkg = c(pkg, readLines(path))
   writeLines(sort(unique(pkg)), path)
-  cat(sort(error_pkgs(log)))
+  pkgs = sort(error_pkgs(log))
+  cat(pkgs)
+  pkgs2 = error_cran()
+  cat(pkgs2)
+  message('\nAfter excluding packages that errorred on CRAN:')
+  cat(setdiff(pkgs, pkgs2))
 }
