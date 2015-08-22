@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH=$HOME/texlive/bin/x86_64-linux:$PATH
+
 texlive_pkgs() {
   wget -q https://github.com/yihui/ubuntu-bin/raw/master/TeXLive.pkgs
   [ -e $HOME/texlive/bin/x86_64-linux/tlmgr ] && tlmgr install $(cat TeXLive.pkgs | tr '\n' ' ') > /dev/null
