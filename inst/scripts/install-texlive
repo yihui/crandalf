@@ -1,7 +1,7 @@
 #!/bin/bash
 
 texlive_pkgs() {
-  wget https://github.com/yihui/ubuntu-bin/raw/master/TeXLive.pkgs
+  wget -q https://github.com/yihui/ubuntu-bin/raw/master/TeXLive.pkgs
   [ -e $HOME/texlive/bin/x86_64-linux/tlmgr ] && tlmgr install $(cat TeXLive.pkgs | tr '\n' ' ') > /dev/null
   tlmgr update --all
   mktexlsr
@@ -13,7 +13,7 @@ texlive_pkgs
 
 cd ~
 
-wget https://github.com/yihui/ubuntu-bin/releases/download/latest/texlive.tar.gz
+wget -q https://github.com/yihui/ubuntu-bin/releases/download/latest/texlive.tar.gz
 tar zxf texlive.tar.gz
 pdflatex --version
 # now you can use `tlmgr install` to install whatever package you want

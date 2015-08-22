@@ -3,7 +3,7 @@
 which pandoc && exit 0
 
 cd ~
-wget https://github.com/yihui/ubuntu-bin/releases/download/latest/pandoc.tar.gz
+wget -q https://github.com/yihui/ubuntu-bin/releases/download/latest/pandoc.tar.gz
 tar zxf pandoc.tar.gz
 rm pandoc.tar.gz
 chmod +x pandoc pandoc-citeproc
