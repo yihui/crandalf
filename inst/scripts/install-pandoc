@@ -1,6 +1,7 @@
 #!/bin/bash
 
 which pandoc && exit 0
+export PATH=$PATH:$HOME/bin
 
 cd ~
 wget -q https://github.com/yihui/ubuntu-bin/releases/download/latest/pandoc.tar.gz
