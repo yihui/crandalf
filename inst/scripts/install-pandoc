@@ -8,5 +8,5 @@ wget -q https://github.com/yihui/ubuntu-bin/releases/download/latest/pandoc.tar.
 tar zxf pandoc.tar.gz
 rm pandoc.tar.gz
 chmod +x pandoc pandoc-citeproc
-mv pandoc pandoc-citeproc ~/bin/
+mv pandoc pandoc-citeproc $HOME/bin/
 pandoc --version

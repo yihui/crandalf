@@ -13,7 +13,7 @@ texlive_pkgs() {
 texlive_pkgs
 [ -e $HOME/texlive/bin/x86_64-linux/pdflatex ] && exit 0
 
-cd ~
+cd $HOME
 
 wget -q https://github.com/yihui/ubuntu-bin/releases/download/latest/texlive.tar.gz
 tar zxf texlive.tar.gz
