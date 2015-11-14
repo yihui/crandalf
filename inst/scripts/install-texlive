@@ -3,7 +3,7 @@
 export PATH=$HOME/texlive/bin/x86_64-linux:$PATH
 
 NEED_REINSTALL=$(git log --format=%B --no-merges -n 1 | grep -E "\[reinstall texlive\]")
-if [ ! -z $NEED_REINSTALL ]
+if [ ! -z "$NEED_REINSTALL" ]
 then
   rm -rf ~/texlive
 fi
