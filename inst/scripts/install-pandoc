@@ -1,7 +1,8 @@
 #!/bin/bash
 
 NEED_REINSTALL=$(git log --format=%B --no-merges -n 1 | grep -E "\[reinstall pandoc\]")
-if [ ! -z $NEED_REINSTALL ] then
+if [ ! -z $NEED_REINSTALL ]
+then
   rm -rf ~/bin/pandoc*
 fi
 
