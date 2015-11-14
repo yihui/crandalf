@@ -1,8 +1,14 @@
 #!/bin/bash
 
-which pandoc && exit 0
+NEED_REINSTALL=$(git log --format=%B --no-merges -n 1 | grep -E "\[reinstall pandoc\]")
+if [ ! -z $NEED_REINSTALL ] then
+  rm -rf ~/bin/pandoc*
+fi
+
+[ ! -d ~/bin ] && mkdir ~/bin
 export PATH=$PATH:$HOME/bin
-[ ! -d ~/bin ] && mkdir ~/bin || true
+
+[ -e ~/bin/pandoc ] && pandoc --version && exit 0
 
 cd ~
 wget -q https://github.com/yihui/ubuntu-bin/releases/download/latest/pandoc.tar.gz
