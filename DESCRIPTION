@@ -20,3 +20,4 @@ Suggests:
 License: MIT + file LICENSE
 URL: https://github.com/yihui/crandalf
 BugReports: https://github.com/yihui/crandalf/issues
+RoxygenNote: 5.0.1

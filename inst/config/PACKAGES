@@ -20,4 +20,4 @@ matrix: 1
 package: rmarkdown
 install: rstudio/rmarkdown
 exclude: gsl
-matrix: 1
+matrix: 10
