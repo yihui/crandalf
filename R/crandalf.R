@@ -139,7 +139,7 @@ if (!('roxygen2' %in% loadedNamespaces())) {
   pkg_db = local({
     rds = tempfile(fileext = '.rds')
     on.exit(unlink(rds), add = TRUE)
-    download.file('https://cran.rstudio.com/web/packages/packages.rds', rds, mode = 'wb')
+    system2('wget', c('-q -O', shQuote(rds), 'https://cran.rstudio.com/web/packages/packages.rds'))
     readRDS(rds)
   })
   rownames(pkg_db) = pkg_db[, 'Package']
