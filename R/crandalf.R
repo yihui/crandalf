@@ -335,6 +335,29 @@ fix_R2 = function(lib = .libPaths()[-1]) {
   lapply(old, install_deps)
 }
 
+#' Check the reversion dependencies of an R package on Github
+#'
+#' This function calls \code{tools::\link[tools]{check_packages_in_dir}()} to
+#' check the reverse dependencies of an R package hosted on Github.
+#' @param repo the repository name of the form \samp{user/repo}
+#' @inheritParams tools::check_packages_in_dir
+#' @export
+rev_check = function(
+  repo = 'yihui/knitr', check_args = '--no-manual', reverse = list(which = 'all'),
+  xvfb = TRUE, Ncpus = parallel::detectCores()
+) {
+  unlink(c('*.tar.gz', '*.Rcheck'), recursive = TRUE)
+  pkg = basename(repo)
+  if (dir.exists(pkg)) {
+    system(sprintf('cd %s && git pull', pkg))
+  } else {
+    system(sprintf('git clone https://github.com/%s.git'), repo)
+  }
+  system(paste('R CMD build', pkg))
+  tools::check_packages_in_dir('.', check_args, reverse = reverse, xvfb = xvfb, Ncpus = Ncpus)
+  tools::summarize_check_packages_in_dir_results('.', full = TRUE)
+}
+
 #' Given a character string, split it by white spaces or a custom string
 #'
 #' This package often reads R package names as a character string from
