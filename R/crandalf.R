@@ -351,7 +351,7 @@ rev_check = function(
   if (dir.exists(pkg)) {
     system(sprintf('cd %s && git pull', pkg))
   } else {
-    system(sprintf('git clone https://github.com/%s.git'), repo)
+    system(sprintf('git clone https://github.com/%s.git', repo))
   }
   system(paste('R CMD build', pkg))
   tools::check_packages_in_dir('.', check_args, reverse = reverse, xvfb = xvfb, Ncpus = Ncpus)
