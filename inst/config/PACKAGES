@@ -19,5 +19,6 @@ matrix: 1
 
 package: rmarkdown
 install: rstudio/rmarkdown
+only: BacArena coala exams geoknife mbbefd mvtboost rex RNeXML rnn
 exclude: gsl
-matrix: 10
+matrix: 1
