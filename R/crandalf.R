@@ -338,7 +338,9 @@ fix_R2 = function(lib = .libPaths()[-1]) {
 #' Check the reversion dependencies of an R package on Github
 #'
 #' This function calls \code{tools::\link[tools]{check_packages_in_dir}()} to
-#' check the reverse dependencies of an R package hosted on Github.
+#' check the reverse dependencies of an R package hosted on Github. If it has
+#' been called once before, only the packages that failed last time will be
+#' checked (to save time when the number of reverse dependencies is large).
 #' @param repo the repository name of the form \samp{user/repo}
 #' @inheritParams tools::check_packages_in_dir
 #' @export
@@ -346,16 +348,37 @@ rev_check = function(
   repo = 'yihui/knitr', check_args = '--no-manual', reverse = list(which = 'all'),
   xvfb = TRUE, Ncpus = parallel::detectCores()
 ) {
-  unlink(c('*.tar.gz', '*.Rcheck'), recursive = TRUE)
+
+  failed_pkgs = function() {
+    x = list.files('.', '[.]Rcheck$')
+    if (length(x)) gsub('[.]Rcheck$', '', x)
+  }
+
   pkg = basename(repo)
   if (dir.exists(pkg)) {
     system(sprintf('cd %s && git pull', pkg))
   } else {
     system(sprintf('git clone https://github.com/%s.git', repo))
   }
-  system(paste('R CMD build', pkg))
-  tools::check_packages_in_dir('.', check_args, reverse = reverse, xvfb = xvfb, Ncpus = Ncpus)
+  RCMD(c('build', pkg))
+
+  failed = failed_pkgs()
+  if (length(failed)) for (pkg in failed) {
+    RCMD(c('check', check_args, sprintf('%s_*.tar.gz', pkg)))
+  } else tools::check_packages_in_dir(
+    '.', check_args, reverse = reverse, xvfb = xvfb, Ncpus = Ncpus
+  )
+  res = capture.output(tools::summarize_check_packages_in_dir_results('.'))
+  success = grep('^[a-zA-Z]+.* [.]{3} (OK|NOTE)', res, value = TRUE)
+  success = gsub(' [.]{3} (OK|NOTE)', '', success)
+  unlink(sprintf('%s.Rcheck', success), recursive = TRUE)
+  unlink(sprintf('%s_*.tar.gz', success))
+
   tools::summarize_check_packages_in_dir_results('.', full = TRUE)
+}
+
+RCMD = function(cmd, ...) {
+  system2(file.path(R.home('bin'), 'R'), c('CMD', cmd), ...)
 }
 
 #' Given a character string, split it by white spaces or a custom string
