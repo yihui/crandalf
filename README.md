@@ -13,7 +13,7 @@ Checking reverse dependencies is certainly not a pleasant thing to do. The basic
 idea is extremely simple: you just download all your reverse dependencies and
 run `R CMD check` on them. It is fairly easy to automate this, e.g. using
 `tools::package_dependencies()`. The code below shows how many packages one may
-have to check before submitting a new version to CRAN:
+have to check before submitting a new version to CRAN: 
 
 ```r
 options(repos = c(CRAN = 'http://cran.rstudio.com'))
