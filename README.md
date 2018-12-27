@@ -1,4 +1,4 @@
-# crandalf: No More "YOU SHALL NOT PASS" 
+# crandalf: No More "YOU SHALL NOT PASS"
 
 [![Build Status](https://travis-ci.org/yihui/crandalf.svg?branch=master)](https://travis-ci.org/yihui/crandalf)
 
