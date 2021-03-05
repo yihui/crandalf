@@ -16,10 +16,10 @@ setwd(owd)
 
 update.packages(checkBuilt = TRUE, ask = FALSE)
 
-pkgs0 = c('xfun', 'tinytex', 'markdown', 'rmarkdown')
+pkgs0 = c('remotes', 'xfun', 'tinytex', 'markdown', 'rmarkdown')
 for (i in pkgs0) {
   if (!requireNamespace(i, quietly = TRUE)) install.packages(i)
-  # if (i == 'remotes') remotes::install_github('yihui/xfun')
+  if (i == 'remotes') remotes::install_github('yihui/xfun')
 }
 
 message('Querying reverse dependencies and their versions...')
