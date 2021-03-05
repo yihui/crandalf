@@ -1,1 +1,1 @@
-brew update
+brew update > /dev/null
