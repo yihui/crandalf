@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# $1 is the optional build number
-for i in `seq 1 100`; do
-  if ! travis logs $1.$i; then
-    exit 0
-  fi
-done

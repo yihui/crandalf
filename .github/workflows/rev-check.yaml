@@ -1,0 +1,69 @@
+on:
+  - push
+  - pull_request
+  - schedule:
+    - cron:  '0 6 * * *'
+
+name: rev-check
+
+jobs:
+  rev-check:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macOS-latest, r: 'release'}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Checkout the package
+        uses: actions/checkout@v2
+        with:
+          path: package
+          # change the repo below to yours
+          repository: yihui/xfun
+          # ref: master
+
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.config.r }}
+
+      - uses: r-lib/actions/setup-tinytex@v1
+        env:
+          TINYTEX_INSTALLER: TinyTeX
+
+      - name: Query dependencies
+        run: |
+          Rscript R/deps.R
+
+      - name: Cache R packages
+        if: runner.os != 'Windows'
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/versions.txt') }}
+          restore-keys: ${{ runner.os }}-
+
+      - name: Install system dependencies
+        if: runner.os == 'macOS'
+        run: |
+          sh install-sysreqs.sh
+
+      - name: Check reverse dependencies
+        run: |
+          Rscript R/revcheck.R
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          path: |
+            00check_diffs.html
+            *.Rcheck
+            *.Rcheck2
