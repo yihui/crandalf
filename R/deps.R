@@ -16,12 +16,13 @@ setwd(owd)
 
 update.packages(checkBuilt = TRUE, ask = FALSE)
 
-pkgs0 = c('xfun', 'tinytex', 'markdown')
+pkgs0 = c('xfun', 'tinytex', 'markdown', 'knitr')
 for (i in pkgs0) {
   if (!requireNamespace(i, quietly = TRUE)) install.packages(i)
   # if (i == 'remotes') remotes::install_github('yihui/xfun')
 }
 
+message('Querying reverse dependencies and their versions...')
 db = available.packages(type = 'source')
 pkgs = xfun:::check_deps(pkg, db)$install
 db = db[rownames(db) %in% c(pkgs, pkgs0), c('Package', 'Version')]
@@ -36,6 +37,7 @@ retry = function(expr, times = 3) {
 }
 
 # Homebrew dependencies
+message('Querying Homebrew dependencies for R packages')
 deps = NULL
 for (i in sprintf('https://sysreqs.r-hub.io/pkg/%s/osx-x86_64-clang', pkgs)) {
   x = retry(readLines(i, warn = FALSE))
@@ -46,10 +48,13 @@ for (i in sprintf('https://sysreqs.r-hub.io/pkg/%s/osx-x86_64-clang', pkgs)) {
 }
 deps = unlist(strsplit(deps, '\\s+'))
 deps = setdiff(deps, 'pandoc-citeproc')  # pandoc-citeproc is no longer available
-if (length(deps)) cat(
-  paste(c('brew install', deps), collapse = ' '), '\n',
-  file = 'install-sysreqs.sh', append = TRUE
-)
+if (length(deps)) {
+  cat('Need to install system packages:', deps, sep = ' ')
+  cat(
+    paste(c('brew install', deps, '> /dev/null'), collapse = ' '), '\n',
+    file = 'install-sysreqs.sh', append = TRUE
+  )
+}
 
 # generate the R script to do rev dep check
 x = readLines('R/revcheck.R')

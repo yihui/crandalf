@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Checkout the package
+      - name: Checkout your package
         uses: actions/checkout@v2
         with:
           path: package
