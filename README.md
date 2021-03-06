@@ -5,7 +5,7 @@
 TLDR; If you want to do the reverse dependency check on your package, you can
 [edit the Github Action
 rev-check.yaml](https://github.com/yihui/crandalf/edit/master/.github/workflows/rev-check.yaml):
-change the `repository` from `yihui/xfun` to your username/repo, and follow the
+change the `repository` from `yihui/knitr` to your username/repo, and follow the
 Github guide to create a pull request. The check results will be available in
 Github Actions.
 
