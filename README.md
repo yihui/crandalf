@@ -39,3 +39,18 @@ following:
 
 This repo provides a service based on Github Actions to run reverse dependency
 checks via `xfun::rev_check(),` which is one implementation of the above idea.
+Features include:
+
+1.  The checks are run on macOS, and it will try to automatically install system
+    dependencies for R packages via Homebrew (thanks to
+    [sysreqsdb](https://github.com/r-hub/sysreqsdb)).
+2.  It uses the LaTeX distribution [TinyTeX](https://github.com/yihui/tinytex),
+    which means missing LaTeX packages will be automatically installed,
+    including those used in package vignettes.
+
+Note that this service has two caveats:
+
+1.  It will try its best to install as many packages required by the checks as
+    possible, but it doesn't guarantee all can be installed.
+2.  Currently it only installs CRAN packages but not other repositories. This
+    may change in the future.
