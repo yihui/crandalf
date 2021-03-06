@@ -51,11 +51,11 @@ for (i in pkgs) {
 }
 deps = unlist(strsplit(deps, '\\s+'))
 form = scan(what = character(), text = system2('brew', 'formulae', stdout = TRUE))
-deps = intersect(deps, form)  # only install available formulae (e.g. exclude pandoc-citeproc)
+deps = intersect(deps, form)  # only install available formulae
 if (length(deps)) {
   cat('Need to install system packages:', deps, sep = ' ')
   cat(
-    paste(c('brew install', deps), collapse = ' '), '\n',
+    paste('brew install', deps, collapse = '\n'), '\n',
     file = 'install-sysreqs.sh', append = TRUE
   )
 }
