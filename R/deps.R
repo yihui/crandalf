@@ -16,7 +16,7 @@ setwd(owd)
 
 update.packages(checkBuilt = TRUE, ask = FALSE)
 
-pkgs0 = c('remotes', 'xfun', 'tinytex', 'markdown', 'rmarkdown')
+pkgs0 = c('xfun', 'tinytex')
 for (i in pkgs0) {
   if (!requireNamespace(i, quietly = TRUE)) install.packages(i)
   if (i == 'remotes') remotes::install_github('yihui/xfun')
@@ -27,7 +27,7 @@ db = available.packages(type = 'source')
 pkgs = xfun:::check_deps(pkg, db)$install
 db = db[rownames(db) %in% c(pkgs, pkgs0), c('Package', 'Version')]
 
-writeLines(c(db[, 1], db[, 2], getRversion()$major), ".github/versions.txt")
+write.csv(rbind(db, c('R', getRversion()$major)), ".github/versions.csv", row.names = FALSE)
 
 retry = function(expr, times = 3) {
   for (i in seq_len(times)) {

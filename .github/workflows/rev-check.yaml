@@ -44,7 +44,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/versions.txt') }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/versions.csv') }}
           restore-keys: ${{ runner.os }}-
 
       - name: Install system dependencies
@@ -57,7 +57,6 @@ jobs:
           Rscript R/revcheck.R
 
       - name: Upload check results
-        if: failure()
         uses: actions/upload-artifact@main
         with:
           name: ${{ runner.os }}-r-${{ matrix.config.r }}-results
