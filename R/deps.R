@@ -47,7 +47,8 @@ for (i in sprintf('https://sysreqs.r-hub.io/pkg/%s/osx-x86_64-clang', pkgs)) {
   deps = c(deps, x)
 }
 deps = unlist(strsplit(deps, '\\s+'))
-deps = setdiff(deps, 'pandoc-citeproc')  # pandoc-citeproc is no longer available
+form = scan(what = character(), text = system2('brew', 'formulae', stdout = TRUE))
+deps = intersect(deps, 'pandoc-citeproc')  # only install available formulae (e.g. exclude pandoc-citeproc)
 if (length(deps)) {
   cat('Need to install system packages:', deps, sep = ' ')
   cat(
