@@ -50,7 +50,7 @@ jobs:
       - name: Install system dependencies
         if: runner.os == 'macOS'
         run: |
-          sh install-sysreqs.sh
+          sh install-sysreqs.sh || true
 
       - name: Check reverse dependencies
         run: |
