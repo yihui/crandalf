@@ -24,7 +24,7 @@ jobs:
         with:
           path: package
           # change the repo below to yours
-          repository: yihui/xfun
+          repository: yihui/knitr
           # ref: master
 
       - uses: r-lib/actions/setup-r@v1
