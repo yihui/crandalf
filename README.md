@@ -9,6 +9,8 @@ change the `repository` from `yihui/knitr` to your username/repo, and follow the
 Github guide to create a pull request. The check results will be available in
 Github Actions.
 
+## The idea
+
 There are a lot of things to check before you submit an R package to CRAN, and
 the last thing is probably to make sure your new version will not break any
 existing packages on CRAN, otherwise you may hear [Gandalf tell you
@@ -48,9 +50,46 @@ Features include:
     which means missing LaTeX packages will be automatically installed,
     including those used in package vignettes.
 
+## Caveats
+
 Note that this service has two caveats:
 
 1.  It will try its best to install as many packages required by the checks as
     possible, but it doesn't guarantee all can be installed.
-2.  Currently it only installs CRAN packages but not other repositories. This
-    may change in the future.
+2.  Currently it only installs CRAN packages but not packages from other
+    repositories. This may change in the future.
+
+As a result, even if your package passes the checks, it doesn't guarantee that
+no reverse dependencies would be broken. It may help you discover potential
+problems without you running all the checks locally.
+
+The option `xfun.rev_check.sample = 0` in `.Rprofile` means that soft reverse
+dependencies are not checked. Here "soft" means packages that list your package
+in their `Suggests` or `Enhances` field in the `DESCRIPTION` file. This number
+indicates the number of soft reverse dependencies that you want to check (they
+will be randomly sampled).
+
+## Debugging
+
+When the checks for any reverse dependencies fail, the Github action run will
+have an artifact `macOS-rev-check-results` for you to download. It contains the
+`R CMD check` logs of failed packages as well as an HTML file
+`00check_diff.html`, which contains a summary of the failed checks, indicating
+the errors caused by the new version of the package (compared to its CRAN
+version).
+
+## Rechecking
+
+After you fix the problems revealed by the initial check and push to the Github
+repo of your package, you can add a `recheck` file to the root directory of this
+repo. In this file, you specify the names of packages that you want to recheck.
+This may save you some time by skipping checking packages that have been checked
+and have passed last time. However, please note that your fix might break those
+passed packages. To be conservative, you can always check the full list of
+reverse dependencies, which can just be time-consuming for a package that has a
+large number of reverse dependencies.
+
+## Run `xfun::rev_check()` locally
+
+You can also run `xfun::rev_check()` locally in this repo. More info on this is
+coming...
