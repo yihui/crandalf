@@ -38,17 +38,7 @@ retry = function(expr, times = 3) {
 
 # Homebrew dependencies
 message('Querying Homebrew dependencies for R packages')
-deps = NULL
-for (i in pkgs) {
-  u = sprintf('https://sysreqs.r-hub.io/pkg/%s/osx-x86_64-clang', i)
-  x = retry(readLines(u, warn = FALSE))
-  x = gsub('^\\s*\\[|\\]\\s*$', '', x)
-  x = unlist(strsplit(gsub('"', '', x), ','))
-  x = setdiff(x, 'null')
-  if (length(x))
-    message('Package ', i, ' requires Homebrew packages: ', paste(x, collapse = ' '))
-  deps = c(deps, x)
-}
+deps = xfun:::brew_deps(pkgs)
 deps = unlist(strsplit(deps, '\\s+'))
 form = scan(what = character(), text = system2('brew', 'formulae', stdout = TRUE))
 deps = intersect(deps, form)  # only install available formulae
