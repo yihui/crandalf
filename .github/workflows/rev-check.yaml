@@ -1,7 +1,7 @@
 on:
   push:
-    branches: [ $default-branch ]
-  pull_request: null
+    branches: [ master ]
+  pull_request:
   schedule:
     - cron: '0 6 * * * '
 
@@ -52,6 +52,7 @@ jobs:
       - name: Install system dependencies
         if: runner.os == 'macOS'
         run: |
+          brew install --cask xquartz
           sh install-sysreqs.sh || true
 
       - name: Check reverse dependencies
