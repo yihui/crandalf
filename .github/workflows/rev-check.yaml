@@ -1,6 +1,9 @@
 on:
-  - push
-  - pull_request
+  push:
+    branches: [ $default-branch ]
+  pull_request: null
+  schedule:
+    - cron: '0 6 * * * '
 
 name: rev-check
 
