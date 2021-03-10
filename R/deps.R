@@ -29,13 +29,6 @@ db = db[rownames(db) %in% c(pkgs, pkgs0), c('Package', 'Version')]
 
 write.csv(rbind(db, c('R', getRversion()$major)), ".github/versions.csv", row.names = FALSE)
 
-retry = function(expr, times = 3) {
-  for (i in seq_len(times)) {
-    if (!inherits(res <- try(expr, silent = TRUE), 'try-error')) return(res)
-    Sys.sleep(5)
-  }
-}
-
 # Homebrew dependencies
 message('Querying Homebrew dependencies for R packages')
 deps = xfun:::brew_deps(pkgs)
