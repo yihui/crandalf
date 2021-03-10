@@ -1,3 +1,4 @@
+R_LIBS_USER=~/R-tmp
 R_BROWSER=false
 R_KEEP_PKG_SOURCE=yes
 

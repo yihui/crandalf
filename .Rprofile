@@ -1,3 +1,5 @@
+dir.create(.libPaths()[1], recursive = TRUE, showWarnings = FALSE)
+
 if (file.exists("~/.Rprofile")) {
   base::sys.source("~/.Rprofile", envir = environment())
 }
