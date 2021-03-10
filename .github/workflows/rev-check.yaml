@@ -30,6 +30,10 @@ jobs:
           repository: yihui/knitr
           # ref: master
 
+      - name: Clean up .Renviron
+        run: |
+          sed -i '' /R_LIBS_USER/d .Renviron
+
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
