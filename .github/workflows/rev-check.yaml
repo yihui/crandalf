@@ -68,6 +68,8 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: ${{ runner.os }}-rev-check-results
+          if-no-files-found: ignore
+          if: failure()
           path: |
             00check_diffs.html
             *.Rcheck
