@@ -46,5 +46,7 @@ if (length(deps)) {
 x = readLines('R/revcheck.R')
 writeLines(gsub('PKG_NAME', pkg, x), 'R/revcheck.R')
 
+# preinstall more LaTeX packages discovered from previous runs to save time
+tinytex::tlmgr_install(scan('latex.txt', character()))
 # record LaTeX packages used
 writeLines(tinytex::tl_pkgs(), 'latex-packages.txt')
