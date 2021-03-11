@@ -4,7 +4,9 @@ if (file.exists("~/.Rprofile")) {
   base::sys.source("~/.Rprofile", envir = environment())
 }
 
-if (!requireNamespace('xfun', quietly = TRUE)) utils::install.packages('xfun')
+if (!requireNamespace('xfun', quietly = TRUE)) {
+  utils::install.packages('xfun', repos = 'https://yihui.r-universe.dev')
+}
 
 options(
   repos = c(
