@@ -1,0 +1,15 @@
+appendixnumberbeamer
+bbm
+beamertheme-metropolis
+boxedminipage
+chngcntr
+fancybox
+mathdesign
+pgfopts
+pgfplots
+realboxes
+relsize
+titling
+todonotes
+usebib
+was
