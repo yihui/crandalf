@@ -16,10 +16,9 @@ setwd(owd)
 
 update.packages(checkBuilt = TRUE, ask = FALSE)
 
-pkgs0 = c('remotes', 'xfun', 'tinytex')
+pkgs0 = c('xfun', 'tinytex')
 for (i in pkgs0) {
   if (!requireNamespace(i, quietly = TRUE)) install.packages(i)
-  if (i == 'remotes') remotes::install_github('yihui/xfun')
 }
 
 message('Querying reverse dependencies and their versions...')
@@ -47,5 +46,7 @@ if (length(deps)) {
 x = readLines('R/revcheck.R')
 writeLines(gsub('PKG_NAME', pkg, x), 'R/revcheck.R')
 
+# preinstall more LaTeX packages discovered from previous runs to save time
+tinytex::tlmgr_install(scan('latex.txt', character()))
 # record LaTeX packages used
 writeLines(tinytex::tl_pkgs(), 'latex-packages.txt')
