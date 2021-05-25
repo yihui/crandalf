@@ -19,8 +19,8 @@ if (length(pkgs)) message(
   paste(pkgs, collapse = ' ')
 )
 
-if (file.exists('00check_diffs.html')) {
-  system('curl -F "file=@00check_diffs.html" https://file.io')
+if (file.exists(f <- '00check_diffs.html')) {
+  cat(xfun::file_string(f))
   r = '[.]Rcheck2$'
   pkgs = gsub(r, '', list.files('.', r))
   stop(
