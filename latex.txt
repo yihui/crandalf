@@ -3,6 +3,7 @@ bbm
 beamertheme-metropolis
 boxedminipage
 chngcntr
+doublestroke
 fancybox
 mathdesign
 pgfopts
@@ -10,6 +11,7 @@ pgfplots
 realboxes
 relsize
 titling
+tocloft
 todonotes
 usebib
 was

@@ -2,12 +2,13 @@
 
 [![rev-check](https://github.com/yihui/crandalf/workflows/rev-check/badge.svg)](https://github.com/yihui/crandalf/actions)
 
-TLDR; If you want to do the reverse dependency check on your package, you can
+TL;DR If you want to do the reverse dependency check on your package, you can
 [edit the Github Action
-rev-check.yaml](https://github.com/yihui/crandalf/edit/master/.github/workflows/rev-check.yaml):
-change the `repository` from `yihui/knitr` to your username/repo, and follow the
-Github guide to create a pull request. The check results will be available in
-Github Actions.
+rev-check.yaml](https://github.com/yihui/crandalf/edit/master/.github/workflows/rev-check.yaml)
+(Github will automatically fork the repo for you since you don't have write
+permission to my repo): change the `repository` from `yihui/knitr` to your
+username/repo, and follow the Github guide to create a pull request. The check
+results will be available in Github Actions.
 
 ## The idea
 
