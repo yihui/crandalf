@@ -4,7 +4,9 @@ if (file.exists("~/.Rprofile")) {
   base::sys.source("~/.Rprofile", envir = environment())
 }
 
-utils::install.packages('xfun', repos = 'https://cloud.r-project.org')
+if (!requireNamespace('xfun', quietly = TRUE)) {
+  utils::install.packages('xfun', repos = 'https://cloud.r-project.org')
+}
 
 options(
   repos = c(
