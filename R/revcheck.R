@@ -22,7 +22,7 @@ if (length(pkgs)) message(
 )
 
 if (file.exists(f <- '00check_diffs.html')) {
-  cat(xfun::file_string(f))
+  if (file.exists(f <- xfun::with_ext(f, '.md'))) cat(xfun::file_string(f))
   r = '[.]Rcheck2$'
   pkgs = gsub(r, '', list.files('.', r))
   stop(
