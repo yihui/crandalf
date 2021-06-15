@@ -4,14 +4,10 @@ if (file.exists("~/.Rprofile")) {
   base::sys.source("~/.Rprofile", envir = environment())
 }
 
-if (!requireNamespace('xfun', quietly = TRUE)) {
-  utils::install.packages('xfun', repos = 'https://yihui.r-universe.dev')
-}
-
 options(
   repos = c(
     gsub('^@CRAN@$', 'https://cloud.r-project.org', getOption('repos')),
-    CRANextra = if (xfun::is_macos()) 'https://macos.rbind.io'
+    CRANextra = if (Sys.info()["sysname"] == "Darwin") 'https://macos.rbind.io'
   ),
   Ncpus = 10, mc.cores = 10, browser = 'false',
   xfun.rev_check.summary = TRUE, xfun.rev_check.sample = 0
