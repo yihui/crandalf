@@ -1,10 +1,3 @@
-# markdown is for xfun::rev_check() to generate the check summary in HTML;
-# rmarkdown is installed just in case the package has R Markdown vignettes
-pkgs = c('markdown', 'rmarkdown')
-for (i in pkgs) {
-  if (!requireNamespace(i, quietly = TRUE)) install.packages(i)
-}
-
 # if the event is not pull request, only install/update packages
 if (Sys.getenv('GITHUB_EVENT_NAME') != 'pull_request') {
   message('Reverse dependency checks are only performed on pull requests...')
@@ -19,8 +12,8 @@ if (length(pkgs)) message(
   paste(pkgs, collapse = ' ')
 )
 
-if (file.exists('00check_diffs.html')) {
-  system('curl -F "file=@00check_diffs.html" https://file.io')
+if (file.exists(f <- '00check_diffs.html')) {
+  if (file.exists(f <- xfun::with_ext(f, '.md'))) cat(xfun::file_string(f))
   r = '[.]Rcheck2$'
   pkgs = gsub(r, '', list.files('.', r))
   stop(
