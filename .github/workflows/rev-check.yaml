@@ -27,7 +27,7 @@ jobs:
         with:
           path: package
           # change the repo below to yours
-          repository: yihui/knitr
+          repository: rstudio/rticles
           # ref: master
 
       - name: Clean up .Renviron
