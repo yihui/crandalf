@@ -5,6 +5,7 @@ boxedminipage
 chngcntr
 doublestroke
 fancybox
+imakeidx
 mathdesign
 pgfopts
 pgfplots
