@@ -1,4 +1,5 @@
-dir.create(.libPaths()[1], recursive = TRUE, showWarnings = FALSE)
+# if R_LIBS_USER was set (in .Renviron), make sure it exists
+dir.create(Sys.getenv('R_LIBS_USER', tempdir()), recursive = TRUE, showWarnings = FALSE)
 
 if (file.exists("~/.Rprofile")) {
   base::sys.source("~/.Rprofile", envir = environment())
