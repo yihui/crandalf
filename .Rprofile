@@ -14,3 +14,8 @@ options(
   xfun.rev_check.summary = TRUE, xfun.rev_check.sample = 0,
   xfun.rev_check.keep_md = TRUE
 )
+
+# only install binary packages on Windows and macOS
+if (.Platform$OS.type == "windows" || Sys.info()["sysname"] == "Darwin") {
+  options(pkgType = 'binary')
+}
