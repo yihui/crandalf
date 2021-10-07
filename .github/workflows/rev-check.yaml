@@ -41,6 +41,8 @@ jobs:
         env:
           TINYTEX_INSTALLER: TinyTeX
 
+      - uses: r-lib/actions/setup-pandoc@v1
+
       - name: Query dependencies
         run: |
           Rscript R/deps.R
