@@ -16,12 +16,10 @@ setwd(owd)
 
 update.packages(checkBuilt = TRUE, ask = FALSE)
 
-pkgs0 = c('xfun', 'tinytex', 'remotes')
+pkgs0 = c('xfun', 'tinytex')
 for (i in pkgs0) {
   if (!requireNamespace(i, quietly = TRUE)) install.packages(i)
 }
-# TODO: use xfun >= 0.27 when it's on CRAN
-remotes::install_github('yihui/xfun')
 
 message('Querying reverse dependencies and their versions...')
 db = available.packages(type = 'source')
