@@ -7,6 +7,6 @@ for (i in pkgs) {
 
 # clean up installed packages (from cache) that are no longer on CRAN
 db = available.packages(type = 'source')
-remove.packages(setdiff(.packages(TRUE), c(rownames(db), knitr:::.base.pkgs)))
+remove.packages(setdiff(.packages(TRUE), c(rownames(db), 'base', knitr:::.base.pkgs)))
 
 update.packages(checkBuilt = TRUE, ask = FALSE)
