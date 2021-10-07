@@ -79,3 +79,6 @@ jobs:
           path: |
             00check_diffs.html
             recheck
+            recheck2
+            *.Rcheck
+            *.Rcheck2
