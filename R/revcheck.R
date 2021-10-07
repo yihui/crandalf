@@ -5,18 +5,19 @@ if (Sys.getenv('GITHUB_EVENT_NAME') != 'pull_request') {
 }
 
 pkgs = readLines('latex-packages.txt')
-xfun::rev_check('PKG_NAME', src = 'package')
+res  = xfun::rev_check('PKG_NAME', src = 'package')
 pkgs = setdiff(tinytex::tl_pkgs(), pkgs)
 if (length(pkgs)) message(
   'These new packages were installed in TinyTeX during the checks: ',
   paste(pkgs, collapse = ' ')
 )
 
+xfun:::clean_Rcheck2()
+
 if (file.exists(f <- '00check_diffs.html')) {
   if (file.exists(f <- xfun::with_ext(f, '.md'))) cat(xfun::file_string(f))
-  r = '[.]Rcheck2$'
-  pkgs = gsub(r, '', list.files('.', r))
-  writeLines(pkgs, 'recheck')
+  writeLines(pkgs <- names(res)[res == 1], 'recheck')
+  writeLines(names(res)[res > 1], 'recheck2')
   stop(
     'Some reverse dependencies may be broken by the dev version of PKG_NAME: ',
     paste(pkgs, collapse = ' ')
