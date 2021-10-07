@@ -5,4 +5,8 @@ for (i in pkgs) {
   if (!requireNamespace(i, quietly = TRUE)) install.packages(i)
 }
 
+# clean up installed packages (from cache) that are no longer on CRAN
+db = available.packages(type = 'source')
+remove.packages(setdiff(.packages(TRUE), c(rownames(db), knitr:::.base.pkgs)))
+
 update.packages(checkBuilt = TRUE, ask = FALSE)
