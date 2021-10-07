@@ -55,6 +55,8 @@ if (length(deps)) {
 x = readLines('R/revcheck.R')
 writeLines(gsub('PKG_NAME', pkg, x), 'R/revcheck.R')
 
+# install from Github if the default install from yihui.org failed
+if (Sys.which('tlmgr') == '') tinytex::install_tinytex(version = 'latest')
 # preinstall more LaTeX packages discovered from previous runs to save time
 tinytex::tlmgr_install(scan('latex.txt', character()))
 # record LaTeX packages used
