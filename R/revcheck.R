@@ -16,6 +16,7 @@ if (file.exists(f <- '00check_diffs.html')) {
   if (file.exists(f <- xfun::with_ext(f, '.md'))) cat(xfun::file_string(f))
   r = '[.]Rcheck2$'
   pkgs = gsub(r, '', list.files('.', r))
+  writeLines(pkgs, 'recheck')
   stop(
     'Some reverse dependencies may be broken by the dev version of PKG_NAME: ',
     paste(pkgs, collapse = ' ')

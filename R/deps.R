@@ -26,8 +26,16 @@ db = available.packages(type = 'source')
 pkgs = xfun:::check_deps(pkg, db)$install
 db = db[rownames(db) %in% c(pkgs, pkgs0), c('Package', 'Version')]
 
-write.csv(rbind(db, c('R', getRversion()$major)), ".github/versions.csv", row.names = FALSE)
+# update cache on GHA when package versions and/or R's major.minor version have changed
+write.csv(
+  rbind(db, c('R', paste(head(unlist(getRversion()), 2), collapse = '.'))),
+  ".github/versions.csv", row.names = FALSE
+)
 
+# this step can be time-consuming when length(pkgs) is large and system
+# dependencies may not be necessary for most pkgs to run (may be necessary for
+# them to compile), so skip it for large length(pkgs)
+if (length(pkgs) < 100) {
 # Homebrew dependencies
 message('Querying Homebrew dependencies for R packages')
 deps = xfun:::brew_deps(pkgs)
@@ -40,6 +48,7 @@ if (length(deps)) {
     paste('brew install', deps, collapse = '\n'), '\n',
     file = 'install-sysreqs.sh', append = TRUE
   )
+}
 }
 
 # generate the R script to do rev dep check
