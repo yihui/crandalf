@@ -19,6 +19,9 @@ jobs:
         config:
           - {os: macOS-latest, r: 'release'}
 
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - uses: actions/checkout@v2
 
