@@ -1,13 +1,16 @@
 appendixnumberbeamer
 bbm
+bbold
 beamertheme-metropolis
 boxedminipage
+caption
 chngcntr
 doublestroke
 elocalloc
 fancybox
 forest
 gb4e
+grfext
 imakeidx
 inlinedef
 linguex
@@ -15,6 +18,7 @@ mathdesign
 orcidlink
 pgfopts
 pgfplots
+picture
 realboxes
 regexpatch
 relsize
