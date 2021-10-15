@@ -96,35 +96,34 @@ large number of reverse dependencies.
 ## Timeout
 
 When your package has a large number of reverse dependencies, the job may take
-longer than six hours to finish, which will lead to timeout. There are two
-possible ways to avoid it:
+longer than six hours to finish, which will lead to timeout. To solve this
+problem, you have to split the reverse dependencies into batches and run the
+checks in different jobs.
 
-1.  Check a subset of packages each time. You can write a subset of package
-    names into the `recheck` file, commit it, and push to the branch
-    corresponding to the pull request. Then write another subset, and repeat.
-    All reverse dependencies to be checked can be obtained via
-    `xfun::pkg_dep()`, e.g.,
+1.  Fork this repo, go to `Settings -> Actions` and allow all actions in your
+    forked repo.
 
-    ``` r
-    res = xfun:::pkg_dep('survival', reverse = TRUE)
-    writeLines(res[1:100], 'recheck')
-    ```
+2.  Clone the forked repo. Change the `repository` in
+    `.github/workflows/rev-check.yaml` to your package repo that you want to
+    check (e.g., `therneau/survival`). Commit and push to your repo. Wait for
+    the action to finish, which will cache the reverse dependencies and their
+    dependencies. This can save quite a bit of R package installation time in
+    the future.
 
-2.  Or fork this repo, go to `Settings -> Actions` and allow all actions in your
-    forked repo. Then change the `repository` in `rev-check.yaml` to your repo
-    that you want to check. Commit and push to your repo. Wait for the action to
-    finish, which will cache the reverse dependencies and their dependencies.
-    This can save quite a bit of R package installation time in the future. Then
-    create a new branch, make an arbitrary change, and send yourself a pull
-    request. The pull request is just for triggering the Github Action to do the
-    reverse dependency checks, because these checks are performed [only in pull
-    requests](https://github.com/yihui/crandalf/blob/f2028ce8c9dc6f45eb73b52ee906d26872ceb66e/R/revcheck.R#L10-L14).
-    If timeout still occurs with this method of caching R packages, you will
-    have to use the first method.
+3.  Install [the latest version of **xfun**](https://github.com/yihui/xfun#xfun)
+    (>= v0.26.4). You may need to restart R after the installation.
 
-From my experience, checking a package takes about one or two minutes on
-average. You are likely to hit the timeout if you need to check more than 300
-packages.
+4.  Run `xfun::crandalf_check("PKG")` where `PKG` is your package name (e.g.,
+    `survival`). This function will split the reverse dependencies into batches
+    if necessary. From my experience, checking a package takes about one or two
+    minutes on average. You are likely to hit the timeout if you need to check
+    more than 400 packages, so the batch size for `xfun::crandalf_check()` is
+    400 by default, but you can change it.
+
+5.  Run `xfun::crandalf_results("PKG")` and wait for all jobs to finish, which
+    can take roughly `N / 5 * 6` hours where `N` is the number of batches. For
+    example, if you have 4000 reverse dependencies to check, they will be
+    checked in `4000 / 400 = 10` batches, and may take `10 / 5 * 6 = 12` hours.
 
 ## Run `xfun::rev_check()` locally
 
