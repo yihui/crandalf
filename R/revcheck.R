@@ -11,6 +11,7 @@ if (length(pkgs)) message(
   'These new packages were installed in TinyTeX during the checks: ',
   paste(pkgs, collapse = ' ')
 )
+xfun::write_utf8(c(pkgs, xfun::read_utf8('latex.txt')), 'latex.txt')
 
 xfun:::clean_Rcheck2()
 
