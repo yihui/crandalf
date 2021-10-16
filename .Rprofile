@@ -19,3 +19,8 @@ options(
 if (.Platform$OS.type == "windows" || Sys.info()["sysname"] == "Darwin") {
   options(pkgType = 'binary')
 }
+
+# settings for myself
+if (Sys.getenv('USER') == 'yihui') {
+  options(xfun.rev_check.src_dir = '~/Dropbox/repo')
+}
