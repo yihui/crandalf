@@ -111,7 +111,7 @@ checks in different jobs.
     the future.
 
 3.  Install [the latest version of **xfun**](https://github.com/yihui/xfun#xfun)
-    (>= v0.26.4). You may need to restart R after the installation.
+    (>= v0.27). You may need to restart R after the installation.
 
 4.  Run `xfun::crandalf_check("PKG")` where `PKG` is your package name (e.g.,
     `survival`). This function will split the reverse dependencies into batches
