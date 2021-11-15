@@ -1,7 +1,8 @@
-# if the event is not pull request, only install/update packages
+# if the event is not pull request, only install/cache packages, then quit
 if (Sys.getenv('GITHUB_EVENT_NAME') != 'pull_request') {
   message('Reverse dependency checks are only performed on pull requests...')
-  writeLines(read.csv('.github/versions.csv')[, 1], '00ignore')
+  xfun:::pkg_install(setdiff(read.csv('.github/versions.csv')[, 1], .packages(TRUE)))
+  q('no')
 }
 
 pkgs = readLines('latex-packages.txt')

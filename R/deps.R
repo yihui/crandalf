@@ -23,7 +23,7 @@ for (i in pkgs0) {
 
 message('Querying reverse dependencies and their versions...')
 db = available.packages(type = 'source')
-pkgs = xfun:::check_deps(pkg, db)$install
+pkgs = xfun:::check_deps(pkg, db, which = 'hard')$install
 db = db[rownames(db) %in% c(pkgs, pkgs0), c('Package', 'Version')]
 
 # update cache on GHA when package versions and/or R's major.minor version have changed

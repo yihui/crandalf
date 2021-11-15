@@ -66,11 +66,12 @@ have been checked. Even with a subset of reverse dependencies checked, this
 service may help you discover potential problems without you running all the
 checks locally.
 
-The option `xfun.rev_check.sample = 0` in `.Rprofile` means that soft reverse
-dependencies are not checked. Here "soft" means packages that list your package
-in their `Suggests` or `Enhances` field in the `DESCRIPTION` file. This number
-indicates the number of soft reverse dependencies that you want to check (they
-will be randomly sampled).
+The option `xfun.rev_check.sample = Inf` in `.Rprofile` means that all soft
+reverse dependencies are checked. Here "soft" means packages that list your
+package in their `Suggests` or `Enhances` field in the `DESCRIPTION` file. This
+number indicates the number of soft reverse dependencies that you want to check
+(they will be randomly sampled). If you do not want to check them at all, set
+this option to `0`.
 
 ## Debugging
 
