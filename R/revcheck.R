@@ -16,9 +16,9 @@ xfun::write_utf8(pkgs, 'latex.txt')
 
 xfun:::clean_Rcheck2()
 
-if (file.exists(f <- '00check_diffs.html')) {
-  if (file.exists(f <- xfun::with_ext(f, '.md'))) cat(xfun::file_string(f))
-  writeLines(pkgs <- names(res)[res == 1], 'recheck')
+if (length(pkgs <- names(res)[res == 1])) {
+  if (file.exists(f <- '00check_diffs.md')) cat(xfun::file_string(f))
+  writeLines(pkgs, 'recheck')
   writeLines(names(res)[res > 1], 'recheck2')
   stop(
     'Some reverse dependencies may be broken by the dev version of PKG_NAME: ',
