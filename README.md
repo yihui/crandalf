@@ -4,7 +4,7 @@
 
 TL;DR If you want to do the reverse dependency check on your package, you can
 [edit the Github Action
-rev-check.yaml](https://github.com/yihui/crandalf/edit/master/.github/workflows/rev-check.yaml)
+rev-check.yaml](https://github.com/yihui/crandalf/edit/main/.github/workflows/rev-check.yaml)
 (Github will automatically fork the repo for you since you don't have write
 permission to my repo): change the `repository` from `yihui/knitr` to your
 username/repo, and follow the Github guide to create a pull request. The check
@@ -66,11 +66,12 @@ have been checked. Even with a subset of reverse dependencies checked, this
 service may help you discover potential problems without you running all the
 checks locally.
 
-The option `xfun.rev_check.sample = 0` in `.Rprofile` means that soft reverse
-dependencies are not checked. Here "soft" means packages that list your package
-in their `Suggests` or `Enhances` field in the `DESCRIPTION` file. This number
-indicates the number of soft reverse dependencies that you want to check (they
-will be randomly sampled).
+The option `xfun.rev_check.sample = Inf` in `.Rprofile` means that all soft
+reverse dependencies are checked. Here "soft" means packages that list your
+package in their `Suggests` or `Enhances` field in the `DESCRIPTION` file. This
+number indicates the number of soft reverse dependencies that you want to check
+(they will be randomly sampled). If you do not want to check them at all, set
+this option to `0`.
 
 ## Debugging
 
@@ -111,7 +112,7 @@ checks in different jobs.
     the future.
 
 3.  Install [the latest version of **xfun**](https://github.com/yihui/xfun#xfun)
-    (>= v0.26.4). You may need to restart R after the installation.
+    (>= v0.27). You may need to restart R after the installation.
 
 4.  Run `xfun::crandalf_check("PKG")` where `PKG` is your package name (e.g.,
     `survival`). This function will split the reverse dependencies into batches
