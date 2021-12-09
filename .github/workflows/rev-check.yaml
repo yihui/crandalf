@@ -1,7 +1,8 @@
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
+  workflow_dispatch:
   schedule:
     - cron: '0 6 * * * '
 
@@ -18,6 +19,9 @@ jobs:
       matrix:
         config:
           - {os: macOS-latest, r: 'release'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v2
@@ -41,6 +45,8 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v1
         env:
           TINYTEX_INSTALLER: TinyTeX
+
+      - uses: r-lib/actions/setup-pandoc@v1
 
       - name: Query dependencies
         run: |
@@ -73,5 +79,8 @@ jobs:
           if-no-files-found: ignore
           path: |
             00check_diffs.html
+            latex.txt
+            recheck
+            recheck2
             *.Rcheck
             *.Rcheck2
