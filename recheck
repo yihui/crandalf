@@ -1,5 +1,9 @@
-poweRlaw
-codingMatrices
-micompr
-gMCP
-poppr
+BART BENMMI BGLR BNPmix EMVS EstimationTools FuzzyNumbers GiRaF HDBRR
+ISOpureR MALDIquant MALDIquantForeign MM2S MM2Sdata NMF PepSAVIms SMM
+Sleuth2 Sleuth3 StMoMo TDA TESS Tides WeightedCluster XLConnect ape
+bbemkr causalsens cna codingMatrices collin colorSpec confidence
+copula dimRed dirichletprocess fic ftsa gMCP gems genlasso ggtikz hdlm
+hierbase hts iSubGen lmSubsets mFLICA matchingMarkets memgene memor
+mhtboot micompr mosaic mvord naivebayes parfm pegas poppr poweRlaw
+rstpm2 sdcMicro semPLS sparseHessianFD svars texreg tikzDevice trackeR
+unifDAG vegdata
