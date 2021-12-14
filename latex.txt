@@ -4,7 +4,10 @@ ae
 algorithm2e
 algorithmicx
 algorithms
+animate
+apalike2
 appendixnumberbeamer
+auto-pst-pdf
 babel-english
 bbm
 bbm-macros
@@ -26,6 +29,7 @@ cmap
 colortbl
 contour
 ctable
+diagbox
 doi
 doublestroke
 elocalloc
@@ -45,9 +49,12 @@ fouriernc
 gb4e
 grfext
 gsftopk
+harvard
 hobby
+hvfloat
 ifmtarg
 ifoddpage
+ifplatform
 ifsym
 imakeidx
 inlinedef
@@ -75,6 +82,7 @@ newfloat
 nowidow
 ntgclass
 oberdiek
+ocgx2
 orcidlink
 paralist
 parskip
@@ -82,6 +90,7 @@ pdflscape
 pdfpages
 pgfopts
 pgfplots
+pict2e
 picture
 placeins
 pmboxdraw
@@ -103,16 +112,19 @@ subfigure
 tablefootnote
 textpos
 thumbpdf
+tikz-cd
 titlesec
 titling
 tocbibind
 tocloft
 todonotes
+transparent
 txfonts
 underscore
 units
 upquote
 usebib
+utopia
 was
 wasy
 wasy-type1
