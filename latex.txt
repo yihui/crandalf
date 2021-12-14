@@ -5,6 +5,7 @@ algorithm2e
 algorithmicx
 algorithms
 animate
+apalike2
 appendixnumberbeamer
 auto-pst-pdf
 babel-english
@@ -48,6 +49,7 @@ fouriernc
 gb4e
 grfext
 gsftopk
+harvard
 hobby
 hvfloat
 ifmtarg
