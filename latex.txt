@@ -22,6 +22,7 @@ calrsfs
 cancel
 capt-of
 caption
+catchfile
 changepage
 chemformula
 chngcntr
@@ -29,6 +30,7 @@ cmap
 colortbl
 contour
 ctable
+currfile
 diagbox
 doi
 doublestroke
@@ -37,11 +39,13 @@ elsarticle
 enumitem
 eso-pic
 etoc
+eulervm
 extsizes
 fancybox
 fancyhdr
 fancyref
 filecontents
+filemod
 footmisc
 forest
 fourier
@@ -52,6 +56,8 @@ gsftopk
 harvard
 hobby
 hvfloat
+hyphen-english
+hyphen-italian
 ifmtarg
 ifoddpage
 ifplatform
@@ -76,11 +82,13 @@ media9
 microtype
 minifp
 mnsymbol
+multido
 multirow
 needspace
 newfloat
 nowidow
 ntgclass
+nth
 oberdiek
 ocgx2
 orcidlink
@@ -131,6 +139,7 @@ wasy-type1
 wasysym
 wrapfig
 xifthen
+xpatch
 xtab
 xyling
 yfonts
