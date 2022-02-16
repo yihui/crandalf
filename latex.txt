@@ -9,6 +9,7 @@ apalike2
 appendixnumberbeamer
 auto-pst-pdf
 babel-english
+babel-german
 bbm
 bbm-macros
 bbold
@@ -58,6 +59,7 @@ harvard
 hobby
 hvfloat
 hyphen-english
+hyphen-german
 hyphen-italian
 ifmtarg
 ifoddpage
