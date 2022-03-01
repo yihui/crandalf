@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# ./revcheck PKG
+
+rm -f 00check_diffs.*
+Rscript -e "tinytex:::install_yihui_pkgs()"
+time caffeinate Rscript -e "install.packages(\"$1\");xfun::rev_check(\"$1\")"
+[ -e 00check_diffs.html ] && open 00check_diffs.html
