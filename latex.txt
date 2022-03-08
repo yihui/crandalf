@@ -5,6 +5,7 @@ algorithm2e
 algorithmicx
 algorithms
 animate
+anysize
 apalike2
 appendixnumberbeamer
 auto-pst-pdf
@@ -81,6 +82,7 @@ marginfix
 marvosym
 mathabx
 mathdesign
+mathtools
 mdframed
 media9
 microtype
@@ -88,6 +90,7 @@ minifp
 mnsymbol
 multido
 multirow
+ncntrsbk
 needspace
 newfloat
 nowidow
@@ -115,6 +118,7 @@ rotfloat
 sansmath
 setspace
 soul
+srcltx
 standalone
 statex2
 stmaryrd
@@ -132,6 +136,7 @@ tocloft
 todonotes
 transparent
 txfonts
+ucs
 underscore
 units
 upquote
