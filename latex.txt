@@ -16,6 +16,7 @@ bbm-macros
 bbold
 bclogo
 beamertheme-metropolis
+bigfoot
 blkarray
 boxedminipage
 breakurl
@@ -40,6 +41,7 @@ doublestroke
 elocalloc
 elsarticle
 enumitem
+epigraph
 eso-pic
 etoc
 eulervm
@@ -56,6 +58,7 @@ fouriernc
 gb4e
 grfext
 gsftopk
+har2nat
 harvard
 hobby
 hvfloat
