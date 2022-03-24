@@ -5,15 +5,18 @@ algorithm2e
 algorithmicx
 algorithms
 animate
+anysize
 apalike2
 appendixnumberbeamer
 auto-pst-pdf
 babel-english
+babel-german
 bbm
 bbm-macros
 bbold
 bclogo
 beamertheme-metropolis
+bigfoot
 blkarray
 boxedminipage
 breakurl
@@ -23,6 +26,7 @@ cancel
 capt-of
 caption
 catchfile
+ccaption
 changepage
 chemformula
 chngcntr
@@ -37,6 +41,7 @@ doublestroke
 elocalloc
 elsarticle
 enumitem
+epigraph
 eso-pic
 etoc
 eulervm
@@ -53,16 +58,19 @@ fouriernc
 gb4e
 grfext
 gsftopk
+har2nat
 harvard
 hobby
 hvfloat
 hyphen-english
+hyphen-german
 hyphen-italian
 ifmtarg
 ifoddpage
 ifplatform
 ifsym
 imakeidx
+import
 inlinedef
 inputenx
 koma-script
@@ -77,6 +85,7 @@ marginfix
 marvosym
 mathabx
 mathdesign
+mathtools
 mdframed
 media9
 microtype
@@ -84,6 +93,7 @@ minifp
 mnsymbol
 multido
 multirow
+ncntrsbk
 needspace
 newfloat
 nowidow
@@ -111,6 +121,7 @@ rotfloat
 sansmath
 setspace
 soul
+srcltx
 standalone
 statex2
 stmaryrd
@@ -128,6 +139,7 @@ tocloft
 todonotes
 transparent
 txfonts
+ucs
 underscore
 units
 upquote
