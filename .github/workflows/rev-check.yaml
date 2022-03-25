@@ -32,6 +32,7 @@ jobs:
           path: package
           # change the repo below to yours
           repository: yihui/knitr
+          ref: use-xcolor
 
       - name: Clean up .Renviron
         run: |
