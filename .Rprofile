@@ -11,6 +11,7 @@ options(
     CRANextra = if (Sys.info()["sysname"] == "Darwin") 'https://macos.rbind.io'
   ),
   Ncpus = 10, mc.cores = 10, browser = 'false',
+  xfun.rev_check.compare = TRUE,
   xfun.rev_check.summary = TRUE, xfun.rev_check.sample = Inf,
   xfun.rev_check.keep_md = TRUE, xfun.rev_check.timeout_total = 5 * 60 * 60
 )
