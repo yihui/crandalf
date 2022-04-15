@@ -29,9 +29,11 @@ catchfile
 ccaption
 changepage
 chemformula
+chicago
 chngcntr
 cmap
 colortbl
+confproc
 contour
 ctable
 currfile
@@ -65,6 +67,7 @@ hvfloat
 hyphen-english
 hyphen-german
 hyphen-italian
+ieeetran
 ifmtarg
 ifoddpage
 ifplatform
@@ -96,6 +99,7 @@ multirow
 ncntrsbk
 needspace
 newfloat
+nextpage
 nowidow
 ntgclass
 nth
