@@ -12,4 +12,7 @@ for (i in pkgs) {
 db = available.packages(type = 'source')
 remove.packages(setdiff(.packages(TRUE), c(rownames(db), xfun::base_pkgs())))
 
+# packages could be broken for some reason (reinstall them if so)
+for (i in .packages(TRUE)) tryCatch(find.package(i), error = function(e) install.packages(i))
+
 update.packages(checkBuilt = TRUE, ask = FALSE)
