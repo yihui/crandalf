@@ -16,6 +16,7 @@ bbm-macros
 bbold
 bclogo
 beamertheme-metropolis
+bigfoot
 blkarray
 boxedminipage
 breakurl
@@ -28,9 +29,11 @@ catchfile
 ccaption
 changepage
 chemformula
+chicago
 chngcntr
 cmap
 colortbl
+confproc
 contour
 ctable
 currfile
@@ -40,6 +43,7 @@ doublestroke
 elocalloc
 elsarticle
 enumitem
+epigraph
 eso-pic
 etoc
 eulervm
@@ -56,12 +60,14 @@ fouriernc
 gb4e
 grfext
 gsftopk
+har2nat
 harvard
 hobby
 hvfloat
 hyphen-english
 hyphen-german
 hyphen-italian
+ieeetran
 ifmtarg
 ifoddpage
 ifplatform
@@ -93,6 +99,7 @@ multirow
 ncntrsbk
 needspace
 newfloat
+nextpage
 nowidow
 ntgclass
 nth
