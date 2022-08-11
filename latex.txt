@@ -6,6 +6,7 @@ algorithmicx
 algorithms
 animate
 anysize
+apa6
 apalike2
 appendixnumberbeamer
 auto-pst-pdf
