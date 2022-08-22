@@ -6,6 +6,7 @@ algorithmicx
 algorithms
 animate
 anysize
+apa6
 apalike2
 appendixnumberbeamer
 auto-pst-pdf
@@ -108,6 +109,7 @@ ocgx2
 orcidlink
 paralist
 parskip
+pdfcrop
 pdflscape
 pdfpages
 pgfopts
