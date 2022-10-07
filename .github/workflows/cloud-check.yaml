@@ -1,0 +1,55 @@
+on:
+  # Manual trigger to check a package via RStudio's cloud
+  workflow_dispatch:
+    inputs:
+      pkg_repo:
+        description: 'Github repo of the form user/repo'
+        required: true
+        type: string
+
+name: rev-check
+
+jobs:
+  rev-check:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macOS-latest, r: 'release'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Checkout your package
+        uses: actions/checkout@v2
+        with:
+          path: package
+          repository: ${{ github.event.inputs.pkg_repo }}
+
+      - name: Clean up .Renviron
+        run: |
+          sed -i '' /R_LIBS_USER/d .Renviron
+
+      - uses: r-lib/actions/setup-r@HEAD
+        with:
+          r-version: ${{ matrix.config.r }}
+
+      - name: Check on cloud
+        run: |
+          Rscript R/cloud.R
+
+      - name: Upload check results
+        uses: actions/upload-artifact@main
+        if: failure()
+        with:
+          name: ${{ runner.os }}-rev-check-results
+          if-no-files-found: ignore
+          path: |
+            package/revdep

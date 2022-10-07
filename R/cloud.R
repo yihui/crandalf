@@ -1,0 +1,12 @@
+install.packages('remotes')
+remotes::install_github('r-lib/revdepcheck')
+setwd('package')
+
+revdepcheck::cloud_check()
+revdepcheck::cloud_status()
+
+if (length(res <- revdepcheck::cloud_broken())) {
+  revdepcheck::cloud_summary()
+  revdepcheck::cloud_report()
+  stop('Package(s) broken: ', paste(res, collapse = ' '))
+}
