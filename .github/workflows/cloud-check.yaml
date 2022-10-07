@@ -7,10 +7,10 @@ on:
         required: true
         type: string
 
-name: rev-check
+name: cloud-check
 
 jobs:
-  rev-check:
+  cloud-check:
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
