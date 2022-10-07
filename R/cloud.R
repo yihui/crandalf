@@ -10,5 +10,8 @@ if (length(res <- revdepcheck::cloud_broken())) {
   print(revdepcheck::cloud_summary())
   revdepcheck::cloud_report()
   for (p in res) print(revdepcheck::cloud_details(revdep = p))
+  fs = list.files(list.files('revdep/cloud.noindex', full.names = TRUE), full.names = TRUE)
+  # only keep results from broken packages
+  unlink(fs[!basename(fs) %in% c(res, paste0(res, '.tar.gz'))], recursive = TRUE)
   stop('Package(s) broken: ', paste(res, collapse = ' '))
 }
