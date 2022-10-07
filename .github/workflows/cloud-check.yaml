@@ -48,13 +48,15 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@HEAD
 
       - name: Cache R packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-cloud-${{ github.run_id }}
           restore-keys: ${{ runner.os }}-cloud-
 
       - name: Check on cloud
+        env:
+          RSTUDIO_CLOUD_REVDEP_KEY: ${{ secrets.RSTUDIO_CLOUD_REVDEP_KEY }}
         run: |
           Rscript R/cloud.R ${{ github.event.inputs.pkg_repo }}
 
