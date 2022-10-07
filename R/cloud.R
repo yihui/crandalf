@@ -1,5 +1,5 @@
 install.packages('remotes')
-remotes::install_github('r-lib/revdepcheck')
+remotes::install_github(c('r-lib/revdepcheck', commandArgs(TRUE)))
 setwd('package')
 
 revdepcheck::cloud_check()

@@ -43,7 +43,7 @@ jobs:
 
       - name: Check on cloud
         run: |
-          Rscript R/cloud.R
+          Rscript R/cloud.R ${{ github.event.inputs.pkg_repo }}
 
       - name: Upload check results
         uses: actions/upload-artifact@main
