@@ -41,6 +41,19 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
 
+      - uses: r-lib/actions/setup-tinytex@HEAD
+        env:
+          TINYTEX_INSTALLER: TinyTeX
+
+      - uses: r-lib/actions/setup-pandoc@HEAD
+
+      - name: Cache R packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ env.GITHUB_JOB }}
+          restore-keys: ${{ runner.os }}-
+
       - name: Check on cloud
         run: |
           Rscript R/cloud.R ${{ github.event.inputs.pkg_repo }}
