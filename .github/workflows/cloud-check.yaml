@@ -51,8 +51,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ env.GITHUB_JOB }}
-          restore-keys: ${{ runner.os }}-
+          key: ${{ runner.os }}-cloud-${{ env.GITHUB_JOB }}
+          restore-keys: ${{ runner.os }}-cloud-
 
       - name: Check on cloud
         run: |

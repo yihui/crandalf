@@ -1,4 +1,4 @@
-install.packages('remotes')
+if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes')
 remotes::install_github(c('r-lib/revdepcheck', commandArgs(TRUE)))
 setwd('package')
 
