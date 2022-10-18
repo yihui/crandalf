@@ -1,6 +1,6 @@
 update.packages(ask = FALSE, checkBuilt = TRUE)
 if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes')
-remotes::install_github(c('r-lib/revdepcheck', commandArgs(TRUE)))
+remotes::install_github(c('r-lib/revdepcheck', commandArgs(TRUE)), dependencies = TRUE)
 setwd('package')
 
 revdepcheck::cloud_check(r_version = getRversion())
