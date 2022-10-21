@@ -6,6 +6,10 @@ on:
         description: 'Github repo of the form user/repo'
         required: true
         type: string
+      pkg_ref:
+        description: 'Branch, tag, or SHA'
+        required: false
+        type: string
 
 name: cloud-check
 
@@ -32,6 +36,7 @@ jobs:
         with:
           path: package
           repository: ${{ github.event.inputs.pkg_repo }}
+          ref: ${{ github.event.inputs.pkg_ref }}
 
       - name: Clean up .Renviron
         run: |
