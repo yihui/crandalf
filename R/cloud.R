@@ -1,6 +1,7 @@
 update.packages(ask = FALSE, checkBuilt = TRUE)
 if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes')
 remotes::install_github(c('r-lib/revdepcheck', commandArgs(TRUE)), dependencies = TRUE)
+if (!dir.exists('package')) q('no')
 setwd('package')
 
 # if the current R version doesn't work, use the highest supported version

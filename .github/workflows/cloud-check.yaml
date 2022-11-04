@@ -1,15 +1,19 @@
 on:
+  push:
+    branches: [ main ]
   # Manual trigger to check a package via RStudio's cloud
   workflow_dispatch:
     inputs:
       pkg_repo:
         description: 'Github repo of the form user/repo'
-        required: true
+        required: false
         type: string
       pkg_ref:
         description: 'Branch, tag, or SHA'
         required: false
         type: string
+  schedule:
+    - cron: '0 7 * * * '
 
 name: cloud-check
 
@@ -33,6 +37,7 @@ jobs:
 
       - name: Checkout your package
         uses: actions/checkout@v2
+        if: github.event.inputs.pkg_repo != ''
         with:
           path: package
           repository: ${{ github.event.inputs.pkg_repo }}
