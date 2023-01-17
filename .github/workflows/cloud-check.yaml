@@ -21,7 +21,7 @@ jobs:
   cloud-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: Check ${{ github.event.inputs.pkg_repo }}
 
     strategy:
       fail-fast: false
