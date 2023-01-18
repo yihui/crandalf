@@ -20,7 +20,6 @@ tryCatch(
 revdepcheck::cloud_status(update_interval = 60)
 
 if (length(res <- revdepcheck::cloud_broken())) {
-  print(revdepcheck::cloud_summary())
   revdepcheck::cloud_report()
   for (p in res) print(revdepcheck::cloud_details(revdep = p))
   fs = list.files(list.files('revdep/cloud.noindex', full.names = TRUE), full.names = TRUE)
