@@ -7,8 +7,7 @@ if (file.exists("~/.Rprofile")) {
 
 options(
   repos = c(
-    gsub('^@CRAN@$', 'https://cloud.r-project.org', getOption('repos', c(CRAN = "@CRAN@"))),
-    CRANextra = if (Sys.info()["sysname"] == "Darwin") 'https://macos.rbind.io'
+    gsub('^@CRAN@$', 'https://cloud.r-project.org', getOption('repos', c(CRAN = "@CRAN@")))
   ),
   Ncpus = 10, mc.cores = 10, browser = 'false',
   xfun.rev_check.compare = TRUE, xfun.rev_check.timeout = 30 * 60,
