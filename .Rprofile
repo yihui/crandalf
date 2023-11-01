@@ -22,5 +22,5 @@ if (.Platform$OS.type == "windows" || Sys.info()["sysname"] == "Darwin") {
 
 # settings for myself
 if (Sys.getenv('USER') == 'yihui') {
-  options(xfun.rev_check.src_dir = '~/Dropbox/repo')
+  options(xfun.rev_check.src_dir = '~/Downloads/Dropbox/repo')
 }
