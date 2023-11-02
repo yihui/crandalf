@@ -12,6 +12,10 @@ on:
         description: 'Branch, tag, or SHA'
         required: false
         type: string
+      rev_deps:
+        description: 'Specific revdeps to be checked'
+        required: false
+        type: string
   schedule:
     - cron: '0 7 * * * '
 
@@ -68,7 +72,7 @@ jobs:
         env:
           RSTUDIO_CLOUD_REVDEP_KEY: ${{ secrets.RSTUDIO_CLOUD_REVDEP_KEY }}
         run: |
-          Rscript R/cloud.R ${{ github.event.inputs.pkg_repo }}
+          Rscript R/cloud.R ${{ github.event.inputs.pkg_repo }} ${{ github.event.inputs.rev_deps }}
 
       - name: Upload check results
         uses: actions/upload-artifact@main
