@@ -111,8 +111,9 @@ checks in different jobs.
     dependencies. This can save quite a bit of R package installation time in
     the future.
 
-3.  Install [the latest version of **xfun**](https://github.com/yihui/xfun#xfun)
-    (>= v0.27). You may need to restart R after the installation.
+3.  Install [the latest version of
+    **xfun**](https://github.com/yihui/xfun#xfun). You may need to restart R
+    after the installation.
 
 4.  Run `xfun::crandalf_check("PKG")` where `PKG` is your package name (e.g.,
     `survival`). This function will split the reverse dependencies into batches
@@ -142,3 +143,9 @@ will create an R library at `~/R-tmp`, which will be used to install reverse
 dependencies and their dependencies (which you probably don't use routinely, so
 a dedicated path `~/R-tmp` is used instead of the usual `.libPaths()`). Other
 than that, all file I/O will only occur inside this repo.
+
+## Related work
+
+If you want to check revdeps in your own repo instead of this repo, you may use
+the Github action [`r-devel/recheck.yml`](https://github.com/r-devel/recheck).
+
