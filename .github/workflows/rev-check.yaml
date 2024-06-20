@@ -30,7 +30,6 @@ jobs:
           path: package
           # change the repo below to yours
           repository: yihui/knitr
-          # ref: master
 
       - name: Clean up .Renviron
         run: |
