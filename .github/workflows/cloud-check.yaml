@@ -71,9 +71,8 @@ jobs:
       - name: Check on cloud
         env:
           RSTUDIO_CLOUD_REVDEP_KEY: ${{ secrets.RSTUDIO_CLOUD_REVDEP_KEY }}
-        uses: mxschmitt/action-tmate@HEAD
-        #run: |
-        #  Rscript R/cloud.R ${{ github.event.inputs.rev_deps }}
+        run: |
+          Rscript R/cloud.R ${{ github.event.inputs.rev_deps }}
 
       - name: Upload check results
         uses: actions/upload-artifact@main
