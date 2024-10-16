@@ -47,6 +47,10 @@ jobs:
           repository: ${{ github.event.inputs.pkg_repo }}
           ref: ${{ github.event.inputs.pkg_ref }}
 
+      - name: Install xquartz
+        run: |
+          brew install --cask xquartz
+
       - name: Clean up .Renviron
         run: |
           sed -i '' /R_LIBS_USER/d .Renviron
