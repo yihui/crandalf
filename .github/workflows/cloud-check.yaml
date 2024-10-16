@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ main ]
+    branches: [ test-xquartz ]
   # Manual trigger to check a package via RStudio's cloud
   workflow_dispatch:
     inputs:
@@ -41,15 +41,9 @@ jobs:
 
       - name: Checkout your package
         uses: actions/checkout@v2
-        if: github.event.inputs.pkg_repo != ''
         with:
           path: package
-          repository: ${{ github.event.inputs.pkg_repo }}
-          ref: ${{ github.event.inputs.pkg_ref }}
-
-      - name: Install xquartz
-        run: |
-          brew install --cask xquartz
+          repository: yihui/litedown
 
       - name: Clean up .Renviron
         run: |
@@ -58,6 +52,9 @@ jobs:
       - uses: r-lib/actions/setup-r@HEAD
         with:
           r-version: ${{ matrix.config.r }}
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@HEAD
 
       - uses: r-lib/actions/setup-tinytex@HEAD
         env:
