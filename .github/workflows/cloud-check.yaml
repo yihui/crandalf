@@ -16,6 +16,11 @@ on:
         description: 'Specific revdeps to be checked'
         required: false
         type: string
+      batch_size:
+        description: 'Batch size'
+        required: true
+        default: 200
+        type: number
   schedule:
     - cron: '0 7 * * * '
 
@@ -35,6 +40,7 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      CLOUD_BATCH_SIZE: ${{ github.event.inputs.batch_size }}
 
     steps:
       - uses: actions/checkout@v2
