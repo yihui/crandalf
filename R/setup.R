@@ -1,3 +1,6 @@
+install.packages('remotes')
+remotes::install_github('yihui/xfun')
+
 # markdown is for xfun::rev_check() to generate the check summary in HTML;
 # rmarkdown is installed just in case the package has R Markdown vignettes
 pkgs = c('markdown', 'rmarkdown')
