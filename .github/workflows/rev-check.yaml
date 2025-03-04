@@ -22,10 +22,10 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@HEAD
 
       - name: Checkout your package
-        uses: actions/checkout@v2
+        uses: actions/checkout@HEAD
         with:
           path: package
           # change the repo below to yours
@@ -52,7 +52,7 @@ jobs:
 
       - name: Cache R packages
         if: runner.os != 'Windows'
-        uses: actions/cache@v2
+        uses: actions/cache@HEAD
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-${{ hashFiles('.github/versions.csv') }}
