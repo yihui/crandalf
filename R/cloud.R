@@ -60,7 +60,7 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
     }
   }
   if (length(broken)) {
-    stop('Package(s) broken: ', paste(broken, collapse = ' '), call. = FALSE)
+    stop('Package(s) broken: ', paste(sort(broken), collapse = ' '), call. = FALSE)
   } else {
     message('All reverse dependencies are good!')
   }
