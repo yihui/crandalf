@@ -68,7 +68,6 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
 
 if (dir.exists('package')) {
   setwd('package')
-  if (packageVersion('knitr') < '1.50') install.packages('knitr', repos = 'https://cloud.r-project.org', type = 'source')
   remotes::install_local(dependencies = TRUE, quiet = TRUE)
   cloud_check(gsub('[, ]', '', commandArgs(TRUE)))
 }
