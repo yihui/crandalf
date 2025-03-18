@@ -15,11 +15,6 @@ options(
   xfun.rev_check.keep_md = TRUE, xfun.rev_check.timeout_total = 5 * 60 * 60
 )
 
-# only install binary packages on Windows and macOS
-if (tolower(Sys.getenv('CI')) != 'true' && (.Platform$OS.type == "windows" || Sys.info()["sysname"] == "Darwin")) {
-  options(pkgType = 'binary')
-}
-
 # settings for myself
 if (Sys.getenv('USER') == 'yihui') {
   options(xfun.rev_check.src_dir = '~/Downloads/Dropbox/repo')
