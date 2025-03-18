@@ -16,7 +16,7 @@ options(
 )
 
 # only install binary packages on Windows and macOS
-if (.Platform$OS.type == "windows" || Sys.info()["sysname"] == "Darwin") {
+if (tolower(Sys.getenv('CI')) != 'true' && (.Platform$OS.type == "windows" || Sys.info()["sysname"] == "Darwin")) {
   options(pkgType = 'binary')
 }
 
