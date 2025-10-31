@@ -6,7 +6,7 @@ if (!Sys.getenv('GITHUB_EVENT_NAME') %in% c('pull_request', 'workflow_dispatch')
 }
 
 pkgs = readLines('latex-packages.txt')
-install.packages('PKG_NAME')
+install.packages('PKG_NAME', dependencies = TRUE)
 res  = xfun::rev_check('PKG_NAME', src = 'package')
 pkgs = setdiff(tinytex::tl_pkgs(), pkgs)
 if (length(pkgs)) message(
