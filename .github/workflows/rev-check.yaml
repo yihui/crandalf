@@ -48,7 +48,6 @@ jobs:
 
       - uses: yihui/actions/setup-r-dependencies@HEAD
         with:
-          working-directory: package
           brew-packages: xquartz
           extra-packages: rmarkdown litedown .
 
