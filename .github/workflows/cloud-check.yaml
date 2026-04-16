@@ -1,0 +1,94 @@
+on:
+  push:
+    branches: [ main ]
+  # Manual trigger to check a package via RStudio's cloud
+  workflow_dispatch:
+    inputs:
+      pkg_repo:
+        description: 'Github repo of the form user/repo'
+        required: false
+        type: string
+      pkg_ref:
+        description: 'Branch, tag, or SHA'
+        required: false
+        type: string
+      rev_deps:
+        description: 'Specific revdeps to be checked'
+        required: false
+        type: string
+      batch_size:
+        description: 'Batch size'
+        required: true
+        default: 200
+        type: number
+  schedule:
+    - cron: '0 7 * * * '
+
+name: cloud-check
+
+jobs:
+  cloud-check:
+    runs-on: ${{ matrix.config.os }}
+
+    name: Check ${{ github.event.inputs.pkg_repo }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macOS-latest, r: 'release'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      CLOUD_BATCH_SIZE: ${{ github.event.inputs.batch_size }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Checkout your package
+        uses: actions/checkout@v2
+        if: github.event.inputs.pkg_repo != ''
+        with:
+          path: package
+          repository: ${{ github.event.inputs.pkg_repo }}
+          ref: ${{ github.event.inputs.pkg_ref }}
+
+      - name: Install xquartz
+        run: |
+          brew install --cask xquartz
+
+      - name: Clean up .Renviron
+        run: |
+          sed -i '' /R_LIBS_USER/d .Renviron
+
+      - uses: r-lib/actions/setup-r@HEAD
+        with:
+          r-version: ${{ matrix.config.r }}
+
+      - uses: r-lib/actions/setup-tinytex@HEAD
+        env:
+          TINYTEX_INSTALLER: TinyTeX
+
+      - uses: r-lib/actions/setup-pandoc@HEAD
+
+      - name: Cache R packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-cloud-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-cloud-
+
+      - name: Check on cloud
+        env:
+          RSTUDIO_CLOUD_REVDEP_KEY: ${{ secrets.RSTUDIO_CLOUD_REVDEP_KEY }}
+        run: |
+          Rscript R/cloud.R ${{ github.event.inputs.rev_deps }}
+
+      - name: Upload check results
+        uses: actions/upload-artifact@main
+        if: failure()
+        with:
+          name: ${{ runner.os }}-rev-check-results
+          if-no-files-found: ignore
+          path: |
+            package/revdep

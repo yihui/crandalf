@@ -1,6 +1,4 @@
 on:
-  push:
-    branches: [ main ]
   pull_request:
   workflow_dispatch:
   schedule:
@@ -24,10 +22,10 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@HEAD
 
       - name: Checkout your package
-        uses: actions/checkout@v2
+        uses: actions/checkout@HEAD
         with:
           path: package
           # change the repo below to yours
@@ -47,27 +45,13 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@HEAD
 
-      - name: Query dependencies
-        run: |
-          Rscript R/deps.R
-
-      - name: Cache R packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@v2
+      - uses: yihui/actions/setup-r-dependencies@HEAD
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/versions.csv') }}
-          restore-keys: ${{ runner.os }}-
-
-      - name: Install system dependencies
-        if: runner.os == 'macOS'
-        run: |
-          brew install --cask xquartz
-          sh install-sysreqs.sh || true
+          brew-packages: xquartz
+          extra-packages: rmarkdown litedown .
 
       - name: Check reverse dependencies
         run: |
-          Rscript R/setup.R
           Rscript R/revcheck.R
 
       - name: Upload check results

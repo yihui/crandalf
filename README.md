@@ -6,7 +6,7 @@ TL;DR If you want to do the reverse dependency check on your package, you can
 [edit the Github Action
 rev-check.yaml](https://github.com/yihui/crandalf/edit/main/.github/workflows/rev-check.yaml)
 (Github will automatically fork the repo for you since you don't have write
-permission to my repo): change the `repository` from `yihui/knitr` to your
+permission to my repo): change the `repository` from `yihui/litedown` to your
 username/repo, and follow the Github guide to create a pull request. The check
 results will be available in Github Actions.
 
@@ -42,14 +42,9 @@ following:
 
 This repo provides a service based on Github Actions to run reverse dependency
 checks via `xfun::rev_check(),` which is one implementation of the above idea.
-Features include:
-
-1.  The checks are run on macOS, and it will try to automatically install system
-    dependencies for R packages via Homebrew (thanks to
-    [sysreqsdb](https://github.com/r-hub/sysreqsdb)).
-2.  It uses the LaTeX distribution [TinyTeX](https://github.com/yihui/tinytex),
-    which means missing LaTeX packages will be automatically installed,
-    including those used in package vignettes.
+It uses the LaTeX distribution [TinyTeX](https://github.com/yihui/tinytex),
+which means missing LaTeX packages will be automatically installed, including
+those used in package vignettes.
 
 ## Caveats
 
@@ -111,8 +106,9 @@ checks in different jobs.
     dependencies. This can save quite a bit of R package installation time in
     the future.
 
-3.  Install [the latest version of **xfun**](https://github.com/yihui/xfun#xfun)
-    (>= v0.27). You may need to restart R after the installation.
+3.  Install [the latest version of
+    **xfun**](https://github.com/yihui/xfun#xfun). You may need to restart R
+    after the installation.
 
 4.  Run `xfun::crandalf_check("PKG")` where `PKG` is your package name (e.g.,
     `survival`). This function will split the reverse dependencies into batches
@@ -142,3 +138,8 @@ will create an R library at `~/R-tmp`, which will be used to install reverse
 dependencies and their dependencies (which you probably don't use routinely, so
 a dedicated path `~/R-tmp` is used instead of the usual `.libPaths()`). Other
 than that, all file I/O will only occur inside this repo.
+
+## Related work
+
+If you want to check revdeps in your own repo instead of this repo, you may use
+the Github action [`r-devel/recheck.yml`](https://github.com/r-devel/recheck).
