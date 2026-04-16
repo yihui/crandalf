@@ -46,23 +46,11 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@HEAD
 
-      - name: Query dependencies
-        run: |
-          Rscript R/deps.R
-
-      - name: Cache R packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@HEAD
+      - uses: yihui/actions/setup-r-dependencies@HEAD
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/versions.csv') }}
-          restore-keys: ${{ runner.os }}-
-
-      - name: Install system dependencies
-        if: runner.os == 'macOS'
-        run: |
-          brew install --cask xquartz
-          sh install-sysreqs.sh || true
+          working-directory: package
+          brew-packages: xquartz
+          extra-packages: rmarkdown litedown .
 
       - name: Check reverse dependencies
         run: |
