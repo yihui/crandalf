@@ -53,7 +53,6 @@ jobs:
 
       - name: Check reverse dependencies
         run: |
-          Rscript R/setup.R
           Rscript R/revcheck.R
 
       - name: Upload check results
