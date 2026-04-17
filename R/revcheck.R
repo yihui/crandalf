@@ -44,7 +44,7 @@ if (length(pkgs <- names(res)[res == 1])) {
   writeLines(pkgs, 'recheck')
   writeLines(names(res)[res > 1], 'recheck2')
   stop(
-    'Some reverse dependencies may be broken by the dev version of PKG_NAME: ',
+    'Some reverse dependencies may be broken by the dev version of ', pkg, ': ',
     paste(pkgs, collapse = ' ')
   )
 }
