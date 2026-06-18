@@ -43,10 +43,10 @@ jobs:
       CLOUD_BATCH_SIZE: ${{ github.event.inputs.batch_size }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@HEAD
 
       - name: Checkout your package
-        uses: actions/checkout@v2
+        uses: actions/checkout@HEAD
         if: github.event.inputs.pkg_repo != ''
         with:
           path: package
@@ -72,7 +72,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@HEAD
 
       - name: Cache R packages
-        uses: actions/cache@v3
+        uses: actions/cache@HEAD
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-cloud-${{ github.run_id }}
