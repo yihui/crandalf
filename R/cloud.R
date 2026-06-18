@@ -1,7 +1,3 @@
-update.packages(ask = FALSE, checkBuilt = TRUE, quiet = TRUE)
-if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes', quiet = TRUE)
-remotes::install_github('r-lib/revdepcheck', quiet = TRUE)
-
 sM = suppressMessages
 
 # run revdepcheck::cloud_check()
@@ -68,6 +64,5 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
 
 if (dir.exists('package')) {
   setwd('package')
-  remotes::install_local(dependencies = TRUE, quiet = TRUE)
   cloud_check(gsub('[, ]', '', commandArgs(TRUE)))
 }

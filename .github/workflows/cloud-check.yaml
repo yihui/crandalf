@@ -71,12 +71,10 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@HEAD
 
-      - name: Cache R packages
-        uses: actions/cache@HEAD
+      - uses: yihui/actions/setup-r-dependencies@HEAD
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-cloud-${{ github.run_id }}
-          restore-keys: ${{ runner.os }}-cloud-
+          working-directory: package
+          extra-packages: r-lib/revdepcheck
 
       - name: Check on cloud
         env:
