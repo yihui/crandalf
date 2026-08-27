@@ -21,7 +21,7 @@ if (!tinytex::is_tinytex()) tinytex::install_tinytex()
 # preinstall more LaTeX packages discovered from previous runs to save time
 tinytex::tlmgr_install(scan('latex.txt', character()))
 # record LaTeX packages used
-writeLines(tinytex::tl_pkgs(), 'latex-packages.txt')
+xfun::write_utf8(tinytex::tl_pkgs(), 'latex-packages.txt')
 
 if (!Sys.getenv('GITHUB_EVENT_NAME') %in% c('pull_request', 'workflow_dispatch')) {
   message('Reverse dependency checks are only performed on pull requests or manual dispatch to PR branch...')
@@ -41,8 +41,8 @@ xfun:::clean_Rcheck2()
 
 if (length(pkgs <- names(res)[res == 1])) {
   if (file.exists(f <- '00check_diffs.md')) cat(xfun::file_string(f))
-  writeLines(pkgs, 'recheck')
-  writeLines(names(res)[res > 1], 'recheck2')
+  xfun::write_utf8(pkgs, 'recheck')
+  xfun::write_utf8(names(res)[res > 1], 'recheck2')
   stop(
     'Some reverse dependencies may be broken by the dev version of ', pkg, ': ',
     paste(pkgs, collapse = ' ')

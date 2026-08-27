@@ -50,7 +50,7 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
   # segfault kills R without running on.exit, so save them first to make results
   # recoverable (the file is also uploaded in the failure artifact)
   dir.create('revdep', showWarnings = FALSE)
-  writeLines(jobs, 'revdep/cloud-jobs.txt')
+  xfun::write_utf8(jobs, 'revdep/cloud-jobs.txt')
 
   for (job in jobs) {
     revdepcheck::cloud_status(job, update_interval = 300)
@@ -97,7 +97,7 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
   # record packages to recheck later: confirmed-broken plus those from jobs whose
   # results could not be fetched (status unknown). the recheck job reads this.
   recheck = union(broken, crashed)
-  writeLines(recheck, 'revdep/recheck.txt')
+  xfun::write_utf8(recheck, 'revdep/recheck.txt')
   if (length(crashed)) message(
     'Could not fetch results for ', length(crashed),
     ' package(s); marked for recheck: ', paste(sort(crashed), collapse = ' ')
