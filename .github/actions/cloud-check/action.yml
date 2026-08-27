@@ -1,0 +1,84 @@
+name: 'Cloud check'
+description: 'Set up the toolchain and run revdepcheck cloud checks for a package'
+
+inputs:
+  pkg_repo:
+    description: 'Github repo of the form user/repo'
+    required: false
+    default: ''
+  pkg_ref:
+    description: 'Branch, tag, or SHA'
+    required: false
+    default: ''
+  rev_deps:
+    description: 'Specific revdeps to be checked (space-separated)'
+    required: false
+    default: ''
+
+outputs:
+  recheck:
+    description: 'Space-separated packages to recheck (broken + results not fetched)'
+    value: ${{ steps.recheck.outputs.packages }}
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout your package
+      uses: actions/checkout@HEAD
+      if: inputs.pkg_repo != ''
+      with:
+        path: package
+        repository: ${{ inputs.pkg_repo }}
+        ref: ${{ inputs.pkg_ref }}
+
+    - name: Install xquartz
+      shell: bash
+      run: |
+        brew install --cask xquartz
+
+    - name: Clean up .Renviron
+      shell: bash
+      run: |
+        sed -i '' /R_LIBS_USER/d .Renviron
+
+    - uses: r-lib/actions/setup-r@HEAD
+      with:
+        r-version: release
+
+    - uses: r-lib/actions/setup-tinytex@HEAD
+      env:
+        TINYTEX_INSTALLER: TinyTeX
+
+    - uses: r-lib/actions/setup-pandoc@HEAD
+
+    - uses: yihui/actions/setup-r-dependencies@HEAD
+      if: inputs.pkg_repo != ''
+      with:
+        working-directory: package
+        extra-packages: r-lib/revdepcheck
+
+    - name: Check on cloud
+      shell: bash
+      run: |
+        Rscript R/cloud.R ${{ inputs.rev_deps }}
+
+    - name: Collect packages to recheck
+      id: recheck
+      if: always()
+      shell: bash
+      run: |
+        f=package/revdep/recheck.txt
+        list=""
+        if [ -f "$f" ]; then
+          list=$(tr '\n' ' ' < "$f")
+        fi
+        echo "packages=$list" >> "$GITHUB_OUTPUT"
+
+    - name: Upload check results
+      uses: actions/upload-artifact@main
+      if: failure()
+      with:
+        name: ${{ runner.os }}-rev-check-results-${{ github.job }}
+        if-no-files-found: ignore
+        path: |
+          package/revdep

@@ -10,17 +10,19 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
   if (length(pkgs) == 0) pkgs = revdepcheck::cran_revdeps(pkg, bioc = TRUE)
   pkgs = setdiff(pkgs, pkg)
   N = length(pkgs)
-  jobs = broken = NULL
+  jobs = broken = crashed = NULL
+  job_pkgs = list()  # map each job id to the packages checked in it
   rver = format(getRversion())
   check = function() {
     # make sure to check at least 2 packages
     if (length(pkgs) == 1) pkgs = c(pkgs, if (length(broken)) broken[1] else pkgs)
+    batch = head(pkgs, batch_size)
     try_check = function() {
       sM(revdepcheck::cloud_check(
-        tarball = tgz, r_version = rver, revdep_packages = head(pkgs, batch_size)
+        tarball = tgz, r_version = rver, revdep_packages = batch
       ))
     }
-    jobs <<- c(jobs, tryCatch(
+    job = tryCatch(
       try_check(),
       error = function(e) {
         if (getRversion() != rver) stop(e)  # already tried a different version
@@ -34,7 +36,9 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
         rver <<- v
         try_check()
       }
-    ))
+    )
+    jobs <<- c(jobs, job)
+    job_pkgs[[job]] <<- batch
     pkgs <<- tail(pkgs, -batch_size)
     message(max(N - length(pkgs), 0), '... ', appendLF = FALSE)
   }
@@ -70,22 +74,39 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
     res
   }
   for (job in jobs) {
-    res = NULL
+    ok = FALSE
     for (i in 1:3) {  # retry twice in case the crash/error was transient
       res = tryCatch(
-        xfun::Rscript_call(summarize_job, list(job)),
+        list(val = xfun::Rscript_call(summarize_job, list(job))),
         error = function(e) {
           message('Failed to fetch results for job ', job, ' (attempt ', i, '): ',
                   conditionMessage(e))
           NULL
         }
       )
-      if (!is.null(res)) break
+      if (!is.null(res)) { ok = TRUE; break }
     }
-    if (length(res)) broken = unique(c(res, broken))
+    if (ok) {
+      if (length(res$val)) broken = unique(c(res$val, broken))
+    } else {
+      # summary crashed for this job: we don't know which of its packages are
+      # broken, so mark them all for a later recheck
+      crashed = unique(c(crashed, job_pkgs[[job]]))
+    }
   }
+  # record packages to recheck later: confirmed-broken plus those from jobs whose
+  # results could not be fetched (status unknown). the recheck job reads this.
+  recheck = union(broken, crashed)
+  writeLines(recheck, 'revdep/recheck.txt')
+  if (length(crashed)) message(
+    'Could not fetch results for ', length(crashed),
+    ' package(s); marked for recheck: ', paste(sort(crashed), collapse = ' ')
+  )
   if (length(broken)) {
     stop('Package(s) broken: ', paste(sort(broken), collapse = ' '), call. = FALSE)
+  } else if (length(crashed)) {
+    stop('Result fetch failed for package(s): ', paste(sort(crashed), collapse = ' '),
+         call. = FALSE)
   } else {
     message('All reverse dependencies are good!')
   }
