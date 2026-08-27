@@ -42,18 +42,47 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
   message('Checking ', N, ' packages: ', appendLF = FALSE)
   while (length(pkgs) > 0) check()
   message('All jobs submitted.')
+  # persist job ids: fetching results below can segfault (see below), and a
+  # segfault kills R without running on.exit, so save them first to make results
+  # recoverable (the file is also uploaded in the failure artifact)
+  dir.create('revdep', showWarnings = FALSE)
+  writeLines(jobs, 'revdep/cloud-jobs.txt')
+
   for (job in jobs) {
     revdepcheck::cloud_status(job, update_interval = 300)
   }
-  for (job in jobs) {
-    if (length(res <- sM(revdepcheck::cloud_broken(job)))) {
-      sM(revdepcheck::cloud_report(job))
+
+  # cloud_broken()/cloud_report()/cloud_details() download results via a curl
+  # multi handle, which has been observed to segfault (multi_run -> SIGSEGV).
+  # A segfault cannot be caught by tryCatch (it aborts the R process), so run
+  # each job's summary in a separate R session via xfun::Rscript_call(): a crash
+  # there returns a nonzero exit code (turned into a catchable error) instead of
+  # killing the whole run at the very end after all packages were checked.
+  summarize_job = function(job) {
+    res = revdepcheck::cloud_broken(job)
+    if (length(res)) {
+      revdepcheck::cloud_report(job)
       for (p in res) print(revdepcheck::cloud_details(job, revdep = p))
       fs = list.files(file.path('revdep/cloud.noindex', job), full.names = TRUE)
       # only keep results from broken packages
       unlink(fs[!basename(fs) %in% c(res, paste0(res, '.tar.gz'))], recursive = TRUE)
-      broken = unique(c(res, broken))
     }
+    res
+  }
+  for (job in jobs) {
+    res = NULL
+    for (i in 1:3) {  # retry twice in case the crash/error was transient
+      res = tryCatch(
+        xfun::Rscript_call(summarize_job, list(job)),
+        error = function(e) {
+          message('Failed to fetch results for job ', job, ' (attempt ', i, '): ',
+                  conditionMessage(e))
+          NULL
+        }
+      )
+      if (!is.null(res)) break
+    }
+    if (length(res)) broken = unique(c(res, broken))
   }
   if (length(broken)) {
     stop('Package(s) broken: ', paste(sort(broken), collapse = ' '), call. = FALSE)
