@@ -1,0 +1,87 @@
+on:
+  push:
+    branches: [ main ]
+  # Manual trigger to check a package via RStudio's cloud
+  workflow_dispatch:
+    inputs:
+      pkg_repo:
+        description: 'Github repo of the form user/repo'
+        required: false
+        type: string
+      pkg_ref:
+        description: 'Branch, tag, or SHA'
+        required: false
+        type: string
+      rev_deps:
+        description: 'Specific revdeps to be checked'
+        required: false
+        type: string
+      batch_size:
+        description: 'Batch size'
+        required: true
+        default: 200
+        type: number
+
+name: cloud-check
+
+jobs:
+  cloud-check:
+    runs-on: ${{ matrix.config.os }}
+
+    name: Check ${{ github.event.inputs.pkg_repo }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macOS-latest, r: 'release'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      CLOUD_BATCH_SIZE: ${{ github.event.inputs.batch_size }}
+      RSTUDIO_CLOUD_REVDEP_KEY: ${{ secrets.RSTUDIO_CLOUD_REVDEP_KEY }}
+
+    outputs:
+      recheck: ${{ steps.check.outputs.recheck }}
+
+    steps:
+      - uses: actions/checkout@HEAD
+
+      - id: check
+        uses: ./.github/actions/cloud-check
+        with:
+          pkg_repo: ${{ github.event.inputs.pkg_repo }}
+          pkg_ref: ${{ github.event.inputs.pkg_ref }}
+          rev_deps: ${{ github.event.inputs.rev_deps }}
+
+  # recheck packages that were broken or whose results could not be fetched
+  # (e.g. the summary stage segfaulted); only runs if that list is non-empty
+  cloud-recheck:
+    needs: cloud-check
+    # run even though cloud-check "failed" (it stop()s on broken/crashed pkgs);
+    # only skip if the run was cancelled or there is nothing to recheck
+    if: ${{ !cancelled() && needs.cloud-check.outputs.recheck != '' }}
+
+    runs-on: ${{ matrix.config.os }}
+
+    name: Recheck broken/crashed packages
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macOS-latest, r: 'release'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      CLOUD_BATCH_SIZE: ${{ github.event.inputs.batch_size }}
+      RSTUDIO_CLOUD_REVDEP_KEY: ${{ secrets.RSTUDIO_CLOUD_REVDEP_KEY }}
+
+    steps:
+      - uses: actions/checkout@HEAD
+
+      - uses: ./.github/actions/cloud-check
+        with:
+          pkg_repo: ${{ github.event.inputs.pkg_repo }}
+          pkg_ref: ${{ github.event.inputs.pkg_ref }}
+          rev_deps: ${{ needs.cloud-check.outputs.recheck }}

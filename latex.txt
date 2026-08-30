@@ -109,6 +109,7 @@ ocgx2
 orcidlink
 paralist
 parskip
+pdfcrop
 pdflscape
 pdfpages
 pgfopts
