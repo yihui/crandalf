@@ -6,7 +6,7 @@ if (file.exists("~/.Rprofile")) {
 }
 
 options(
-  repos = 'https://cloud.r-project.org',
+  repos = 'https://cloud.r-project.org', xfun.install.packages = 'pak',
   Ncpus = 10, mc.cores = 10, browser = 'false', install.packages.compile.from.source = 'always',
   xfun.rev_check.compare = TRUE, xfun.rev_check.timeout = 30 * 60,
   xfun.rev_check.summary = TRUE, xfun.rev_check.sample = Inf,

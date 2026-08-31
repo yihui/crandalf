@@ -49,7 +49,7 @@ jobs:
       - uses: yihui/actions/setup-r-dependencies@HEAD
         with:
           brew-packages: xquartz
-          extra-packages: rmarkdown litedown .
+          extra-packages: rmarkdown litedown pak .
 
       - name: Check reverse dependencies
         run: |
