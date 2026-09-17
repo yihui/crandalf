@@ -1,14 +1,9 @@
 sM = suppressMessages
 
-# run revdepcheck::cloud_check()
-cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 200)) {
-  batch_size = as.integer(batch_size)
-  tools::Rcmd(c('build', '.'))
-  tgz = Sys.glob('*_*.tar.gz')  # tarball
-  if (length(tgz) != 1) stop('Failed to build or find the source package ', tgz)
-  pkg = gsub('_.*$', '', tgz)
-  if (length(pkgs) == 0) pkgs = revdepcheck::cran_revdeps(pkg, bioc = TRUE)
-  pkgs = setdiff(pkgs, pkg)
+# submit one round of checks for `pkgs` (in batches) and fetch the results;
+# returns list(broken, crashed) where `crashed` are packages whose results could
+# not be fetched (e.g. the summary stage segfaulted)
+cloud_run = function(pkgs, tgz, batch_size) {
   N = length(pkgs)
   jobs = broken = crashed = NULL
   job_pkgs = list()  # map each job id to the packages checked in it
@@ -46,11 +41,11 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
   message('Checking ', N, ' packages: ', appendLF = FALSE)
   while (length(pkgs) > 0) check()
   message('All jobs submitted.')
-  # persist job ids: fetching results below can segfault (see below), and a
-  # segfault kills R without running on.exit, so save them first to make results
+  # record job ids: fetching results below can segfault (see below), and a
+  # segfault kills R without running on.exit, so save them to make results
   # recoverable (the file is also uploaded in the failure artifact)
   dir.create('revdep', showWarnings = FALSE)
-  xfun::write_utf8(jobs, 'revdep/cloud-jobs.txt')
+  cat(jobs, sep = '\n', file = 'revdep/cloud-jobs.txt', append = TRUE)
 
   for (job in jobs) {
     revdepcheck::cloud_status(job, update_interval = 300)
@@ -90,18 +85,46 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
       if (length(res$val)) broken = unique(c(res$val, broken))
     } else {
       # summary crashed for this job: we don't know which of its packages are
-      # broken, so mark them all for a later recheck
+      # broken, so mark them all to be rechecked
       crashed = unique(c(crashed, job_pkgs[[job]]))
     }
   }
-  # record packages to recheck later: confirmed-broken plus those from jobs whose
-  # results could not be fetched (status unknown). the recheck job reads this.
-  recheck = union(broken, crashed)
-  xfun::write_utf8(recheck, 'revdep/recheck.txt')
-  if (length(crashed)) message(
-    'Could not fetch results for ', length(crashed),
-    ' package(s); marked for recheck: ', paste(sort(crashed), collapse = ' ')
-  )
+  list(broken = broken, crashed = crashed)
+}
+
+# run revdepcheck::cloud_check(), rechecking (in the same session, to avoid
+# re-setting up the toolchain) packages whose results could not be fetched
+cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 200)) {
+  batch_size = as.integer(batch_size)
+  tools::Rcmd(c('build', '.'))
+  tgz = Sys.glob('*_*.tar.gz')  # tarball
+  if (length(tgz) != 1) stop('Failed to build or find the source package ', tgz)
+  pkg = gsub('_.*$', '', tgz)
+  if (length(pkgs) == 0) pkgs = revdepcheck::cran_revdeps(pkg, bioc = TRUE)
+  pkgs = setdiff(pkgs, pkg)
+
+  dir.create('revdep', showWarnings = FALSE)
+  unlink('revdep/cloud-jobs.txt')  # start a fresh record of job ids
+  broken = crashed = NULL
+  # keep rechecking crashed packages (whose status is unknown) until none remain
+  # or we hit the round limit; confirmed-broken packages are not rechecked, as
+  # that would just repeat a known failure
+  for (round in 1:3) {
+    res = cloud_run(pkgs, tgz, batch_size)
+    broken = unique(c(broken, res$broken))
+    crashed = res$crashed
+    if (length(crashed) == 0) break
+    if (round < 3) message(
+      'Could not fetch results for ', length(crashed),
+      ' package(s); rechecking them: ', paste(sort(crashed), collapse = ' ')
+    )
+    pkgs = crashed
+  }
+
+  # record packages to recheck later: confirmed-broken plus any still-unfetched
+  # (in case you want to re-dispatch the workflow with this list)
+  writeLines(union(broken, crashed), 'revdep/recheck.txt')
+
   if (length(broken)) {
     stop('Package(s) broken: ', paste(sort(broken), collapse = ' '), call. = FALSE)
   } else if (length(crashed)) {

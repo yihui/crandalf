@@ -39,49 +39,53 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       CLOUD_BATCH_SIZE: ${{ github.event.inputs.batch_size }}
-      RSTUDIO_CLOUD_REVDEP_KEY: ${{ secrets.RSTUDIO_CLOUD_REVDEP_KEY }}
-
-    outputs:
-      recheck: ${{ steps.check.outputs.recheck }}
 
     steps:
       - uses: actions/checkout@HEAD
 
-      - id: check
-        uses: ./.github/actions/cloud-check
+      - name: Checkout your package
+        uses: actions/checkout@HEAD
+        if: github.event.inputs.pkg_repo != ''
         with:
-          pkg_repo: ${{ github.event.inputs.pkg_repo }}
-          pkg_ref: ${{ github.event.inputs.pkg_ref }}
-          rev_deps: ${{ github.event.inputs.rev_deps }}
+          path: package
+          repository: ${{ github.event.inputs.pkg_repo }}
+          ref: ${{ github.event.inputs.pkg_ref }}
 
-  # recheck packages that were broken or whose results could not be fetched
-  # (e.g. the summary stage segfaulted); only runs if that list is non-empty
-  cloud-recheck:
-    needs: cloud-check
-    # run even though cloud-check "failed" (it stop()s on broken/crashed pkgs);
-    # only skip if the run was cancelled or there is nothing to recheck
-    if: ${{ !cancelled() && needs.cloud-check.outputs.recheck != '' }}
+      - name: Install xquartz
+        run: |
+          brew install --cask xquartz
 
-    runs-on: ${{ matrix.config.os }}
+      - name: Clean up .Renviron
+        run: |
+          sed -i '' /R_LIBS_USER/d .Renviron
 
-    name: Recheck broken/crashed packages
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - {os: macOS-latest, r: 'release'}
-
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      CLOUD_BATCH_SIZE: ${{ github.event.inputs.batch_size }}
-      RSTUDIO_CLOUD_REVDEP_KEY: ${{ secrets.RSTUDIO_CLOUD_REVDEP_KEY }}
-
-    steps:
-      - uses: actions/checkout@HEAD
-
-      - uses: ./.github/actions/cloud-check
+      - uses: r-lib/actions/setup-r@HEAD
         with:
-          pkg_repo: ${{ github.event.inputs.pkg_repo }}
-          pkg_ref: ${{ github.event.inputs.pkg_ref }}
-          rev_deps: ${{ needs.cloud-check.outputs.recheck }}
+          r-version: ${{ matrix.config.r }}
+
+      - uses: r-lib/actions/setup-tinytex@HEAD
+        env:
+          TINYTEX_INSTALLER: TinyTeX
+
+      - uses: r-lib/actions/setup-pandoc@HEAD
+
+      - uses: yihui/actions/setup-r-dependencies@HEAD
+        if: github.event.inputs.pkg_repo != ''
+        with:
+          working-directory: package
+          extra-packages: r-lib/revdepcheck
+
+      - name: Check on cloud
+        env:
+          RSTUDIO_CLOUD_REVDEP_KEY: ${{ secrets.RSTUDIO_CLOUD_REVDEP_KEY }}
+        run: |
+          Rscript R/cloud.R ${{ github.event.inputs.rev_deps }}
+
+      - name: Upload check results
+        uses: actions/upload-artifact@main
+        if: failure()
+        with:
+          name: ${{ runner.os }}-rev-check-results
+          if-no-files-found: ignore
+          path: |
+            package/revdep
