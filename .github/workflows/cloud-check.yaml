@@ -73,7 +73,7 @@ jobs:
         if: github.event.inputs.pkg_repo != ''
         with:
           working-directory: package
-          extra-packages: r-lib/revdepcheck
+          extra-packages: xfun r-lib/revdepcheck
 
       - name: Check on cloud
         env:

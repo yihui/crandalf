@@ -123,7 +123,7 @@ cloud_check = function(pkgs = NULL, batch_size = Sys.getenv('CLOUD_BATCH_SIZE', 
 
   # record packages to recheck later: confirmed-broken plus any still-unfetched
   # (in case you want to re-dispatch the workflow with this list)
-  writeLines(union(broken, crashed), 'revdep/recheck.txt')
+  xfun::write_utf8(union(broken, crashed), 'revdep/recheck.txt')
 
   if (length(broken)) {
     stop('Package(s) broken: ', paste(sort(broken), collapse = ' '), call. = FALSE)
